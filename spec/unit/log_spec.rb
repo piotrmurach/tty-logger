@@ -21,8 +21,8 @@ RSpec.describe TTY::Logger, "#log" do
     logger.info("Successfully", "deployed")
 
     expect(output.string).to eq([
-      "\e[36m#{styles[:info][:symbol]}\e[0m ",
-      "\e[36minfo\e[0m    ",
+      "\e[32m#{styles[:info][:symbol]}\e[0m ",
+      "\e[32minfo\e[0m    ",
       "Successfully deployed\n"].join)
   end
 
@@ -65,8 +65,8 @@ RSpec.describe TTY::Logger, "#log" do
     logger.info { "Successfully deployed" }
 
     expect(output.string).to eq([
-      "\e[36m#{styles[:info][:symbol]}\e[0m ",
-      "\e[36minfo\e[0m    ",
+      "\e[32m#{styles[:info][:symbol]}\e[0m ",
+      "\e[32minfo\e[0m    ",
       "Successfully deployed\n"].join)
   end
 
@@ -84,8 +84,8 @@ RSpec.describe TTY::Logger, "#log" do
     logger.info("Successfully deployed")
 
     expect(output.string).to eq([
-      "\e[36m#{styles[:info][:symbol]}\e[0m ",
-      "\e[36minfo\e[0m    ",
+      "\e[32m#{styles[:info][:symbol]}\e[0m ",
+      "\e[32minfo\e[0m    ",
       "Successfully deployed {:app=>\"myapp\", :env=>\"prod\"}\n"].join)
   end
 
@@ -95,8 +95,8 @@ RSpec.describe TTY::Logger, "#log" do
     logger.with(app: 'myapp', env: 'prod').info("Successfully deployed")
 
     expect(output.string).to eq([
-      "\e[36m#{styles[:info][:symbol]}\e[0m ",
-      "\e[36minfo\e[0m    ",
+      "\e[32m#{styles[:info][:symbol]}\e[0m ",
+      "\e[32minfo\e[0m    ",
       "Successfully deployed {:app=>\"myapp\", :env=>\"prod\"}\n"].join)
   end
 end

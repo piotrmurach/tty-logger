@@ -16,7 +16,7 @@ module TTY
           info: {
             label: "info",
             symbol: "ℹ",
-            color: :cyan,
+            color: :green,
             levelpad: 3
           },
           warn: {
@@ -47,6 +47,9 @@ module TTY
           @pastel = Pastel.new
         end
 
+        # Handle log event output in format
+        #
+        # @api public
         def call(*message, fields, name: nil)
           @mutex.lock
 
