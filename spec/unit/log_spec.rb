@@ -16,7 +16,7 @@ RSpec.describe TTY::Logger, "#log" do
   end
 
   it "logs a message at info level" do
-    logger = TTY::Logger.new(output: output, level: :debug)
+    logger = TTY::Logger.new(output: output)
 
     logger.info("Successfully", "deployed")
 
@@ -26,8 +26,19 @@ RSpec.describe TTY::Logger, "#log" do
       "Successfully deployed\n"].join)
   end
 
+  it "logs a message at warn level" do
+    logger = TTY::Logger.new(output: output)
+
+    logger.warn("Failed to", "deploy")
+
+    expect(output.string).to eq([
+      "\e[33m#{styles[:warn][:symbol]}\e[0m ",
+      "\e[33mwarning\e[0m ",
+      "Failed to deploy\n"].join)
+  end
+
   it "logs a message at error level" do
-    logger = TTY::Logger.new(output: output, level: :debug)
+    logger = TTY::Logger.new(output: output)
 
     logger.error("Failed to", "deploy")
 
@@ -38,7 +49,7 @@ RSpec.describe TTY::Logger, "#log" do
   end
 
   it "logs a message at fatal level" do
-    logger = TTY::Logger.new(output: output, level: :debug)
+    logger = TTY::Logger.new(output: output)
 
     logger.fatal("Failed to", "deploy")
 
