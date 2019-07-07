@@ -21,11 +21,12 @@
 
 > A readable, structured and beautiful logging for the terminal
 
-**TTY::Logger** provides independent logging component for [TTY](https://github.com/piotrmurach/tty) toolkit.
+**TTY::Logger** provides independent logging component for [TTY toolkit](https://github.com/piotrmurach/tty).
 
 ## Features
 
 * Intuitive console output for an increased readability
+* Supports structured data logging
 
 ## Installation
 
@@ -78,6 +79,26 @@ You can set level using the following:
 TTY::Logger.new level: :info
 TTY::Logger.new level: "INFO"
 TTY::Logger.new level: TTY::Logger::INFO_LEVEL
+```
+
+### Structured logging
+
+To add global data available for all logger calls:
+
+```ruby
+logger = TTY::Logger.new(fields: {app: "myapp", env: "prod"})
+
+logger.info("Deploying...")
+# => Deploying... app=myapp env=prod
+```
+
+To only add data for a single log event:
+
+```ruby
+logger = TTY::Logger.new
+
+logger.with(app: "myapp", env: "prod").info("Deplying...")
+# => Deploying... app=myapp env=prod
 ```
 
 ## Development
