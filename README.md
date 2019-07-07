@@ -4,7 +4,28 @@
 
 # TTY::Logger
 
+[![Gem Version](https://badge.fury.io/rb/tty-logger.svg)][gem]
+[![Build Status](https://secure.travis-ci.org/piotrmurach/tty-logger.svg?branch=master)][travis]
+[![Build status](https://ci.appveyor.com/api/projects/status/vtrkdk0naknnxoog?svg=true)][appveyor]
+[![Code Climate](https://codeclimate.com/github/piotrmurach/tty-logger/badges/gpa.svg)][codeclimate]
+[![Coverage Status](https://coveralls.io/repos/github/piotrmurach/tty-logger/badge.svg)][coverage]
+[![Inline docs](http://inch-ci.org/github/piotrmurach/tty-logger.svg?branch=master)][inchpages]
+
+[gitter]: https://gitter.im/piotrmurach/tty
+[gem]: http://badge.fury.io/rb/tty-logger
+[travis]: http://travis-ci.org/piotrmurach/tty-logger
+[appveyor]: https://ci.appveyor.com/project/piotrmurach/tty-logger
+[codeclimate]: https://codeclimate.com/github/piotrmurach/tty-logger
+[coverage]: https://coveralls.io/github/piotrmurach/tty-logger
+[inchpages]: http://inch-ci.org/github/piotrmurach/tty-logger
+
 > A readable, structured and beautiful logging for the terminal
+
+**TTY::Logger** provides independent logging component for [TTY](https://github.com/piotrmurach/tty) toolkit.
+
+## Features
+
+* Intuitive console output for an increased readability
 
 ## Installation
 
@@ -24,8 +45,39 @@ Or install it yourself as:
 
 ## Usage
 
+Create logger:
+
 ```ruby
 logger = TTY::Logger.new
+```
+
+Log information:
+
+```ruby
+logger.info "User logged in"
+logger.info { "User logged in" }
+```
+
+### Levels
+
+The supported levels, ordered by precedence, are:
+
+* `:debug` - for debug-related messages
+* `:info` - for information of any kind
+* `:warn` - for warnings
+* `:error` - for errors
+* `:fatal` - for fatal conditions
+
+So the order is: `:debug` < `:info` < `:warn` < `:error` < `:fatal`
+
+For example, `:info` takes precedence over `:debug`. If your log level is set to `:info`, `:info`, `:warn`, `:error` and `:fatal` will be printed to the console. If your log level is set to `:warn`, only `:warn`, `:error` and `:fatal` will be printed.
+
+You can set level using the following:
+
+```ruby
+TTY::Logger.new level: :info
+TTY::Logger.new level: "INFO"
+TTY::Logger.new level: TTY::Logger::INFO_LEVEL
 ```
 
 ## Development
