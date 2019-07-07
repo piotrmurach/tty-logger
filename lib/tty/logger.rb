@@ -61,7 +61,7 @@ module TTY
       if msg.empty? && block_given?
         msg = [yield]
       end
-      @handler.(*msg, @fields)
+      @handler.(*msg, @fields, name: current_level)
     end
 
     # Log a message at :debug level
@@ -88,14 +88,14 @@ module TTY
     # Log a message at :error level
     #
     # @api public
-    def error(*msg)
+    def error(*msg, &block)
       log(:error, *msg, &block)
     end
 
     # Log a message at :fatal level
     #
     # @api public
-    def fatal(*msg)
+    def fatal(*msg, &block)
       log(:fatal, *msg, &block)
     end
   end # Logger
