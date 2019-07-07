@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe do
+RSpec.describe TTY::Logger, 'levels' do
   it "fails when unknown level" do
     logger = TTY::Logger.new
     expect {
