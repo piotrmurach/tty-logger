@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 RSpec.describe do
+  it "fails when unknown level" do
+    logger = TTY::Logger.new
+    expect {
+      logger.compare_levels(:error, :unknown)
+    }.to raise_error(ArgumentError, "Invalid level :unknown")
+  end
+
   it "compares names with equal level" do
     logger = TTY::Logger.new
     expect(logger.compare_levels(:info, :info)).to eq(:eq)

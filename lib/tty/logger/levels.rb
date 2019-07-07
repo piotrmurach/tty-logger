@@ -30,7 +30,7 @@ module TTY
         when "error" then ERROR_LEVEL
         when "fatal" then FATAL_LEVEL
         else
-          raise "Invalid level #{level.inspect}"
+          raise ArgumentError, "Invalid level #{level.inspect}"
         end
       end
 

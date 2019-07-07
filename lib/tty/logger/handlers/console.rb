@@ -12,10 +12,14 @@ module TTY
           @mutex = Mutex.new
         end
 
-        def call(*msg)
+        def call(*msg, fields)
           @mutex.lock
 
-          output.puts msg.join(" ")
+          fmt = []
+          fmt << msg.join(" ")
+          fmt << fields unless fields.empty?
+
+          output.puts fmt.join(" ")
         ensure
           @mutex.unlock
         end

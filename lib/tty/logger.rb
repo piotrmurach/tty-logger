@@ -20,10 +20,27 @@ module TTY
     # By default output to stderr
     attr_reader :output
 
-    def initialize(output: $stderr, level: :info, handler: Handlers::Console)
+    def initialize(output: $stderr, level: :info, handler: Handlers::Console,
+                   fields: {})
       @output = output
       @level = level
+      @fields = fields
       @handler = handler.new(output: output)
+    end
+
+    # Add structured data
+    #
+    # @example
+    #   logger = TTY::Logger.new
+    #   logger.with(app: "myenv", env: "prod").debug("Deplying")
+    #
+    # @return [TTY::Logger]
+    #   a new copy of this logger
+    #
+    # @api public
+    def with(new_fields)
+      self.class.new(fields: @fields.merge(new_fields),
+                     output: output, level: level)
     end
 
     # Check current level against another
@@ -44,7 +61,7 @@ module TTY
       if msg.empty? && block_given?
         msg = [yield]
       end
-      @handler.(*msg)
+      @handler.(*msg, @fields)
     end
 
     # Log a message at :debug level
