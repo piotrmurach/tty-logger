@@ -55,8 +55,18 @@ logger = TTY::Logger.new
 Log information:
 
 ```ruby
-logger.info "User logged in"
-logger.info { "User logged in" }
+logger.info "Successfully deployed"
+logger.info { "Dynamically generated info" }
+```
+
+User different [levels](#levels) to differentiate log events:
+
+```ruby
+logger.debug "Deploying..."
+logger.info "Deploying..."
+logger.warn "Deploying..."
+logger.error "Deploying..."
+logger.fatal "Deploying..."
 ```
 
 ### Levels
