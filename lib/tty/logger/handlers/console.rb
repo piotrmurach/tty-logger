@@ -41,8 +41,9 @@ module TTY
 
         attr_reader :output
 
-        def initialize(output: $stderr)
+        def initialize(output: $stderr, formatter: nil)
           @output = output
+          @formatter = formatter
           @mutex = Mutex.new
           @pastel = Pastel.new
         end
@@ -60,7 +61,7 @@ module TTY
           fmt << color.(style[:symbol])
           fmt << color.(style[:label]) + (" " * style[:levelpad])
           fmt << message.join(" ")
-          fmt << fields unless fields.empty?
+          fmt << @formatter.dump(fields) unless fields.empty?
 
           output.puts fmt.join(" ")
         ensure

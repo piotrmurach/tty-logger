@@ -12,6 +12,9 @@ module TTY
     # Error raised by this logger
     class Error < StandardError; end
 
+    # Logging formatter
+    attr_reader :formatter
+
     # The log handling device
     attr_reader :handler
 
@@ -22,11 +25,12 @@ module TTY
     attr_reader :output
 
     def initialize(output: $stderr, level: :info, handler: Handlers::Console,
-                   fields: {})
+                   formatter: Formatters::Text, fields: {})
       @output = output
       @level = level
       @fields = fields
-      @handler = handler.new(output: output)
+      @formatter = formatter.new
+      @handler = handler.new(output: output, formatter: @formatter)
     end
 
     # Add structured data

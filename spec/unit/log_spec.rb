@@ -86,7 +86,7 @@ RSpec.describe TTY::Logger, "#log" do
     expect(output.string).to eq([
       "\e[32m#{styles[:info][:symbol]}\e[0m ",
       "\e[32minfo\e[0m    ",
-      "Successfully deployed {:app=>\"myapp\", :env=>\"prod\"}\n"].join)
+      "Successfully deployed app=myapp env=prod\n"].join)
   end
 
   it "logs message with fields" do
@@ -97,6 +97,6 @@ RSpec.describe TTY::Logger, "#log" do
     expect(output.string).to eq([
       "\e[32m#{styles[:info][:symbol]}\e[0m ",
       "\e[32minfo\e[0m    ",
-      "Successfully deployed {:app=>\"myapp\", :env=>\"prod\"}\n"].join)
+      "Successfully deployed app=myapp env=prod\n"].join)
   end
 end
