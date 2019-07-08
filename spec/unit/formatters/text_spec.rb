@@ -13,7 +13,7 @@ RSpec.describe TTY::Logger::Formatters::Text, "#dump" do
     {key: "k", value: 1, want: "k=1"},
     {key: "k", value: 1.035, want: "k=1.035"},
     {key: "k", value: 1e-5, want: "k=0.00001"},
-    {key: "k", value: 2+1i, want: "k=(2+1i)"},
+    {key: "k", value: Complex(2,1), want: "k=(2+1i)"},
     {key: "k", value: "v v", want: "k=\"v v\""},
     {key: "k", value: " ", want: 'k=" "'},
     {key: "k", value: '"', want: 'k="\""'},
