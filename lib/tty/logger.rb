@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "logger/formatters/text"
 require_relative "logger/levels"
 require_relative "logger/version"
 require_relative "logger/handlers/console"
@@ -72,6 +73,10 @@ module TTY
     end
 
     # Log a message at :info level
+    #
+    # @examples
+    #   logger.info "Successfully deployed"
+    #   logger.info { "Dynamically generated info" }
     #
     # @api public
     def info(*msg, &block)
