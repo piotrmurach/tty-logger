@@ -99,7 +99,7 @@ module TTY
           case str
           when SINGLE_QUOTE_REGEX
             str.inspect
-          when ESCAPE_STR_REGEX
+          when ESCAPE_STR_REGEX, LITERAL_TRUE, LITERAL_FALSE, LITERAL_NULL
             ESCAPE_DOUBLE_QUOTE + str.inspect[1..-2] + ESCAPE_DOUBLE_QUOTE
           else
             str
