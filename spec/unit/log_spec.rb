@@ -101,4 +101,16 @@ RSpec.describe TTY::Logger, "#log" do
       "Successfully deployed     ",
       "\e[32mapp\e[0m=myapp \e[32menv\e[0m=prod\n"].join)
   end
+
+  it "logs message with scoped fields" do
+    logger = TTY::Logger.new(output: output)
+
+    logger.info("Successfully deployed", app: 'myapp', env: 'prod')
+
+    expect(output.string).to eq([
+      "\e[32m#{styles[:info][:symbol]}\e[0m ",
+      "\e[32minfo\e[0m    ",
+      "Successfully deployed     ",
+      "\e[32mapp\e[0m=myapp \e[32menv\e[0m=prod\n"].join)
+  end
 end

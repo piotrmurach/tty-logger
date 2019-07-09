@@ -61,13 +61,13 @@ module TTY
     # Log a message given the severtiy level
     #
     # @api public
-    def log(current_level, *msg)
+    def log(current_level, *msg, **scoped_fields)
       return unless log?(current_level)
 
       if msg.empty? && block_given?
         msg = [yield]
       end
-      event = Event.new(msg, @fields)
+      event = Event.new(msg, @fields.merge(scoped_fields))
       @handler.(event, name: current_level)
     end
 
