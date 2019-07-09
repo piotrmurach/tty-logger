@@ -51,7 +51,7 @@ module TTY
         # Handle log event output in format
         #
         # @api public
-        def call(*message, fields, name: nil)
+        def call(event, name: nil)
           @mutex.lock
 
           style = STYLES[name]
@@ -60,9 +60,9 @@ module TTY
           fmt = []
           fmt << color.(style[:symbol])
           fmt << color.(style[:label]) + (" " * style[:levelpad])
-          fmt << "%-25s" % message.join(" ")
-          unless fields.empty?
-            fmt << @formatter.dump(fields).gsub(/(\S+)(?=\=)/, color.("\\1"))
+          fmt << "%-25s" % event.message.join(" ")
+          unless event.fields.empty?
+            fmt << @formatter.dump(event.fields).gsub(/(\S+)(?=\=)/, color.("\\1"))
           end
 
           output.puts fmt.join(" ")

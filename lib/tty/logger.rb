@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "logger/event"
 require_relative "logger/formatters/text"
 require_relative "logger/levels"
 require_relative "logger/version"
@@ -66,7 +67,8 @@ module TTY
       if msg.empty? && block_given?
         msg = [yield]
       end
-      @handler.(*msg, @fields, name: current_level)
+      event = Event.new(msg, @fields)
+      @handler.(event, name: current_level)
     end
 
     # Log a message at :debug level
