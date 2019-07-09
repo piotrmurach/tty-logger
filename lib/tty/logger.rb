@@ -40,13 +40,13 @@ module TTY
     # By default output to stderr
     attr_reader :output
 
-    def initialize(output: $stderr, level: :info, handler: Handlers::Console,
-                   formatter: Formatters::Text, fields: {})
+    def initialize(output: $stderr, level: nil, handler: Handlers::Console,
+                   formatter: Formatters::Text, fields: {}, config: Logger.config)
       @output = output
-      @level = level
+      @level = level || config.level
       @fields = fields
       @formatter = formatter.new
-      @handler = handler.new(output: output, formatter: @formatter)
+      @handler = handler.new(output: output, formatter: @formatter, config: config)
     end
 
     # Add structured data

@@ -41,9 +41,12 @@ module TTY
 
         attr_reader :output
 
-        def initialize(output: $stderr, formatter: nil)
+        attr_reader :config
+
+        def initialize(output: $stderr, formatter: nil, config: nil)
           @output = output
           @formatter = formatter
+          @config = config
           @mutex = Mutex.new
           @pastel = Pastel.new
         end
@@ -62,7 +65,8 @@ module TTY
           fmt << color.(style[:label]) + (" " * style[:levelpad])
           fmt << "%-25s" % event.message.join(" ")
           unless event.fields.empty?
-            fmt << @formatter.dump(event.fields).gsub(/(\S+)(?=\=)/, color.("\\1"))
+            fmt << @formatter.dump(event.fields, max_bytes: config.max_bytes).
+                    gsub(/(\S+)(?=\=)/, color.("\\1"))
           end
 
           output.puts fmt.join(" ")
