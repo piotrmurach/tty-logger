@@ -14,7 +14,7 @@ module TTY
         RBRACKET = "]"
         LITERAL_TRUE = "true"
         LITERAL_FALSE = "false"
-        LITERAL_NULL = "null"
+        LITERAL_NIL = "nil"
         SINGLE_QUOTE_REGEX = /'/
         ESCAPE_DOUBLE_QUOTE = "\""
         ESCAPE_STR_REGEX = /[ ="|{}()\[\]^$+*?.-]/
@@ -69,7 +69,7 @@ module TTY
           when Time           then enc_time(val)
           when TrueClass      then LITERAL_TRUE
           when FalseClass     then LITERAL_FALSE
-          when NilClass       then LITERAL_NULL
+          when NilClass       then LITERAL_NIL
           else
             val
           end
@@ -102,7 +102,7 @@ module TTY
           case str
           when SINGLE_QUOTE_REGEX
             str.inspect
-          when ESCAPE_STR_REGEX, LITERAL_TRUE, LITERAL_FALSE, LITERAL_NULL, NUM_REGEX
+          when ESCAPE_STR_REGEX, LITERAL_TRUE, LITERAL_FALSE, LITERAL_NIL, NUM_REGEX
             ESCAPE_DOUBLE_QUOTE + str.inspect[1..-2] + ESCAPE_DOUBLE_QUOTE
           else
             str
