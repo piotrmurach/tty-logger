@@ -60,8 +60,10 @@ module TTY
           fmt = []
           fmt << color.(style[:symbol])
           fmt << color.(style[:label]) + (" " * style[:levelpad])
-          fmt << message.join(" ")
-          fmt << @formatter.dump(fields) unless fields.empty?
+          fmt << "%-25s" % message.join(" ")
+          unless fields.empty?
+            fmt << @formatter.dump(fields).gsub(/(\S+)(?=\=)/, color.("\\1"))
+          end
 
           output.puts fmt.join(" ")
         ensure

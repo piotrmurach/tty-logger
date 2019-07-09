@@ -12,7 +12,7 @@ RSpec.describe TTY::Logger, "#log" do
     expect(output.string).to eq([
       "\e[36m#{styles[:debug][:symbol]}\e[0m ",
       "\e[36mdebug\e[0m   ",
-      "Successfully deployed\n"].join)
+      "Successfully deployed    \n"].join)
   end
 
   it "logs a message at info level" do
@@ -23,7 +23,7 @@ RSpec.describe TTY::Logger, "#log" do
     expect(output.string).to eq([
       "\e[32m#{styles[:info][:symbol]}\e[0m ",
       "\e[32minfo\e[0m    ",
-      "Successfully deployed\n"].join)
+      "Successfully deployed    \n"].join)
   end
 
   it "logs a message at warn level" do
@@ -34,7 +34,7 @@ RSpec.describe TTY::Logger, "#log" do
     expect(output.string).to eq([
       "\e[33m#{styles[:warn][:symbol]}\e[0m ",
       "\e[33mwarning\e[0m ",
-      "Failed to deploy\n"].join)
+      "Failed to deploy         \n"].join)
   end
 
   it "logs a message at error level" do
@@ -45,7 +45,7 @@ RSpec.describe TTY::Logger, "#log" do
     expect(output.string).to eq([
       "\e[31m#{styles[:error][:symbol]}\e[0m ",
       "\e[31merror\e[0m   ",
-      "Failed to deploy\n"].join)
+      "Failed to deploy         \n"].join)
   end
 
   it "logs a message at fatal level" do
@@ -56,7 +56,7 @@ RSpec.describe TTY::Logger, "#log" do
     expect(output.string).to eq([
       "\e[31m#{styles[:fatal][:symbol]}\e[0m ",
       "\e[31mfatal\e[0m   ",
-      "Failed to deploy\n"].join)
+      "Failed to deploy         \n"].join)
   end
 
   it "logs a message in a block" do
@@ -67,7 +67,7 @@ RSpec.describe TTY::Logger, "#log" do
     expect(output.string).to eq([
       "\e[32m#{styles[:info][:symbol]}\e[0m ",
       "\e[32minfo\e[0m    ",
-      "Successfully deployed\n"].join)
+      "Successfully deployed    \n"].join)
   end
 
   it "doesn't log when lower level" do
@@ -86,7 +86,8 @@ RSpec.describe TTY::Logger, "#log" do
     expect(output.string).to eq([
       "\e[32m#{styles[:info][:symbol]}\e[0m ",
       "\e[32minfo\e[0m    ",
-      "Successfully deployed app=myapp env=prod\n"].join)
+      "Successfully deployed     ",
+      "\e[32mapp\e[0m=myapp \e[32menv\e[0m=prod\n"].join)
   end
 
   it "logs message with fields" do
@@ -97,6 +98,7 @@ RSpec.describe TTY::Logger, "#log" do
     expect(output.string).to eq([
       "\e[32m#{styles[:info][:symbol]}\e[0m ",
       "\e[32minfo\e[0m    ",
-      "Successfully deployed app=myapp env=prod\n"].join)
+      "Successfully deployed     ",
+      "\e[32mapp\e[0m=myapp \e[32menv\e[0m=prod\n"].join)
   end
 end
