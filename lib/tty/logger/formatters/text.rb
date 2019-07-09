@@ -12,13 +12,14 @@ module TTY
         RBRACE = "}"
         LBRACKET = "["
         RBRACKET = "]"
+        ELLIPSIS = "..."
         LITERAL_TRUE = "true"
         LITERAL_FALSE = "false"
         LITERAL_NIL = "nil"
-        SINGLE_QUOTE_REGEX = /'/
+        SINGLE_QUOTE_REGEX = /'/.freeze
         ESCAPE_DOUBLE_QUOTE = "\""
-        ESCAPE_STR_REGEX = /[ ="|{}()\[\]^$+*?.-]/
-        NUM_REGEX = /^-?\d*(?:\.\d+)?\d+$/
+        ESCAPE_STR_REGEX = /[ ="|{}()\[\]^$+*?.-]/.freeze
+        NUM_REGEX = /^-?\d*(?:\.\d+)?\d+$/.freeze
 
         # Dump data in a single formatted line
         #
@@ -32,16 +33,22 @@ module TTY
           bytesize = 0
 
           line = obj.reduce([]) do |acc, (k, v)|
-            if bytesize > max_bytes
-              break acc
-            end
-
             str = "#{dump_key(k)}=#{dump_val(v)}"
-            bytesize += str.bytesize
-            acc << str
+            items = acc.size - 1
+
+            if bytesize + str.bytesize + items > max_bytes
+              if bytesize + items + (acc[-1].bytesize - ELLIPSIS.bytesize) > max_bytes
+                acc.pop
+              end
+              acc << ELLIPSIS
+              break acc
+            else
+              bytesize += str.bytesize
+              acc << str
+            end
             acc
           end
-          line.join(" ")
+          line.join(SPACE)
         end
 
         private

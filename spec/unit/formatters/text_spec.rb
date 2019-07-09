@@ -42,6 +42,18 @@ RSpec.describe TTY::Logger::Formatters::Text, "#dump" do
     end
   end
 
+  [
+    {obj: {a: "aaaaa", b: "bbbbb", c: "ccccc"}, bytes: 24, want: "a=aaaaa b=bbbbb c=ccccc"},
+    {obj: {a: "aaaaa", b: "bbbbb", c: "ccccc"}, bytes: 20, want: "a=aaaaa b=bbbbb ..."},
+    {obj: {a: "aaaaa", b: "bbbbb", c: "ccccc"}, bytes: 15, want: "a=aaaaa ..."},
+    {obj: {a: "aaaaa", b: "bbbbb", c: "ccccc"}, bytes: 7, want: "..."},
+  ].each do |data|
+    it "truncates #{data[:obj].inspect} to #{data[:want].inspect} of #{data[:bytes]} bytes" do
+      formatter = described_class.new
+      expect(formatter.dump(data[:obj], max_bytes: data[:bytes])).to eq(data[:want])
+    end
+  end
+
   it "dumps a log line" do
     formatter = described_class.new
     data = {
