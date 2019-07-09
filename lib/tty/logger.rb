@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "logger/config"
 require_relative "logger/event"
 require_relative "logger/formatters/text"
 require_relative "logger/levels"
