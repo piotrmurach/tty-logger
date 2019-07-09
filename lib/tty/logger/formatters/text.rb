@@ -18,6 +18,7 @@ module TTY
         SINGLE_QUOTE_REGEX = /'/
         ESCAPE_DOUBLE_QUOTE = "\""
         ESCAPE_STR_REGEX = /[ ="|{}()\[\]^$+*?.-]/
+        NUM_REGEX = /^-?\d*(?:\.\d+)?\d+$/
 
         # Dump data in a single formatted line
         #
@@ -99,7 +100,7 @@ module TTY
           case str
           when SINGLE_QUOTE_REGEX
             str.inspect
-          when ESCAPE_STR_REGEX, LITERAL_TRUE, LITERAL_FALSE, LITERAL_NULL
+          when ESCAPE_STR_REGEX, LITERAL_TRUE, LITERAL_FALSE, LITERAL_NULL, NUM_REGEX
             ESCAPE_DOUBLE_QUOTE + str.inspect[1..-2] + ESCAPE_DOUBLE_QUOTE
           else
             str
