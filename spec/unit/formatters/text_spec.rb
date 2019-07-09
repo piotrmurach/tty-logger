@@ -26,6 +26,8 @@ RSpec.describe TTY::Logger::Formatters::Text, "#dump" do
     {key: "k", value: "\\", want: "k=\\"},
     {key: "k", value: "=\\", want: "k=\"=\\\\\""},
     {key: "k", value: "\\\"", want: "k=\"\\\\\\\"\""},
+    {key: "", value: "", want: "="},
+    {key: '"', value: "v", want: '"\""=v'},
     {key: "k", value: Time.new(2019, 7, 7, 12, 21, 35, "+02:00"), want: "k=2019-07-07T12:21:35+02:00"},
     {key: "k", value: {a: 1}, want: "k={a=1}"},
     {key: "k", value: {a: 1, b: 2}, want: "k={a=1 b=2}"},

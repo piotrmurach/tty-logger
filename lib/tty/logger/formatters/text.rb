@@ -51,6 +51,8 @@ module TTY
           case key
           when SINGLE_QUOTE_REGEX
             key.inspect
+          when ESCAPE_STR_REGEX
+            ESCAPE_DOUBLE_QUOTE + key.inspect[1..-2] + ESCAPE_DOUBLE_QUOTE
           else
             key
           end
