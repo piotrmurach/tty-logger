@@ -16,4 +16,12 @@ RSpec.describe TTY::Logger::Config do
     config.max_bytes = 2**8
     expect(config.max_bytes).to eq(256)
   end
+
+  it "yields configuration instance" do
+    config = double(:config)
+    allow(TTY::Logger).to receive(:config).and_return(config)
+    expect { |block|
+      TTY::Logger.configure(&block)
+    }.to yield_with_args(config)
+  end
 end

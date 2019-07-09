@@ -14,6 +14,20 @@ module TTY
     # Error raised by this logger
     class Error < StandardError; end
 
+    # Logger configuration instance
+    #
+    # @api public
+    def self.config
+      @config ||= Config.new
+    end
+
+    # Global logger configuration
+    #
+    # @api public
+    def self.configure
+      yield config
+    end
+
     # Logging formatter
     attr_reader :formatter
 
