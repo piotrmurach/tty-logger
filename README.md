@@ -27,6 +27,8 @@
 
 * Intuitive console output for an increased readability
 * Supports structured data logging
+* Formats and truncates messages to avoid clogging logging output
+* Includes metadata information: time, location, scope
 
 ## Installation
 
@@ -44,7 +46,16 @@ Or install it yourself as:
 
     $ gem install tty-logger
 
-## Usage
+
+## Contents
+
+* [1. Usage](#1-usage)
+* [2. Synopsis](#2-synopsis)
+  * [2.1 Levels](#21-levels)
+  * [2.2 Structured Data](#22-structured-data)
+  * [2.3 Configuration](#23-configuration)
+
+## 1. Usage
 
 Create logger:
 
@@ -69,7 +80,9 @@ logger.error "Deploying..."
 logger.fatal "Deploying..."
 ```
 
-### Levels
+## 2. Synopsis
+
+### 2.1 Levels
 
 The supported levels, ordered by precedence, are:
 
@@ -91,7 +104,7 @@ TTY::Logger.new level: "INFO"
 TTY::Logger.new level: TTY::Logger::INFO_LEVEL
 ```
 
-### Structured logging
+### 2.2 Structured data
 
 To add global data available for all logger calls:
 
@@ -109,6 +122,33 @@ logger = TTY::Logger.new
 
 logger.with(app: "myapp", env: "prod").info("Deplying...")
 # => Deploying... app=myapp env=prod
+```
+
+## 2.3 Configuration
+
+Change global configuration:
+
+* `:level` - the level to log messages at. Defaults to `:info`
+* `:max_bytes` - the maximum message size to be logged in bytes. Defaults to `8192`
+* `:metadata` - the meta info to display, can be `:date`, `:time`. Defaults to `[]`
+
+For example, to provide custom global setting for all logger instances do:
+
+```ruby
+TTY::Logger.configure do |config|
+  config.max_bytes = 2**10
+  config.level = :error
+  config.metadata = [:time, :date]
+end
+```
+
+Or if you wish to setup configuration per logger instance do:
+
+```ruby
+my_config = TTY::Logger::Config.new
+my_config.max_bytes = 2**10
+
+logger = TTY::Logger.new(config: my_config)
 ```
 
 ## Development
