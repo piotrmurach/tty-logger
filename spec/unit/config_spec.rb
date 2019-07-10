@@ -20,6 +20,16 @@ RSpec.describe TTY::Logger::Config do
     expect(config.max_bytes).to eq(256)
   end
 
+  it "defaults metadata to empty array" do
+    config = described_class.new
+    expect(config.metadata).to eq([])
+  end
+
+  it "serializes data into hash" do
+    config = described_class.new
+    expect(config.to_h).to eq({level: :info, max_bytes: 8192, metadata: []})
+  end
+
   it "yields configuration instance" do
     config = double(:config)
     allow(TTY::Logger).to receive(:config).and_return(config)
