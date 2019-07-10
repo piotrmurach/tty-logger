@@ -7,9 +7,12 @@ module TTY
 
       attr_reader :fields
 
-      def initialize(message, fields)
+      attr_reader :metadata
+
+      def initialize(message, fields, metadata)
         @message = message
         @fields = fields
+        @metadata = metadata
       end
     end # Event
   end # Logger

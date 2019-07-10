@@ -43,8 +43,8 @@ module TTY
     def initialize(output: $stderr, level: nil, handler: Handlers::Console,
                    formatter: Formatters::Text, fields: {}, config: Logger.config)
       @output = output
-      @level = level || config.level
       @fields = fields
+      @level = level || config.level
       @formatter = formatter.new
       @handler = handler.new(output: output, formatter: @formatter, config: config)
     end
@@ -82,8 +82,13 @@ module TTY
       if msg.empty? && block_given?
         msg = [yield]
       end
-      event = Event.new(msg, @fields.merge(scoped_fields))
-      @handler.(event, name: current_level)
+      metadata = {
+        level: current_level,
+        time: Time.now,
+        name: current_level
+      }
+      event = Event.new(msg, @fields.merge(scoped_fields), metadata)
+      @handler.(event)
     end
 
     # Log a message at :debug level

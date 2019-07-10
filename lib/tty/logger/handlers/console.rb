@@ -53,11 +53,14 @@ module TTY
 
         # Handle log event output in format
         #
+        # @param [Event] event
+        #   the current event logged
+        #
         # @api public
-        def call(event, name: nil)
+        def call(event)
           @mutex.lock
 
-          style = STYLES[name]
+          style = STYLES[event.metadata[:name]]
           color = configure_color(style)
 
           fmt = []
