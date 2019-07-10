@@ -6,6 +6,8 @@ module TTY
   class Logger
     module Handlers
       class Console
+        ARROW = "›"
+
         STYLES = {
           debug: {
             label: "debug",
@@ -64,6 +66,13 @@ module TTY
           color = configure_color(style)
 
           fmt = []
+          if config.metadata.include?(:date)
+            fmt << @pastel.white(event.metadata[:time].strftime("[%F]"))
+          end
+          if config.metadata.include?(:time)
+            fmt << @pastel.white(event.metadata[:time].strftime("[%T.%3N]"))
+          end
+          fmt << ARROW unless config.metadata.empty?
           fmt << color.(style[:symbol])
           fmt << color.(style[:label]) + (" " * style[:levelpad])
           fmt << "%-25s" % event.message.join(" ")
