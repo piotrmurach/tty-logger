@@ -112,7 +112,8 @@ To add global data available for all logger calls:
 logger = TTY::Logger.new(fields: {app: "myapp", env: "prod"})
 
 logger.info("Deploying...")
-# => Deploying... app=myapp env=prod
+# =>
+# ℹ info Deploying...    app=myapp env=prod
 ```
 
 To only add data for a single log event:
@@ -124,7 +125,7 @@ logger.with(app: "myapp", env: "prod").info("Deplying...")
 # => Deploying... app=myapp env=prod
 ```
 
-## 2.3 Configuration
+### 2.3 Configuration
 
 Change global configuration:
 
