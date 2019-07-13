@@ -17,6 +17,21 @@ RSpec.describe TTY::Logger, 'handlers' do
       "Logging                  \n"].join)
   end
 
+  it "coerces name into handler object" do
+    config = TTY::Logger::Config.new
+    config.handlers = [
+      [:console, {styles: {info: {symbol: "+", label: "INFO"}}}]
+    ]
+
+    logger = TTY::Logger.new(config: config, output: output)
+    logger.info("Logging")
+
+    expect(output.string).to eq([
+      "\e[32m+\e[0m ",
+      "\e[32mINFO\e[0m    ",
+      "Logging                  \n"].join)
+  end
+
   it "fails to coerce name into handler object" do
     config = TTY::Logger::Config.new
     config.handlers = [true]

@@ -57,10 +57,11 @@ module TTY
 
         attr_reader :config
 
-        def initialize(output: $stderr, formatter: nil, config: nil)
+        def initialize(output: $stderr, formatter: nil, config: nil, styles: {})
           @output = output
           @formatter = formatter
           @config = config
+          @styles = styles
           @mutex = Mutex.new
           @pastel = Pastel.new
         end
@@ -74,7 +75,7 @@ module TTY
         def call(event)
           @mutex.lock
 
-          style = STYLES[event.metadata[:name].to_sym]
+          style = configure_styles(event)
           color = configure_color(style)
 
           fmt = []
@@ -96,6 +97,20 @@ module TTY
           output.puts fmt.join(" ")
         ensure
           @mutex.unlock
+        end
+
+        # Merge default styles with custom style overrides
+        #
+        # @return [Hash[String]]
+        #   the style matching log type
+        #
+        # @api private
+        def configure_styles(event)
+          style = STYLES[event.metadata[:name].to_sym].dup
+          (@styles[event.metadata[:name].to_sym] || {}).each do |k, v|
+            style[k] = v
+          end
+          style
         end
 
         def configure_color(style)

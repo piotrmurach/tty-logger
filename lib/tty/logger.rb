@@ -53,10 +53,16 @@ module TTY
 
     # Add handler for logging messages
     #
+    # @example
+    #   add_handler(:console)
+    #
     # @api public
     def add_handler(handler)
-      name = coerce_handler(handler)
-      ready_handler = name.new(output: output, formatter: formatter, config: @config)
+      h, options = *(handler.is_a?(Array) ? handler : [handler, {}])
+      name = coerce_handler(h)
+      global_opts = {output: output, formatter: formatter, config: @config}
+      opts = global_opts.merge(options)
+      ready_handler = name.new(opts)
       @ready_handlers << ready_handler
     end
 
