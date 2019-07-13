@@ -55,6 +55,8 @@ Or install it yourself as:
   * [2.2 Structured Data](#22-structured-data)
   * [2.3 Configuration](#23-configuration)
   * [2.4 Handlers](#24-handlers)
+    * [2.4.1 Console Handler](#241-console-handler)
+    * [2.4.2 Custom Handler](#242-custom-handler)
 
 ## 1. Usage
 
@@ -145,24 +147,112 @@ TTY::Logger.configure do |config|
 end
 ```
 
-Or if you wish to setup configuration per logger instance do:
+Or if you wish to setup configuration per logger instance use block:
 
 ```ruby
-my_config = TTY::Logger::Config.new
-my_config.max_bytes = 2**10
-
-logger = TTY::Logger.new(config: my_config)
+logger = TTY::Logger.new do |config|
+  config.max_bytes = 2**20
+end
 ```
 
 ### 2.4 Handlers
 
+`TTY::Logger` supports many ways to handle log messages.
+
 The available handlers by default are:
 
-* `Handlers::Console` - log messages to the console, enabled by default
+* `:console` - log messages to the console, enabled by default
+
+You can also implement your own [custom handler](#242-custom-handler).
+
+The handlers can be configured via global or instance configuration with `handlers`. The handler can be a name or a class name:
+
+```ruby
+TTY::Logger.new do |config|
+  config.handlers = [:console]
+end
+```
+
+Or using class name:
+
+```ruby
+TTY::Logger.new do |config|
+  config.handlers = [TTY::Logger::Handlers::Console]
+end
+```
+
+Handlers can also be added/removed dynamically through `add_handler` or `remove_handler`.
+
+```ruby
+logger = TTY::Logger.new
+logger.add_handler(:console)
+logger.remove_handler(:console)
+```
 
 #### 2.4.1 Console handler
 
+The console handler prints log messages to the console. It supports the following options:
+
+* `:styles` - a hash of styling options.
+* `:formatter` - the formatter for log messages. Defaults to `:text`
+* `:output` - the device to log error messages to. Defaults to `$stderr`
+
+The supported options in the `:styles` are:
+
+* `:label` - the name for the log message.
+* `:symbol` - the graphics to display before the log message label.
+* `:color` - the color for the log message.
+* `:levelpad` - the extra amount of padding used to display log label.
+
+See the [TTY::Logger::Handlers::Console]() for full list of styles.
+
+Console handler has many defaults styles such as `success` and `error`:
+
+```ruby
+logger = TTY::Logger.new
+logger.success("Default success")
+logger.error("Default error")
+```
+
+You can change console handler default style with a tuple of handler name and options hash:
+
+```ruby
+handler = [
+  :console, {
+  styles: {
+    success: {
+      symbol: "+",
+      label: "Ohh yes"
+    },
+    error: {
+      symbol: "!",
+      label: "Dooh",
+      levelpad: 3
+    }
+  }
+}]
+```
+
+And then use the `handlers` configuration option:
+
+```ruby
+new_style = TTY::Logger.new do |config|
+  config.handlers = [handler]
+end
+
+new_style.success("Custom success")
+new_style.error("Custom error")
+```
+
 #### 2.4.2 Custom handler
+
+```ruby
+class MyConsoleLogger
+  def call(event)
+    ...
+  end
+end
+```
 
 ## Development
 
