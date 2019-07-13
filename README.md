@@ -162,6 +162,7 @@ end
 The available handlers by default are:
 
 * `:console` - log messages to the console, enabled by default
+* `:null` - discards any log messages
 
 You can also implement your own [custom handler](#242-custom-handler).
 
