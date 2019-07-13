@@ -79,14 +79,17 @@ module TTY
           color = configure_color(style)
 
           fmt = []
-          if config.metadata.include?(:date)
-            fmt << @pastel.white(event.metadata[:time].strftime("[%F]"))
-          end
-          if config.metadata.include?(:time)
-            fmt << @pastel.white(event.metadata[:time].strftime("[%T.%3N]"))
-          end
-          if config.metadata.include?(:file)
-            fmt << @pastel.white(format_filepath(event))
+          config.metadata.each do |meta|
+            case meta
+            when :date
+              fmt << @pastel.white(event.metadata[:time].strftime("[%F]"))
+            when :time
+              fmt << @pastel.white(event.metadata[:time].strftime("[%T.%3N]"))
+            when :file
+              fmt << @pastel.white(format_filepath(event))
+            else
+              raise "Unknown metadata `#{meta}`"
+            end
           end
           fmt << ARROW unless config.metadata.empty?
           fmt << color.(style[:symbol])
