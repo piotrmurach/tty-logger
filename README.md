@@ -54,6 +54,7 @@ Or install it yourself as:
   * [2.1 Levels](#21-levels)
   * [2.2 Structured Data](#22-structured-data)
   * [2.3 Configuration](#23-configuration)
+  * [2.4 Handlers](#24-handlers)
 
 ## 1. Usage
 
@@ -127,13 +128,14 @@ logger.with(app: "myapp", env: "prod").info("Deplying...")
 
 ### 2.3 Configuration
 
-Change global configuration:
+All the configuration options can be changed globally via `configure` or per logger instance via object initialization.
 
-* `:level` - the level to log messages at. Defaults to `:info`
-* `:max_bytes` - the maximum message size to be logged in bytes. Defaults to `8192`
-* `:metadata` - the meta info to display, can be `:date`, `:time`. Defaults to `[]`
+* `:handlers` - the handlers used to log messages. Defaults to `[:console]`. See [Handlers](#24-handlers) for more details.
+* `:level` - the logging level. Any message logged below this level will be simply ignored. Each handler may have it's own default level. Defaults to `:info`
+* `:max_bytes` - the maximum message size to be logged in bytes. Defaults to `8192` bytes. The truncated message will have `...` at the end.
+* `:metadata` - the meta info to display before the message, can be `:date`, `:time`. Defaults to `[]`
 
-For example, to provide custom global setting for all logger instances do:
+For example, to configure `:max_bytes`, `:level` and `:metadata` for all logger instances do:
 
 ```ruby
 TTY::Logger.configure do |config|
@@ -151,6 +153,16 @@ my_config.max_bytes = 2**10
 
 logger = TTY::Logger.new(config: my_config)
 ```
+
+### 2.4 Handlers
+
+The available handlers by default are:
+
+* `Handlers::Console` - log messages to the console, enabled by default
+
+#### 2.4.1 Console handler
+
+#### 2.4.2 Custom handler
 
 ## Development
 
