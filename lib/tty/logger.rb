@@ -128,10 +128,14 @@ module TTY
       if msg.empty? && block_given?
         msg = [yield]
       end
+      loc = caller_locations(2,1)[0]
       metadata = {
         level: current_level,
         time: Time.now,
-        name: caller_locations(1,1)[0].label
+        name: caller_locations(1,1)[0].label,
+        path: loc.path,
+        lineno: loc.lineno,
+        method: loc.base_label
       }
       event = Event.new(msg, @fields.merge(scoped_fields), metadata)
       @ready_handlers.each do |handler|
