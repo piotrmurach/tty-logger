@@ -85,6 +85,9 @@ module TTY
           if config.metadata.include?(:time)
             fmt << @pastel.white(event.metadata[:time].strftime("[%T.%3N]"))
           end
+          if config.metadata.include?(:file)
+            fmt << @pastel.white(format_filepath(event))
+          end
           fmt << ARROW unless config.metadata.empty?
           fmt << color.(style[:symbol])
           fmt << color.(style[:label]) + (" " * style[:levelpad])
@@ -97,6 +100,13 @@ module TTY
           output.puts fmt.join(" ")
         ensure
           @mutex.unlock
+        end
+
+        private
+
+        def format_filepath(event)
+          "[%s:%d:in`%s`]" % [event.metadata[:path], event.metadata[:lineno],
+                              event.metadata[:method]]
         end
 
         # Merge default styles with custom style overrides

@@ -69,19 +69,22 @@ RSpec.describe TTY::Logger::Config do
     allow(Time).to receive(:now).and_return(time_now)
 
     logger = TTY::Logger.new(output: output) do |config|
-      config.metadata = [:time, :date]
+      config.metadata = [:time, :date, :file]
     end
 
     logger.info("Deploying", app: "myapp", env: "prod")
 
-    expect(output.string).to eq([
+    expected_output = [
       "\e[37m[2019-07-10]\e[0m ",
-      "\e[37m[19:42:35.000]\e[0m",
+      "\e[37m[19:42:35.000]\e[0m ",
+      "\e[37m[#{__FILE__}:#{__LINE__ - 5}:in`<top (required)>`]\e[0m",
       " #{TTY::Logger::Handlers::Console::ARROW} ",
       "\e[32m#{styles[:info][:symbol]}\e[0m ",
       "\e[32minfo\e[0m    ",
       "Deploying                 ",
       "\e[32mapp\e[0m=myapp \e[32menv\e[0m=prod\n"
-    ].join)
+    ].join
+
+    expect(output.string).to eq(expected_output)
   end
 end
