@@ -62,7 +62,7 @@ module TTY
         def call(event)
           @mutex.lock
 
-          style = STYLES[event.metadata[:name]]
+          style = STYLES[event.metadata[:name].to_sym]
           color = configure_color(style)
 
           fmt = []

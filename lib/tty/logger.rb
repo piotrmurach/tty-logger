@@ -85,7 +85,7 @@ module TTY
       metadata = {
         level: current_level,
         time: Time.now,
-        name: current_level
+        name: caller_locations(1,1)[0].label
       }
       event = Event.new(msg, @fields.merge(scoped_fields), metadata)
       @handler.(event)
