@@ -49,11 +49,10 @@ RSpec.describe TTY::Logger::Config do
   end
 
   it "configures output size" do
-    config = TTY::Logger::Config.new
-    config.max_bytes = 2**4
-    config.level = :debug
-
-    logger = TTY::Logger.new(output: output, config: config)
+    logger = TTY::Logger.new(output: output) do |config|
+      config.max_bytes = 2**4
+      config.level = :debug
+    end
 
     logger.debug("Deploying", app: "myapp", env: "prod")
 
@@ -68,10 +67,10 @@ RSpec.describe TTY::Logger::Config do
   it "configures output metadata" do
     time_now = Time.new(2019, 7, 10, 19, 42, 35, "+02:00")
     allow(Time).to receive(:now).and_return(time_now)
-    config = TTY::Logger::Config.new
-    config.metadata = [:time, :date]
 
-    logger = TTY::Logger.new(output: output, config: config)
+    logger = TTY::Logger.new(output: output) do |config|
+      config.metadata = [:time, :date]
+    end
 
     logger.info("Deploying", app: "myapp", env: "prod")
 

@@ -38,13 +38,19 @@ module TTY
     attr_reader :output
 
     def initialize(output: $stderr, level: nil, formatter: Formatters::Text,
-                   fields: {}, config: Logger.config)
+                   fields: {})
       @output = output
       @fields = fields
-      @config = config
-      @level = level || config.level
+      @config = if block_given?
+                  conf = Config.new
+                  yield(conf)
+                  conf
+                else
+                  self.class.config
+                end
+      @level = level || @config.level
       @formatter = formatter.new
-      @handlers = config.handlers
+      @handlers = @config.handlers
       @ready_handlers = []
       @handlers.each do |handler|
         add_handler(handler)
@@ -60,7 +66,7 @@ module TTY
     def add_handler(handler)
       h, options = *(handler.is_a?(Array) ? handler : [handler, {}])
       name = coerce_handler(h)
-      global_opts = {output: output, formatter: formatter, config: @config}
+      global_opts = { output: output, formatter: formatter, config: @config }
       opts = global_opts.merge(options)
       ready_handler = name.new(opts)
       @ready_handlers << ready_handler
