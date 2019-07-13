@@ -3,9 +3,10 @@
 require_relative "logger/config"
 require_relative "logger/event"
 require_relative "logger/formatters/text"
+require_relative "logger/handlers/console"
+require_relative "logger/handlers/null"
 require_relative "logger/levels"
 require_relative "logger/version"
-require_relative "logger/handlers/console"
 
 module TTY
   class Logger

@@ -32,6 +32,16 @@ RSpec.describe TTY::Logger, 'handlers' do
       "Logging                  \n"].join)
   end
 
+  it "doesn't log with a null handler" do
+    logger = TTY::Logger.new(output: output) do |config|
+      config.handlers = [:null]
+    end
+
+    logger.info("Logging")
+
+    expect(output.string).to eq("")
+  end
+
   it "fails to coerce name into handler object" do
     expect {
       TTY::Logger.new do |config|
