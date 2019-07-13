@@ -27,13 +27,13 @@ RSpec.describe TTY::Logger::Config do
 
   it "defaults handlers to console" do
     config = described_class.new
-    expect(config.handlers).to eq([TTY::Logger::Handlers::Console])
+    expect(config.handlers).to eq([:console])
   end
 
   it "serializes data into hash" do
     config = described_class.new
     expect(config.to_h).to eq({
-      handlers: [TTY::Logger::Handlers::Console],
+      handlers: [:console],
       level: :info,
       max_bytes: 8192,
       metadata: []

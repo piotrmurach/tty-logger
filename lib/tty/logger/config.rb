@@ -22,7 +22,7 @@ module TTY
         @max_bytes = options.fetch(:max_bytes) { 2**13 }
         @level = options.fetch(:level) { :info }
         @metadata = options.fetch(:metadata) { [] }
-        @handlers = options.fetch(:handlers) { [TTY::Logger::Handlers::Console] }
+        @handlers = options.fetch(:handlers) { [:console] }
       end
 
       # Hash representation of this config
