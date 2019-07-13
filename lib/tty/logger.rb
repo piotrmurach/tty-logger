@@ -31,22 +31,32 @@ module TTY
     # Logging formatter
     attr_reader :formatter
 
-    # The log handling device
-    attr_reader :handler
-
     # Logging severity level
     attr_reader :level
 
     # By default output to stderr
     attr_reader :output
 
-    def initialize(output: $stderr, level: nil, handler: Handlers::Console,
-                   formatter: Formatters::Text, fields: {}, config: Logger.config)
+    def initialize(output: $stderr, level: nil, formatter: Formatters::Text,
+                   fields: {}, config: Logger.config)
       @output = output
       @fields = fields
+      @config = config
       @level = level || config.level
       @formatter = formatter.new
-      @handler = handler.new(output: output, formatter: @formatter, config: config)
+      @handlers = config.handlers
+      @ready_handlers = []
+      @handlers.each do |handler|
+        add_handler(handler)
+      end
+    end
+
+    # Add handler for logging messages
+    #
+    # @api private
+    def add_handler(handler)
+      ready_handler = handler.new(output: output, formatter: formatter, config: @config)
+      @ready_handlers << ready_handler
     end
 
     # Add structured data
@@ -88,7 +98,9 @@ module TTY
         name: caller_locations(1,1)[0].label
       }
       event = Event.new(msg, @fields.merge(scoped_fields), metadata)
-      @handler.(event)
+      @ready_handlers.each do |handler|
+        handler.(event)
+      end
     end
 
     # Log a message at :debug level
