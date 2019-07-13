@@ -59,6 +59,28 @@ RSpec.describe TTY::Logger, "#log" do
       "Failed to deploy         \n"].join)
   end
 
+  it "logs a success message at info level" do
+    logger = TTY::Logger.new(output: output)
+
+    logger.success("Deployed", "successfully")
+
+    expect(output.string).to eq([
+      "\e[32m#{styles[:success][:symbol]}\e[0m ",
+      "\e[32msuccess\e[0m ",
+      "Deployed successfully    \n"].join)
+  end
+
+  it "logs a wait message at info level" do
+    logger = TTY::Logger.new(output: output)
+
+    logger.wait("Waiting for", "deploy")
+
+    expect(output.string).to eq([
+      "\e[36m#{styles[:wait][:symbol]}\e[0m ",
+      "\e[36mwaiting\e[0m ",
+      "Waiting for deploy       \n"].join)
+  end
+
   it "logs a message in a block" do
     logger = TTY::Logger.new(output: output, level: :debug)
 

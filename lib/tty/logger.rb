@@ -129,5 +129,19 @@ module TTY
     def fatal(*msg, &block)
       log(:fatal, *msg, &block)
     end
+
+    # Log a message with a success label
+    #
+    # @api public
+    def success(*msg, &block)
+      log(:info, *msg, &block)
+    end
+
+    # Log a message with a wait label
+    #
+    # @api public
+    def wait(*msg, &block)
+      log(:info, *msg, &block)
+    end
   end # Logger
 end # TTY

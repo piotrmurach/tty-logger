@@ -38,6 +38,18 @@ module TTY
             symbol: "!",
             color: :red,
             levelpad: 2
+          },
+          success: {
+            label: "success",
+            symbol: "✔",
+            color: :green,
+            levelpad: 0
+          },
+          wait: {
+            label: "waiting",
+            symbol: "…",
+            color: :cyan,
+            levelpad: 0
           }
         }
 
