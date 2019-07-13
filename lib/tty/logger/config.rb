@@ -15,7 +15,7 @@ module TTY
       # The maximum message size to be logged in bytes. Defaults to 8192
       attr_accessor :max_bytes
 
-      # The meta info to display, can be :date, :time. Defaults to []
+      # The meta info to display, can be :date, :time, :file. Defaults to []
       attr_accessor :metadata
 
       def initialize(**options)

@@ -135,7 +135,7 @@ All the configuration options can be changed globally via `configure` or per log
 * `:handlers` - the handlers used to log messages. Defaults to `[:console]`. See [Handlers](#24-handlers) for more details.
 * `:level` - the logging level. Any message logged below this level will be simply ignored. Each handler may have it's own default level. Defaults to `:info`
 * `:max_bytes` - the maximum message size to be logged in bytes. Defaults to `8192` bytes. The truncated message will have `...` at the end.
-* `:metadata` - the meta info to display before the message, can be `:date`, `:time`. Defaults to `[]`
+* `:metadata` - the meta info to display before the message, can be `:date`, `:time` or `:file`. Defaults to `[]`
 
 For example, to configure `:max_bytes`, `:level` and `:metadata` for all logger instances do:
 
