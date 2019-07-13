@@ -53,10 +53,33 @@ module TTY
 
     # Add handler for logging messages
     #
-    # @api private
+    # @api public
     def add_handler(handler)
-      ready_handler = handler.new(output: output, formatter: formatter, config: @config)
+      name = coerce_handler(handler)
+      ready_handler = name.new(output: output, formatter: formatter, config: @config)
       @ready_handlers << ready_handler
+    end
+
+    # Coerce handler name into object
+    #
+    # @example
+    #   coerce_handler(:console)
+    #   # => TTY::Logger::Handlers::Console
+    #
+    # @raise [Error] when class cannot be coerced
+    #
+    # @return [Class]
+    #
+    # @api private
+    def coerce_handler(name)
+      case name
+      when String, Symbol
+        Handlers.const_get(name.capitalize)
+      when Class
+        name
+      else
+        raise Error, "Handler needs to be a class name or a symbol name"
+      end
     end
 
     # Add structured data
