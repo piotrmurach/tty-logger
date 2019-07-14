@@ -54,6 +54,20 @@ RSpec.describe TTY::Logger::Formatters::Text, "#dump" do
     end
   end
 
+  [
+    {obj: {a: {b: {c: "ccccc"}}}, depth: 1, want: "a={...}"},
+    {obj: {a: {b: {c: "ccccc"}}}, depth: 2, want: "a={b={...}}"},
+    {obj: {a: {b: {c: "ccccc"}}}, depth: 3, want: "a={b={c=ccccc}}"},
+    {obj: {a: ["b", {c: "ccccc"}]}, depth: 1, want: "a=[...]"},
+    {obj: {a: ["b", {c: "ccccc"}]}, depth: 2, want: "a=[b {...}]"},
+    {obj: {a: ["b", {c: "ccccc"}]}, depth: 3, want: "a=[b {c=ccccc}]"},
+  ].each do |data|
+    it "truncates nested object #{data[:obj].inspect} to #{data[:want].inspect}" do
+      formatter = described_class.new
+      expect(formatter.dump(data[:obj], max_depth: data[:depth])).to eq(data[:want])
+    end
+  end
+
   it "dumps a log line" do
     formatter = described_class.new
     data = {

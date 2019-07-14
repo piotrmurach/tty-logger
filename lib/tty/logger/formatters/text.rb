@@ -29,11 +29,11 @@ module TTY
         # @return [String]
         #
         # @api public
-        def dump(obj, max_bytes: 2**12)
+        def dump(obj, max_bytes: 2**12, max_depth: 3)
           bytesize = 0
 
           line = obj.reduce([]) do |acc, (k, v)|
-            str = "#{dump_key(k)}=#{dump_val(v)}"
+            str = "#{dump_key(k)}=#{dump_val(v, max_depth)}"
             items = acc.size - 1
 
             if bytesize + str.bytesize + items > max_bytes
@@ -65,10 +65,10 @@ module TTY
           end
         end
 
-        def dump_val(val)
+        def dump_val(val, depth)
           case val
-          when Hash           then enc_obj(val)
-          when Array          then enc_arr(val)
+          when Hash           then enc_obj(val, depth - 1)
+          when Array          then enc_arr(val, depth - 1)
           when String, Symbol then enc_str(val)
           when Complex        then enc_cpx(val)
           when Float          then enc_float(val)
@@ -82,14 +82,18 @@ module TTY
           end
         end
 
-        def enc_obj(obj)
+        def enc_obj(obj, depth)
+          return LBRACE + ELLIPSIS + RBRACE if depth.zero?
+
           LBRACE +
-            obj.map { |k, v| "#{dump_key(k)}=#{dump_val(v)}" }.join(SPACE) +
+            obj.map { |k, v| "#{dump_key(k)}=#{dump_val(v, depth)}" }.join(SPACE) +
             RBRACE
         end
 
-        def enc_arr(array)
-          LBRACKET + array.map { |v| dump_val(v) }.join(SPACE) + RBRACKET
+        def enc_arr(array, depth)
+          return LBRACKET + ELLIPSIS + RBRACKET if depth.zero?
+
+          LBRACKET + array.map { |v| dump_val(v, depth) }.join(SPACE) + RBRACKET
         end
 
         def enc_cpx(val)
