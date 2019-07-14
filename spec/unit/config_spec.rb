@@ -9,6 +9,11 @@ RSpec.describe TTY::Logger::Config do
     expect(config.max_bytes).to eq(8192)
   end
 
+  it "defaults :max_depth to 3" do
+    config = described_class.new
+    expect(config.max_depth).to eq(3)
+  end
+
   it "defaults :level to :info" do
     config = described_class.new
     expect(config.level).to eq(:info)
@@ -36,6 +41,7 @@ RSpec.describe TTY::Logger::Config do
       handlers: [:console],
       level: :info,
       max_bytes: 8192,
+      max_depth: 3,
       metadata: []
     })
   end
