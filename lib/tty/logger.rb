@@ -30,17 +30,13 @@ module TTY
       yield config
     end
 
-    # Logging formatter
-    attr_reader :formatter
-
     # Logging severity level
     attr_reader :level
 
     # By default output to stderr
     attr_reader :output
 
-    def initialize(output: $stderr, level: nil, formatter: Formatters::Text,
-                   fields: {})
+    def initialize(output: $stderr, level: nil, fields: {})
       @output = output
       @fields = fields
       @config = if block_given?
@@ -51,7 +47,6 @@ module TTY
                   self.class.config
                 end
       @level = level || @config.level
-      @formatter = formatter.new
       @handlers = @config.handlers
       @ready_handlers = []
       @handlers.each do |handler|
@@ -68,7 +63,7 @@ module TTY
     def add_handler(handler)
       h, options = *(handler.is_a?(Array) ? handler : [handler, {}])
       name = coerce_handler(h)
-      global_opts = { output: output, formatter: formatter, config: @config }
+      global_opts = { output: output, config: @config }
       opts = global_opts.merge(options)
       ready_handler = name.new(opts)
       @ready_handlers << ready_handler

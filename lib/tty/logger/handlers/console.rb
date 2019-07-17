@@ -59,7 +59,7 @@ module TTY
 
         def initialize(output: $stderr, formatter: nil, config: nil, styles: {})
           @output = output
-          @formatter = formatter
+          @formatter = (formatter || config.formatter).new
           @config = config
           @styles = styles
           @mutex = Mutex.new
