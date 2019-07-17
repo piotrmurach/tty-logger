@@ -6,6 +6,9 @@ module TTY
   class Logger
     class Config
 
+      # The format used for displaying structured data
+      attr_accessor :formatter
+
       # The handlers used to display logging info. Defaults to [:console]
       attr_accessor :handlers
 
@@ -27,6 +30,7 @@ module TTY
         @level = options.fetch(:level) { :info }
         @metadata = options.fetch(:metadata) { [] }
         @handlers = options.fetch(:handlers) { [:console] }
+        @formatter = options.fetch(:formatter) { TTY::Logger::Formatters::Text }
       end
 
       # Hash representation of this config
@@ -34,6 +38,7 @@ module TTY
       # @api public
       def to_h
         {
+          formatter: formatter,
           handlers: handlers,
           level: level,
           max_bytes: max_bytes,

@@ -35,9 +35,15 @@ RSpec.describe TTY::Logger::Config do
     expect(config.handlers).to eq([:console])
   end
 
+  it "defaults formatter to text" do
+    config = described_class.new
+    expect(config.formatter).to eq(TTY::Logger::Formatters::Text)
+  end
+
   it "serializes data into hash" do
     config = described_class.new
     expect(config.to_h).to eq({
+      formatter: TTY::Logger::Formatters::Text,
       handlers: [:console],
       level: :info,
       max_bytes: 8192,
