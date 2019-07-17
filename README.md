@@ -51,12 +51,14 @@ Or install it yourself as:
 
 * [1. Usage](#1-usage)
 * [2. Synopsis](#2-synopsis)
-  * [2.1 Levels](#21-levels)
-  * [2.2 Structured Data](#22-structured-data)
-  * [2.3 Configuration](#23-configuration)
-  * [2.4 Handlers](#24-handlers)
-    * [2.4.1 Console Handler](#241-console-handler)
-    * [2.4.2 Custom Handler](#242-custom-handler)
+  * [2.1 Types](#21-types)
+  * [2.2 Levels](#22-levels)
+  * [2.3 Structured Data](#23-structured-data)
+  * [2.4 Configuration](#24-configuration)
+  * [2.5 Handlers](#25-handlers)
+    * [2.5.1 Console Handler](#251-console-handler)
+    * [2.5.2 Custom Handler](#252-custom-handler)
+  * [2.6 Formatters](#26-formatters)
 
 ## 1. Usage
 
@@ -66,26 +68,65 @@ Create logger:
 logger = TTY::Logger.new
 ```
 
-Log information:
+And log information using any of the logger [types](#21-types):
 
 ```ruby
-logger.info "Successfully deployed"
+logger.info "Deployed successfully"
+logger.info "Deployed", "successfully"
 logger.info { "Dynamically generated info" }
 ```
 
-User different [levels](#levels) to differentiate log events:
+Include structured data:
 
 ```ruby
-logger.debug "Deploying..."
-logger.info "Deploying..."
-logger.warn "Deploying..."
-logger.error "Deploying..."
-logger.fatal "Deploying..."
+logger.info "Deployed successfully", myapp: "myapp", env: "prod"
+# =>
+# ✔ success Deployed successfully     app=myapp env=prod
+```
+
+Add [metadata](#24-configuration) information:
+
+```ruby
+logger = TTY::Logger.new do |config|
+  config.metadata = [:date, :time]
+end
+logger.info "Deployed successfully"
+# =>
+# [2019-07-17] [23:21:55.287] › ℹ info    Info about the deploy     app=myapp env=prod
+```
+
+Or change structured data [formatting](#26-formatters):
+
+```ruby
+logger = TTY::Logger.new do |config|
+  config.formatter = :json
+end
+logger.info "Deployed successfully"
+# =>
+# [2019-07-17] [23:21:55.287] › ℹ info    Info about the deploy     {"app":"myapp","env":"prod"}
 ```
 
 ## 2. Synopsis
 
-### 2.1 Levels
+## 2.1 Types
+
+There are many logger types to choose from:
+
+* `debug` - logs message at `:debug` level
+* `info` - logs message at `:info` level
+* `success` - logs message at `:info` level
+* `wait` - logs message at `:info` level
+* `warn` - logs message at `:warn` level
+* `error` - logs message at `:error` level
+* `fatal` - logs message at `:fatal` level
+
+```ruby
+logger.success "Deployed successfully"
+# =>
+# ✔ success Deployed successfully     app=myapp env=prod
+```
+
+### 2.2 Levels
 
 The supported levels, ordered by precedence, are:
 
@@ -107,7 +148,7 @@ TTY::Logger.new level: "INFO"
 TTY::Logger.new level: TTY::Logger::INFO_LEVEL
 ```
 
-### 2.2 Structured data
+### 2.3 Structured data
 
 To add global data available for all logger calls:
 
@@ -116,23 +157,24 @@ logger = TTY::Logger.new(fields: {app: "myapp", env: "prod"})
 
 logger.info("Deploying...")
 # =>
-# ℹ info Deploying...    app=myapp env=prod
+# ℹ info    Deploying...              app=myapp env=prod
 ```
 
 To only add data for a single log event:
 
 ```ruby
 logger = TTY::Logger.new
-
-logger.with(app: "myapp", env: "prod").info("Deplying...")
-# => Deploying... app=myapp env=prod
+logger.wait "Ready to deploy", app: "myapp", env: "prod"
+# =>
+# … waiting Ready to deploy           app=myapp env=prod
 ```
 
-### 2.3 Configuration
+### 2.4 Configuration
 
 All the configuration options can be changed globally via `configure` or per logger instance via object initialization.
 
-* `:handlers` - the handlers used to log messages. Defaults to `[:console]`. See [Handlers](#24-handlers) for more details.
+* `:formatter` - the formatter used to display structured data. Defaults to `:text`. see [Formatters](#26-formatters) for more details.
+* `:handlers` - the handlers used to log messages. Defaults to `[:console]`. See [Handlers](#25-handlers) for more details.
 * `:level` - the logging level. Any message logged below this level will be simply ignored. Each handler may have it's own default level. Defaults to `:info`
 * `:max_bytes` - the maximum message size to be logged in bytes. Defaults to `8192` bytes. The truncated message will have `...` at the end.
 * `:max_depth` - the maximum depth for nested structured data. Defaults to `3`.
@@ -156,7 +198,7 @@ logger = TTY::Logger.new do |config|
 end
 ```
 
-### 2.4 Handlers
+### 2.5 Handlers
 
 `TTY::Logger` supports many ways to handle log messages.
 
@@ -191,7 +233,7 @@ logger.add_handler(:console)
 logger.remove_handler(:console)
 ```
 
-#### 2.4.1 Console handler
+#### 2.5.1 Console handler
 
 The console handler prints log messages to the console. It supports the following options:
 
@@ -246,13 +288,36 @@ new_style.success("Custom success")
 new_style.error("Custom error")
 ```
 
-#### 2.4.2 Custom handler
+#### 2.5.2 Custom handler
 
 ```ruby
 class MyConsoleLogger
   def call(event)
     ...
   end
+end
+```
+
+### 2.6 Formatters
+
+The available formatters are:
+
+* `:json`
+* `:text`
+
+You can configure format for all the handlers:
+
+```ruby
+TTY::Logger.new do |config|
+  config.formatter = :json
+end
+```
+
+Or specify a different formatter for each handler. For example, let's say you want to log to console twice, once with default formatter and once with `:json` formatter:
+
+```ruby
+TTY::Logger.new do |config|
+  config.handlers = [:console, [:console, formatter: :json]]
 end
 ```
 
