@@ -30,7 +30,7 @@ module TTY
         @level = options.fetch(:level) { :info }
         @metadata = options.fetch(:metadata) { [] }
         @handlers = options.fetch(:handlers) { [:console] }
-        @formatter = options.fetch(:formatter) { TTY::Logger::Formatters::Text }
+        @formatter = options.fetch(:formatter) { :text }
       end
 
       # Hash representation of this config
