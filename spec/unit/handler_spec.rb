@@ -17,7 +17,20 @@ RSpec.describe TTY::Logger, 'handlers' do
       "Logging                  \n"].join)
   end
 
-  it "coerces name into handler object" do
+  it "coerces class name into handler object" do
+    logger = TTY::Logger.new(output: output) do |config|
+      config.handlers = [TTY::Logger::Handlers::Console]
+    end
+
+    logger.info("Logging")
+
+    expect(output.string).to eq([
+      "\e[32m#{styles[:info][:symbol]}\e[0m ",
+      "\e[32minfo\e[0m    ",
+      "Logging                  \n"].join)
+  end
+
+  it "changes default handler styling" do
     logger = TTY::Logger.new(output: output) do |config|
       config.handlers = [
         [:console, {styles: {info: {symbol: "+", label: "INFO"}}}]
