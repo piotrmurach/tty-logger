@@ -59,11 +59,30 @@ module TTY
 
         def initialize(output: $stderr, formatter: nil, config: nil, styles: {})
           @output = output
-          @formatter = (formatter || config.formatter).new
+          @formatter = coerce_formatter(formatter || config.formatter).new
           @config = config
           @styles = styles
           @mutex = Mutex.new
           @pastel = Pastel.new
+        end
+
+        # Coerce formatter name into constant
+        #
+        # @api private
+        def coerce_formatter(name)
+          case name
+          when String, Symbol
+            const_name = if Formatters.const_defined?(name.upcase)
+                           name.upcase
+                         else
+                           name.capitalize
+                         end
+            Formatters.const_get(const_name)
+          when Class
+            name
+          end
+        rescue
+          raise Error, "Unrecognized formatter name '#{name.inspect}'"
         end
 
         # Handle log event output in format
