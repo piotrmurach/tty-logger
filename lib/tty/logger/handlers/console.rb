@@ -98,7 +98,7 @@ module TTY
           color = configure_color(style)
 
           fmt = []
-          config.metadata.each do |meta|
+          metadata.each do |meta|
             case meta
             when :date
               fmt << @pastel.white(event.metadata[:time].strftime("[%F]"))
@@ -125,6 +125,14 @@ module TTY
         end
 
         private
+
+        def metadata
+          if config.metadata.include?(:all)
+            [:date, :time, :file]
+          else
+            config.metadata
+          end
+        end
 
         def format_filepath(event)
           "[%s:%d:in`%s`]" % [event.metadata[:path], event.metadata[:lineno],
