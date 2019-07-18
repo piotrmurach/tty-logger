@@ -69,6 +69,16 @@ module TTY
       @ready_handlers << ready_handler
     end
 
+    # Remove log events handler
+    #
+    # @example
+    #   remove_handler(:console)
+    #
+    # @api public
+    def remove_handler(handler)
+      @ready_handlers.delete(handler)
+    end
+
     # Coerce handler name into object
     #
     # @example
