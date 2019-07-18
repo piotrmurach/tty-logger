@@ -30,13 +30,13 @@ module TTY
       yield config
     end
 
-    # Logging severity level
-    attr_reader :level
-
     # By default output to stderr
     attr_reader :output
 
-    def initialize(output: $stderr, level: nil, fields: {})
+    # The log serverity level
+    attr_reader :level
+
+    def initialize(output: $stderr, fields: {})
       @output = output
       @fields = fields
       @config = if block_given?
@@ -46,7 +46,7 @@ module TTY
                 else
                   self.class.config
                 end
-      @level = level || @config.level
+      @level = @config.level
       @handlers = @config.handlers
       @ready_handlers = []
       @handlers.each do |handler|
@@ -121,8 +121,7 @@ module TTY
     #
     # @api public
     def with(new_fields)
-      self.class.new(fields: @fields.merge(new_fields),
-                     output: output, level: level)
+      self.class.new(fields: @fields.merge(new_fields), output: output)
     end
 
     # Check current level against another

@@ -5,7 +5,9 @@ RSpec.describe TTY::Logger, "#log" do
   let(:styles) { TTY::Logger::Handlers::Console::STYLES }
 
   it "logs a message at debug level" do
-    logger = TTY::Logger.new(output: output, level: :debug)
+    logger = TTY::Logger.new(output: output) do |config|
+      config.level = :debug
+    end
 
     logger.debug("Successfully", "deployed")
 
@@ -82,7 +84,9 @@ RSpec.describe TTY::Logger, "#log" do
   end
 
   it "logs a message in a block" do
-    logger = TTY::Logger.new(output: output, level: :debug)
+    logger = TTY::Logger.new(output: output) do |config|
+      config.level = :debug
+    end
 
     logger.info { "Successfully deployed" }
 
@@ -93,7 +97,9 @@ RSpec.describe TTY::Logger, "#log" do
   end
 
   it "doesn't log when lower level" do
-    logger = TTY::Logger.new(output: output, level: :warn)
+    logger = TTY::Logger.new(output: output) do |config|
+      config.level = :warn
+    end
 
     logger.debug("Successfully deployed")
 
