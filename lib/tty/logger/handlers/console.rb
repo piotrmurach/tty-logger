@@ -110,9 +110,11 @@ module TTY
           metadata.each do |meta|
             case meta
             when :date
-              fmt << @pastel.white(event.metadata[:time].strftime("[%F]"))
+              fmt << @pastel.white(event.metadata[:time].
+                                   strftime(config.date_format))
             when :time
-              fmt << @pastel.white(event.metadata[:time].strftime("[%T.%3N]"))
+              fmt << @pastel.white(event.metadata[:time].
+                                   strftime(config.time_format))
             when :file
               fmt << @pastel.white(format_filepath(event))
             else
