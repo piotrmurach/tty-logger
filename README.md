@@ -28,7 +28,9 @@
 * Intuitive console output for an increased readability
 * Supports structured data logging
 * Formats and truncates messages to avoid clogging logging output
+* Customizable styling of labels and symbols for console output
 * Includes metadata information: time, location, scope
+* Handles multiple logging outputs
 
 ## Installation
 
@@ -301,14 +303,63 @@ new_style.error("Custom error")
 
 #### 2.5.2 Custom handler
 
+You can create your own log event handler if the default ones don't match your needs.
+
+The design of your handler should include two calls:
+
+* `initialize` - where all dependencies get injected
+* `call` - where the log event is handled
+
+We start with the implementation of the `initialize` method. This method by default is injected with `:config` key that includes all global configuration options. The `:output` key for displaying log message in the console and `:formatter`.
+
+In our case we also add custom `:label`:
+
 ```ruby
-class MyConsoleLogger
-  def call(event)
-    ...
+class MyHandler
+  def initialize(output: nil, config: nil, formatter: nil, label: nil)
+    @label = label
+    @output = output
   end
 end
 ```
 
+Next is the `call` method that accepts the log `event`.
+
+The `event` has the following attributes:
+
+* `message` - the array of message parts to be printed
+* `fields` - the structured data supplied with the event
+* `metadata` - the additional info about the event. See [metadata](#241-metadata) section for details.
+
+We add implementation of `call`:
+
+```ruby
+class MyHandler
+  def initialize(output: nil, config: nil, label: nil)
+    @label = label
+    @output = output
+  end
+
+  def call(event)
+    @output.puts "(#{@label}) #{event.message.join}"
+  end
+end
+```
+
+Once you have your custom handler, you need to register it with the logger. You can do so using the `handlers` configuration option:
+
+```ruby
+logger = TTY::Logger.new do |config|
+  config.handlers = [[MyHandler, label: "myhandler"]]
+end
+```
+
+Or add your handler dynamically after logger initialization:
+
+```ruby
+logger = TTY::Logger.new
+logger.add_handler [MyHandler, label: "myhandler"]
+```
 ### 2.6 Formatters
 
 The available formatters are:
