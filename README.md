@@ -55,6 +55,7 @@ Or install it yourself as:
   * [2.2 Levels](#22-levels)
   * [2.3 Structured Data](#23-structured-data)
   * [2.4 Configuration](#24-configuration)
+    * [2.4.1 Metadata](#241-metadata)
   * [2.5 Handlers](#25-handlers)
     * [2.5.1 Console Handler](#251-console-handler)
     * [2.5.2 Custom Handler](#252-custom-handler)
@@ -84,7 +85,7 @@ logger.info "Deployed successfully", myapp: "myapp", env: "prod"
 # ✔ success Deployed successfully     app=myapp env=prod
 ```
 
-Add [metadata](#24-configuration) information:
+Add [metadata](#241-metadata) information:
 
 ```ruby
 logger = TTY::Logger.new do |config|
@@ -178,7 +179,7 @@ All the configuration options can be changed globally via `configure` or per log
 * `:level` - the logging level. Any message logged below this level will be simply ignored. Each handler may have it's own default level. Defaults to `:info`
 * `:max_bytes` - the maximum message size to be logged in bytes. Defaults to `8192` bytes. The truncated message will have `...` at the end.
 * `:max_depth` - the maximum depth for nested structured data. Defaults to `3`.
-* `:metadata` - the meta info to display before the message, can be `:date`, `:time` or `:file`. Defaults to `[]`
+* `:metadata` - the meta info to display before the message, can be `:date`, `:time` or `:file`. Defaults to empty array `[]`, no metadata. Setting this to `:all` will print all the metadata.
 
 For example, to configure `:max_bytes`, `:level` and `:metadata` for all logger instances do:
 
@@ -195,8 +196,18 @@ Or if you wish to setup configuration per logger instance use block:
 ```ruby
 logger = TTY::Logger.new do |config|
   config.max_bytes = 2**20
+  config.metadata = [:all]
 end
 ```
+
+### 2.4.1 Metadata
+
+The `:metdata` configuration option can include the following symbols:
+
+* `:date` - the log event date
+* `:time` - the log event time
+* `:file` - the file with a line number the log event is triggered from
+
 
 ### 2.5 Handlers
 
@@ -207,7 +218,7 @@ The available handlers by default are:
 * `:console` - log messages to the console, enabled by default
 * `:null` - discards any log messages
 
-You can also implement your own [custom handler](#242-custom-handler).
+You can also implement your own [custom handler](#252-custom-handler).
 
 The handlers can be configured via global or instance configuration with `handlers`. The handler can be a name or a class name:
 
