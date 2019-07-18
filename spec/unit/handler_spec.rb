@@ -55,10 +55,19 @@ RSpec.describe TTY::Logger, 'handlers' do
     expect(output.string).to eq("")
   end
 
-  it "fails to coerce name into handler object" do
+  it "fails to coerce unknown object type into handler object" do
     expect {
       TTY::Logger.new do |config|
         config.handlers = [true]
+      end
+    }.to raise_error(TTY::Logger::Error,
+                     "Handler needs to be a class name or a symbol name")
+  end
+
+  it "fails to coerce name into handler object" do
+    expect {
+      TTY::Logger.new do |config|
+        config.handlers = [:unknown]
       end
     }.to raise_error(TTY::Logger::Error,
                      "Handler needs to be a class name or a symbol name")

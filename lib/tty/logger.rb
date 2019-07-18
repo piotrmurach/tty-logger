@@ -87,8 +87,17 @@ module TTY
       when Class
         name
       else
-        raise Error, "Handler needs to be a class name or a symbol name"
+        raise_handler_error
       end
+    rescue NameError
+      raise_handler_error
+    end
+
+    # Raise error when unknown handler name
+    #
+    # @api private
+    def raise_handler_error
+      raise Error, "Handler needs to be a class name or a symbol name"
     end
 
     # Add structured data
