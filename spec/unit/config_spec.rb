@@ -40,15 +40,22 @@ RSpec.describe TTY::Logger::Config do
     expect(config.formatter).to eq(:text)
   end
 
+  it "defaults date format to [%F]" do
+    config = described_class.new
+    expect(config.date_format).to eq("[%F]")
+  end
+
   it "serializes data into hash" do
     config = described_class.new
     expect(config.to_h).to eq({
+      date_format: "[%F]",
       formatter: :text,
       handlers: [:console],
       level: :info,
       max_bytes: 8192,
       max_depth: 3,
-      metadata: []
+      metadata: [],
+      time_format: "[%T.%3N]"
     })
   end
 

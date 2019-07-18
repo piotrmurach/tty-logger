@@ -5,6 +5,11 @@ require_relative "handlers/console"
 module TTY
   class Logger
     class Config
+      # The format used for date display
+      attr_accessor :date_format
+
+      # The format used for time display
+      attr_accessor :time_format
 
       # The format used for displaying structured data
       attr_accessor :formatter
@@ -31,6 +36,8 @@ module TTY
         @metadata = options.fetch(:metadata) { [] }
         @handlers = options.fetch(:handlers) { [:console] }
         @formatter = options.fetch(:formatter) { :text }
+        @date_format = options.fetch(:date_format) { "[%F]" }
+        @time_format = options.fetch(:time_format) { "[%T.%3N]" }
       end
 
       # Hash representation of this config
@@ -38,12 +45,14 @@ module TTY
       # @api public
       def to_h
         {
+          date_format: date_format,
           formatter: formatter,
           handlers: handlers,
           level: level,
           max_bytes: max_bytes,
           max_depth: max_depth,
           metadata: metadata,
+          time_format: time_format
         }
       end
     end # Config
