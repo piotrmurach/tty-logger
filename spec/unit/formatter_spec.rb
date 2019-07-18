@@ -51,7 +51,16 @@ RSpec.describe TTY::Logger, "formatter" do
       "{\"app\":\"myapp\",\"env\":\"prod\"}\n"].join)
   end
 
+  it "fails to recognize formatter object type" do
+    expect {
+      TTY::Logger.new(output: output) do |config|
+        config.formatter = true
+      end
+    }.to raise_error(TTY::Logger::Error, "Unrecognized formatter name 'true'")
+  end
+
   it "fails to recognize formatter name" do
+
     expect {
       TTY::Logger.new(output: output) do |config|
         config.formatter = :unknown

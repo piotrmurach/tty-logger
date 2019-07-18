@@ -80,8 +80,17 @@ module TTY
             Formatters.const_get(const_name)
           when Class
             name
+          else
+            raise_formatter_error(name)
           end
-        rescue
+        rescue NameError
+          raise_formatter_error(name)
+        end
+
+        # Raise error when unknown formatter name
+        #
+        # @api private
+        def raise_formatter_error(name)
           raise Error, "Unrecognized formatter name '#{name.inspect}'"
         end
 
