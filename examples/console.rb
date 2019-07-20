@@ -2,7 +2,7 @@ require_relative "../lib/tty/logger"
 
 TTY::Logger.configure do |config|
   config.max_bytes = 2**5
-  config.metadata = [:date, :time, :file]
+  config.metadata = [:all]
   config.handlers = [:console, [:console, formatter: :json]]
   config.level = :debug
 end
