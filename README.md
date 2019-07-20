@@ -143,12 +143,20 @@ So the order is: `:debug` < `:info` < `:warn` < `:error` < `:fatal`
 
 For example, `:info` takes precedence over `:debug`. If your log level is set to `:info`, `:info`, `:warn`, `:error` and `:fatal` will be printed to the console. If your log level is set to `:warn`, only `:warn`, `:error` and `:fatal` will be printed.
 
-You can set level using the following:
+You can set level using the `level` configuration option. The value can be a symbol, a string or level constant. For example, `:info`, `INFO` or `TTY::Logger::INFO_LEVEL` will quality as valid level value.
 
 ```ruby
-TTY::Logger.new level: :info
-TTY::Logger.new level: "INFO"
-TTY::Logger.new level: TTY::Logger::INFO_LEVEL
+TTY::Logger.new do |config|
+  config.level = :info # or "INFO" / TTY::Logger::INFO_LEVEL
+end
+```
+
+Or you can specific level for each log events handler:
+
+```ruby
+logger = TTY::Logger.new do |config|
+  config.handlers = [[:console, level: :info]]
+end
 ```
 
 ### 2.3 Structured data
@@ -269,13 +277,17 @@ Console handler has many defaults styles such as `success` and `error`:
 logger = TTY::Logger.new
 logger.success("Default success")
 logger.error("Default error")
+# =>
+# ✔ success Default success
+# ⨯ error   Default error
 ```
 
-You can change console handler default style with a tuple of handler name and options hash:
+You can change console handler default style with a tuple of handler name and options hash.
+
+In our example, we want to change the styling of `success` and `error`:
 
 ```ruby
-handler = [
-  :console, {
+new_styles = {
   styles: {
     success: {
       symbol: "+",
@@ -287,18 +299,21 @@ handler = [
       levelpad: 3
     }
   }
-}]
+}
 ```
 
-And then use the `handlers` configuration option:
+And then use the `new_styles` when providing `handlers` configuration:
 
 ```ruby
 new_style = TTY::Logger.new do |config|
-  config.handlers = [handler]
+  config.handlers = [:console, new_styles]
 end
 
 new_style.success("Custom success")
 new_style.error("Custom error")
+# =>
++ Ohh yes Custom success
+! Dooh    Custom error
 ```
 
 #### 2.5.2 Custom handler
