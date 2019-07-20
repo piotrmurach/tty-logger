@@ -45,6 +45,24 @@ RSpec.describe TTY::Logger, 'handlers' do
       "Logging                  \n"].join)
   end
 
+  it "logs different levels for each handler" do
+    logger = TTY::Logger.new(output: output) do |config|
+      config.handlers = [
+        [:console, level: :error],
+        [:console, level: :debug]
+      ]
+    end
+
+    logger.info("Info")
+    logger.error("Error")
+
+    expect(output.string).to eq([
+      "\e[32m#{styles[:info][:symbol]}\e[0m \e[32minfo\e[0m    Info                     \n",
+      "\e[31m#{styles[:error][:symbol]}\e[0m \e[31merror\e[0m   Error                    \n",
+      "\e[31m#{styles[:error][:symbol]}\e[0m \e[31merror\e[0m   Error                    \n",
+    ].join)
+  end
+
   it "fails to coerce unknown object type into handler object" do
     expect {
       TTY::Logger.new do |config|

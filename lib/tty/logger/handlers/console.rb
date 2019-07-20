@@ -57,13 +57,17 @@ module TTY
 
         attr_reader :config
 
-        def initialize(output: $stderr, formatter: nil, config: nil, styles: {})
+        attr_reader :level
+
+        def initialize(output: $stderr, formatter: nil, config: nil, level: nil,
+                       styles: {})
           @output = output
           @formatter = coerce_formatter(formatter || config.formatter).new
           @config = config
           @styles = styles
           @mutex = Mutex.new
           @pastel = Pastel.new
+          @level = level || @config.level
         end
 
         # Coerce formatter name into constant

@@ -129,7 +129,7 @@ module TTY
     # @return [Symbol]
     #
     # @api public
-    def log?(other_level)
+    def log?(level, other_level)
       compare_levels(level, other_level) != :gt
     end
 
@@ -137,8 +137,6 @@ module TTY
     #
     # @api public
     def log(current_level, *msg, **scoped_fields)
-      return unless log?(current_level)
-
       if msg.empty? && block_given?
         msg = [yield]
       end
@@ -153,7 +151,8 @@ module TTY
       }
       event = Event.new(msg, @fields.merge(scoped_fields), metadata)
       @ready_handlers.each do |handler|
-        handler.(event)
+        level = handler.respond_to?(:level) ? handler.level : @config.level
+        handler.(event) if log?(level, current_level)
       end
     end
 
