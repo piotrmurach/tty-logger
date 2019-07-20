@@ -121,6 +121,8 @@ module TTY
                                    strftime(config.time_format))
             when :file
               fmt << @pastel.white(format_filepath(event))
+            when :pid
+              fmt << @pastel.white("[%d]" % event.metadata[:pid])
             else
               raise "Unknown metadata `#{meta}`"
             end
@@ -144,7 +146,7 @@ module TTY
 
         def metadata
           if config.metadata.include?(:all)
-            [:date, :time, :file]
+            [:pid, :date, :time, :file]
           else
             config.metadata
           end

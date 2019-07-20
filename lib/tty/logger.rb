@@ -144,6 +144,7 @@ module TTY
       metadata = {
         level: current_level,
         time: Time.now,
+        pid: Process.pid,
         name: caller_locations(1,1)[0].label,
         path: loc.path,
         lineno: loc.lineno,
