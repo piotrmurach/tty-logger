@@ -82,4 +82,20 @@ RSpec.describe TTY::Logger::Config do
       "\e[36mapp\e[0m=myapp ...\n"
     ].join)
   end
+
+  it "configures maximum depth of structured data" do
+    logger = TTY::Logger.new(output: output) do |config|
+      config.max_depth = 1
+      config.level = :debug
+    end
+
+    logger.debug("Deploying", app: "myapp", env: { name: "prod" })
+
+    expect(output.string).to eq([
+      "\e[36m#{styles[:debug][:symbol]}\e[0m ",
+      "\e[36mdebug\e[0m   ",
+      "Deploying                 ",
+      "\e[36mapp\e[0m=myapp \e[36menv\e[0m={...}\n"
+    ].join)
+  end
 end

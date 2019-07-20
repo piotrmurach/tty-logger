@@ -130,7 +130,8 @@ module TTY
           fmt << color.(style[:label]) + (" " * style[:levelpad])
           fmt << "%-25s" % event.message.join(" ")
           unless event.fields.empty?
-            fmt << @formatter.dump(event.fields, max_bytes: config.max_bytes).
+            fmt << @formatter.dump(event.fields, max_bytes: config.max_bytes,
+                                   max_depth: config.max_depth).
                     gsub(/(\S+)(?=\=)/, color.("\\1"))
           end
 
