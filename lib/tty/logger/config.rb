@@ -26,7 +26,7 @@ module TTY
       # The maximum depth for formattin array and hash objects. Defaults to 3
       attr_accessor :max_depth
 
-      # The meta info to display, can be :date, :time, :file. Defaults to []
+      # The meta info to display, can be :date, :time, :file, :pid. Defaults to []
       attr_accessor :metadata
 
       def initialize(**options)
