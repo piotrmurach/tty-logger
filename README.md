@@ -335,7 +335,8 @@ By default, the output will be a plain text streamed to console. The text contai
 ```ruby
 loggger.info("Info about the deploy", app="myap", env="prod")
 # =>
-# pid=18315 date="2019-07-21" time="15:42:12.463" path="examples/stream.rb:17:in`<main>`" level=info message="Info about the deploy" app=myapp env=prod
+# pid=18315 date="2019-07-21" time="15:42:12.463" path="examples/stream.rb:17:in`<main>`"
+# level=info message="Info about the deploy" app=myapp env=prod
 ```
 
 You can change stream formatter for ease of working with external services such as `Logstash`. For example, to use `:stream` handler with `:json` format do:
