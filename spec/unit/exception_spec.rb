@@ -19,7 +19,7 @@ RSpec.describe TTY::Logger, "exception logging" do
       "\e[31m#{styles[:fatal][:symbol]}\e[0m ",
       "\e[31mfatal\e[0m   ",
       "Error: Wrong data         \n",
-      "#{error.backtrace.map {|bktrace| bktrace.insert(0, " " * 4) }.join("\n")}\n"
+      "#{error.backtrace.map {|bktrace| bktrace.to_s.insert(0, " " * 4) }.join("\n")}\n"
     ].join)
   end
 

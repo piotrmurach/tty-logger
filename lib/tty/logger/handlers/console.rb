@@ -125,8 +125,9 @@ module TTY
         private
 
         def format_backtrace(event)
+          indent = " " * 4
           event.backtrace.map do |bktrace|
-            bktrace.to_s.insert(0, " " * 4)
+            indent + bktrace.to_s
           end.join("\n")
         end
 
