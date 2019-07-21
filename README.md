@@ -23,6 +23,8 @@
 
 **TTY::Logger** provides independent logging component for [TTY toolkit](https://github.com/piotrmurach/tty).
 
+![](assets/tty-logger-levels.png)
+
 ## Features
 
 * Intuitive console output for an increased readability
@@ -54,7 +56,8 @@ Or install it yourself as:
 
 * [1. Usage](#1-usage)
 * [2. Synopsis](#2-synopsis)
-  * [2.1 Types](#21-types)
+  * [2.1 Logging](#21-logging)
+    * [2.1.1 Exceptions](#211-exceptions)
   * [2.2 Levels](#22-levels)
   * [2.3 Structured Data](#23-structured-data)
   * [2.4 Configuration](#24-configuration)
@@ -97,12 +100,12 @@ Add [metadata](#241-metadata) information:
 logger = TTY::Logger.new do |config|
   config.metadata = [:date, :time]
 end
-logger.info "Deployed successfully"
+logger.info "Deployed successfully", myapp: "myapp", env: "prod"
 # =>
 # [2019-07-17] [23:21:55.287] › ℹ info    Info about the deploy     app=myapp env=prod
 ```
 
-Or change structured data [formatting](#26-formatters):
+Or change structured data [formatting](#26-formatters) display to `JSON`:
 
 ```ruby
 logger = TTY::Logger.new do |config|
@@ -115,7 +118,7 @@ logger.info "Deployed successfully"
 
 ## 2. Synopsis
 
-## 2.1 Types
+## 2.1 Logging
 
 There are many logger types to choose from:
 
@@ -127,10 +130,52 @@ There are many logger types to choose from:
 * `error` - logs message at `:error` level
 * `fatal` - logs message at `:fatal` level
 
+To log a message, simply choose one of the above types and pass in the actual message. For example, to log successfully deployment at info level do:
+
 ```ruby
 logger.success "Deployed successfully"
 # =>
-# ✔ success Deployed successfully     app=myapp env=prod
+# ✔ success Deployed successfully
+```
+
+Or pass in multiple messages:
+
+```ruby
+logger.success "Deployed", "successfully"
+# =>
+# ✔ success Deployed successfully
+```
+
+You can delay message evaluation by passing it inside a block:
+
+```
+logger.info { "Dynamically generated info" }
+# =>
+# ✔ success Deployed successfully
+```
+
+### 2.1.1 Exceptions
+
+You can also report on exceptions.
+
+For example, let's say you caught an exception about incorrect data format and use `fatal` level to log it:
+
+```ruby
+begin
+  raise ArgumentError, "Wrong data"
+rescue => ex
+  logger.fatal("Error:", error)
+end
+```
+
+This will result in a message followed by a full backtrace:
+
+```ruby
+# =>
+# ! fatal   Error: Wrong data
+#    tty-logger/spec/unit/exception_spec.rb:12:in `block (2 levels) in <top (required)>'
+#    rspec-core-3.8.2/lib/rspec/core/example.rb:257:in `instance_exec'
+#    rspec-core-3.8.2/lib/rspec/core/example.rb:257:in `block in run'
 ```
 
 ### 2.2 Levels
