@@ -113,6 +113,9 @@ module TTY
                                    gsub(/(\S+)(?=\=)/, color.("\\1")).
                                    gsub(/\"([^,]+?)\"(?=:)/, "\"" + color.("\\1") + "\"")
           end
+          unless event.backtrace.empty?
+            fmt << "\n" + format_backtrace(event)
+          end
 
           output.each { |out| out.puts fmt.join(" ") }
         ensure
@@ -120,6 +123,12 @@ module TTY
         end
 
         private
+
+        def format_backtrace(event)
+          event.backtrace.map do |bktrace|
+            bktrace.to_s.insert(0, " " * 4)
+          end.join("\n")
+        end
 
         # Merge default styles with custom style overrides
         #

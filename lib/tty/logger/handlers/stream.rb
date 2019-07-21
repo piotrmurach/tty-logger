@@ -46,8 +46,14 @@ module TTY
           unless event.fields.empty?
             data.merge!(event.fields)
           end
+          unless event.backtrace.empty?
+            data.merge!("backtrace" => event.backtrace.join(","))
+          end
 
-          output.each { |out| out.puts @formatter.dump(data) }
+          output.each do |out|
+            out.puts @formatter.dump(data, max_bytes: config.max_bytes,
+                                     max_depth: config.max_depth)
+          end
         ensure
           @mutex.unlock
         end
