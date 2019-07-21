@@ -114,13 +114,13 @@ module TTY
           metadata.each do |meta|
             case meta
             when :date
-              fmt << @pastel.white(event.metadata[:time].
-                                   strftime(config.date_format))
+              fmt << @pastel.white("[" + event.metadata[:time].
+                                   strftime(config.date_format) + "]")
             when :time
-              fmt << @pastel.white(event.metadata[:time].
-                                   strftime(config.time_format))
+              fmt << @pastel.white("[" + event.metadata[:time].
+                                   strftime(config.time_format) + "]")
             when :file
-              fmt << @pastel.white(format_filepath(event))
+              fmt << @pastel.white("[#{format_filepath(event)}]")
             when :pid
               fmt << @pastel.white("[%d]" % event.metadata[:pid])
             else
@@ -154,8 +154,8 @@ module TTY
         end
 
         def format_filepath(event)
-          "[%s:%d:in`%s`]" % [event.metadata[:path], event.metadata[:lineno],
-                              event.metadata[:method]]
+          "%s:%d:in`%s`" % [event.metadata[:path], event.metadata[:lineno],
+                            event.metadata[:method]]
         end
 
         # Merge default styles with custom style overrides
