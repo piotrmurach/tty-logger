@@ -65,6 +65,7 @@ Or install it yourself as:
     * [2.5.3 Custom Handler](#253-custom-handler)
     * [2.5.4 Multiple Handlers](#254-multiple-handlers)
   * [2.6 Formatters](#26-formatters)
+  * [2.7 Output streams](#27-output-streams)
 
 ## 1. Usage
 
@@ -154,13 +155,20 @@ TTY::Logger.new do |config|
 end
 ```
 
-Or you can specific level for each log events handler:
+Or you can specific level for each log events handler.
+
+For example, to log messages above info level to a stream and only error level events to the console do:
 
 ```ruby
 logger = TTY::Logger.new do |config|
-  config.handlers = [[:console, level: :info]]
+  config.handlers = [
+    [:console, level: :error],
+    [:stream, level: :info]
+  ]
 end
 ```
+
+You can also change the [output streams](#27-output-streams) for each handler.
 
 ### 2.3 Structured data
 
@@ -459,6 +467,34 @@ Or specify a different formatter for each handler. For example, let's say you wa
 ```ruby
 TTY::Logger.new do |config|
   config.handlers = [:console, [:console, formatter: :json]]
+end
+```
+### 2.7 Output Streams
+
+By default all log events are output to `stderr`. You can change this using configuration `output` option. Any `IO`-like stream such as file, socket or console can be used. For example, to log all messages to a file do:
+
+```ruby
+logger = TTY::Logger.new do |config|
+  config.output = File.open("errors.log", "a")
+end
+```
+
+You can also specify multiple streams that all log messages will be sent to:
+
+```ruby
+logger = TTY::Logger.new do |config|
+  config.output = [$stderr, File.open("errors.log", "a")]
+end
+```
+
+Conversely, you can specify different output for each of the handlers used. For example, you can output all messages above info level to a file with a stream handler and only show error messages in the console with a nicely formatted output.
+
+```ruby
+logger = TTY::Logger.new do |config|
+  config.handlers = [
+    [:console, output: $stderr, level: :error],
+    [:stream, output: File.open("errors.log", "a"), level: :info)]
+  ]
 end
 ```
 
