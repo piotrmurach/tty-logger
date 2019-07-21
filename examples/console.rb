@@ -3,11 +3,11 @@ require_relative "../lib/tty/logger"
 TTY::Logger.configure do |config|
   config.max_bytes = 2**5
   config.metadata = [:all]
-  config.handlers = [:console, [:console, formatter: :json]]
+  config.handlers = [[:console, formatter: :text]]
   config.level = :debug
 end
 
-logger = TTY::Logger.new(fields: {app: "myapp", env: "prod"})
+logger = TTY::Logger.new(fields: {app: "myapp", env: "prod", extra: 'yes'})
 
 logger.with(path: "/var/www/example.com").info("Deploying", "code")
 
