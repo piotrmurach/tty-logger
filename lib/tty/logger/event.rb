@@ -9,10 +9,31 @@ module TTY
 
       attr_reader :metadata
 
+      attr_reader :backtrace
+
       def initialize(message, fields, metadata)
         @message = message
         @fields = fields
         @metadata = metadata
+        @backtrace = []
+
+        evaluate_message
+      end
+
+      private
+
+      # Extract backtrace information if message contains exception
+      #
+      # @api private
+      def evaluate_message
+        @message.each do |msg|
+          case msg
+          when Exception
+            @backtrace = msg.backtrace_locations
+          else
+            msg
+          end
+        end
       end
     end # Event
   end # Logger
