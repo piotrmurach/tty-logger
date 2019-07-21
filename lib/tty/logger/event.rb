@@ -29,7 +29,7 @@ module TTY
         @message.each do |msg|
           case msg
           when Exception
-            @backtrace = msg.backtrace_locations
+            @backtrace = msg.backtrace
           else
             msg
           end
