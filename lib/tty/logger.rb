@@ -157,6 +157,7 @@ module TTY
         level = handler.respond_to?(:level) ? handler.level : @config.level
         handler.(event) if log?(level, current_level)
       end
+      self
     end
 
     # Log a message at :debug level
