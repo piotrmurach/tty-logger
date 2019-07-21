@@ -7,7 +7,7 @@ TTY::Logger.configure do |config|
   config.level = :debug
 end
 
-logger = TTY::Logger.new(fields: {app: "myapp", env: "prod", extra: 'yes'})
+logger = TTY::Logger.new(fields: {app: "myapp", env: "prod"})
 
 logger.with(path: "/var/www/example.com").info("Deploying", "code")
 
