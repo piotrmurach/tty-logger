@@ -63,6 +63,7 @@ Or install it yourself as:
     * [2.5.1 Console Handler](#251-console-handler)
     * [2.5.2 Stream Handler](#252-stream-handler)
     * [2.5.3 Custom Handler](#253-custom-handler)
+    * [2.5.4 Multiple Handlers](#254-multiple-handlers)
   * [2.6 Formatters](#26-formatters)
 
 ## 1. Usage
@@ -357,7 +358,7 @@ loggger.info("Info about the deploy", app="myap", env="prod")
 # "level":"info","message":"Info about the deploy","app":"myapp","env":"prod"}
 ```
 
-#### 2.5.3 Custom handler
+#### 2.5.3 Custom Handler
 
 You can create your own log event handler if the default ones don't match your needs.
 
@@ -416,6 +417,28 @@ Or add your handler dynamically after logger initialization:
 logger = TTY::Logger.new
 logger.add_handler [MyHandler, label: "myhandler"]
 ```
+
+#### 2.5.4 Multiple Handlers
+
+You can define as many handlers as you need. For example, you may log messages both to console and stream:
+
+```ruby
+logger = TTY::Logger.new do |config|
+  config.handlers = [:console, :stream]
+end
+```
+
+Each handler can have its own configuration. For example, you can register `:console` handler to log messages above error level and `:stream` that logs any message with info or higher level:
+
+```ruby
+logger = TTY::Logger.new do |config|
+  config.handlers = [
+    [:console, level: :error],
+    [:stream, level: :info]
+  ]
+end
+```
+
 ### 2.6 Formatters
 
 The available formatters are:
