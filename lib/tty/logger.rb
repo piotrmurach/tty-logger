@@ -49,8 +49,8 @@ module TTY
       @level = @config.level
       @handlers = @config.handlers
       @output = output || @config.output
-
       @ready_handlers = []
+
       @handlers.each do |handler|
         add_handler(handler)
       end

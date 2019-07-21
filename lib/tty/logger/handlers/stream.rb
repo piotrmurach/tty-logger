@@ -15,11 +15,11 @@ module TTY
         attr_reader :level
 
         def initialize(output: $stderr, formatter: nil, config: nil, level: nil)
-          @mutex = Mutex.new
-          @output = output
+          @output = Array[output].flatten
           @formatter = coerce_formatter(formatter || config.formatter).new
           @config = config
           @level = level || @config.level
+          @mutex = Mutex.new
         end
 
         # @api public
@@ -47,7 +47,7 @@ module TTY
             data.merge!(event.fields)
           end
 
-          output.puts @formatter.dump(data)
+          output.each { |out| out.puts @formatter.dump(data) }
         ensure
           @mutex.unlock
         end

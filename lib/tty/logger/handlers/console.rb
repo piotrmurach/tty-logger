@@ -65,13 +65,13 @@ module TTY
 
         def initialize(output: $stderr, formatter: nil, config: nil, level: nil,
                        styles: {})
-          @output = output
+          @output = Array[output].flatten
           @formatter = coerce_formatter(formatter || config.formatter).new
           @config = config
           @styles = styles
+          @level = level || @config.level
           @mutex = Mutex.new
           @pastel = Pastel.new
-          @level = level || @config.level
         end
 
         # Handle log event output in format
@@ -114,7 +114,7 @@ module TTY
                                    gsub(/\"([^,]+?)\"(?=:)/, "\"" + color.("\\1") + "\"")
           end
 
-          output.puts fmt.join(" ")
+          output.each { |out| out.puts fmt.join(" ") }
         ensure
           @mutex.unlock
         end
