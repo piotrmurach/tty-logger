@@ -31,14 +31,13 @@ module TTY
       yield config
     end
 
-    # By default output to stderr
-    attr_reader :output
-
-    # The log serverity level
-    attr_reader :level
-
-    def initialize(output: $stderr, fields: {})
-      @output = output
+    # Create a logger instance
+    #
+    # @example
+    #   logger = TTY::Logger.new(output: $stdout)
+    #
+    # @api public
+    def initialize(output: nil, fields: {})
       @fields = fields
       @config = if block_given?
                   conf = Config.new
@@ -49,6 +48,8 @@ module TTY
                 end
       @level = @config.level
       @handlers = @config.handlers
+      @output = output || @config.output
+
       @ready_handlers = []
       @handlers.each do |handler|
         add_handler(handler)
@@ -64,7 +65,7 @@ module TTY
     def add_handler(handler)
       h, options = *(handler.is_a?(Array) ? handler : [handler, {}])
       name = coerce_handler(h)
-      global_opts = { output: output, config: @config }
+      global_opts = { output: @output, config: @config }
       opts = global_opts.merge(options)
       ready_handler = name.new(opts)
       @ready_handlers << ready_handler
@@ -122,7 +123,7 @@ module TTY
     #
     # @api public
     def with(new_fields)
-      self.class.new(fields: @fields.merge(new_fields), output: output)
+      self.class.new(fields: @fields.merge(new_fields), output: @output)
     end
 
     # Check current level against another
