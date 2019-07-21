@@ -134,7 +134,8 @@ module TTY
           unless event.fields.empty?
             fmt << @formatter.dump(event.fields, max_bytes: config.max_bytes,
                                    max_depth: config.max_depth).
-                    gsub(/(\S+)(?=\=)/, color.("\\1"))
+                                   gsub(/(\S+)(?=\=)/, color.("\\1")).
+                                   gsub(/\"([^,]+?)\"(?=:)/, "\"" + color.("\\1") + "\"")
           end
 
           output.puts fmt.join(" ")

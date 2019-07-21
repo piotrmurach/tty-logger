@@ -15,7 +15,7 @@ RSpec.describe TTY::Logger, "formatter" do
       "\e[32m#{styles[:info][:symbol]}\e[0m ",
       "\e[32minfo\e[0m    ",
       "Logging                   ",
-      "{\"app\":\"myapp\",\"env\":\"prod\"}\n"].join)
+      "{\"\e[32mapp\e[0m\":\"myapp\",\"\e[32menv\e[0m\":\"prod\"}\n"].join)
   end
 
   it "changes default formatter to JSON as name" do
@@ -29,7 +29,7 @@ RSpec.describe TTY::Logger, "formatter" do
       "\e[32m#{styles[:info][:symbol]}\e[0m ",
       "\e[32minfo\e[0m    ",
       "Logging                   ",
-      "{\"app\":\"myapp\",\"env\":\"prod\"}\n"].join)
+      "{\"\e[32mapp\e[0m\":\"myapp\",\"\e[32menv\e[0m\":\"prod\"}\n"].join)
   end
 
   it "changes default formatter for only one handler" do
@@ -48,7 +48,7 @@ RSpec.describe TTY::Logger, "formatter" do
       "\e[32m#{styles[:info][:symbol]}\e[0m ",
       "\e[32minfo\e[0m    ",
       "Logging                   ",
-      "{\"app\":\"myapp\",\"env\":\"prod\"}\n"].join)
+      "{\"\e[32mapp\e[0m\":\"myapp\",\"\e[32menv\e[0m\":\"prod\"}\n"].join)
   end
 
   it "fails to recognize formatter object type" do
