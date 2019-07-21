@@ -36,8 +36,8 @@ module TTY
         @metadata = options.fetch(:metadata) { [] }
         @handlers = options.fetch(:handlers) { [:console] }
         @formatter = options.fetch(:formatter) { :text }
-        @date_format = options.fetch(:date_format) { "[%F]" }
-        @time_format = options.fetch(:time_format) { "[%T.%3N]" }
+        @date_format = options.fetch(:date_format) { "%F" }
+        @time_format = options.fetch(:time_format) { "%T.%3N" }
       end
 
       # Hash representation of this config
