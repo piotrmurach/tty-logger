@@ -2,10 +2,14 @@
 
 require "pastel"
 
+require_relative "base"
+
 module TTY
   class Logger
     module Handlers
       class Console
+        include Base
+
         ARROW = "›"
 
         STYLES = {
@@ -70,34 +74,6 @@ module TTY
           @level = level || @config.level
         end
 
-        # Coerce formatter name into constant
-        #
-        # @api private
-        def coerce_formatter(name)
-          case name
-          when String, Symbol
-            const_name = if Formatters.const_defined?(name.upcase)
-                           name.upcase
-                         else
-                           name.capitalize
-                         end
-            Formatters.const_get(const_name)
-          when Class
-            name
-          else
-            raise_formatter_error(name)
-          end
-        rescue NameError
-          raise_formatter_error(name)
-        end
-
-        # Raise error when unknown formatter name
-        #
-        # @api private
-        def raise_formatter_error(name)
-          raise Error, "Unrecognized formatter name '#{name.inspect}'"
-        end
-
         # Handle log event output in format
         #
         # @param [Event] event
@@ -144,19 +120,6 @@ module TTY
         end
 
         private
-
-        def metadata
-          if config.metadata.include?(:all)
-            [:pid, :date, :time, :file]
-          else
-            config.metadata
-          end
-        end
-
-        def format_filepath(event)
-          "%s:%d:in`%s`" % [event.metadata[:path], event.metadata[:lineno],
-                            event.metadata[:method]]
-        end
 
         # Merge default styles with custom style overrides
         #
