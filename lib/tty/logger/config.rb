@@ -29,6 +29,12 @@ module TTY
       # The meta info to display, can be :date, :time, :file, :pid. Defaults to []
       attr_accessor :metadata
 
+      # The output for the log messages. Default to `stderr`
+      attr_accessor :output
+
+      # Create a configuration instance
+      #
+      # @api private
       def initialize(**options)
         @max_bytes = options.fetch(:max_bytes) { 2**13 }
         @max_depth = options.fetch(:max_depth) { 3 }
@@ -38,9 +44,12 @@ module TTY
         @formatter = options.fetch(:formatter) { :text }
         @date_format = options.fetch(:date_format) { "%F" }
         @time_format = options.fetch(:time_format) { "%T.%3N" }
+        @output = options.fetch(:output) { $stderr }
       end
 
       # Hash representation of this config
+      #
+      # @return [Hash[Symbol]]
       #
       # @api public
       def to_h
@@ -52,6 +61,7 @@ module TTY
           max_bytes: max_bytes,
           max_depth: max_depth,
           metadata: metadata,
+          output: output,
           time_format: time_format
         }
       end

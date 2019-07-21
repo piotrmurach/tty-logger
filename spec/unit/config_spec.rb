@@ -45,6 +45,11 @@ RSpec.describe TTY::Logger::Config do
     expect(config.date_format).to eq("%F")
   end
 
+  it "defaults output to stderr" do
+    config = described_class.new
+    expect(config.output).to eq($stderr)
+  end
+
   it "serializes data into hash" do
     config = described_class.new
     expect(config.to_h).to eq({
@@ -55,6 +60,7 @@ RSpec.describe TTY::Logger::Config do
       max_bytes: 8192,
       max_depth: 3,
       metadata: [],
+      output: $stderr,
       time_format: "%T.%3N"
     })
   end
