@@ -26,6 +26,7 @@
 ## Features
 
 * Intuitive console output for an increased readability
+* Ability to stream data to any IO object
 * Supports structured data logging
 * Formats and truncates messages to avoid clogging logging output
 * Customizable styling of labels and symbols for console output
@@ -60,7 +61,8 @@ Or install it yourself as:
     * [2.4.1 Metadata](#241-metadata)
   * [2.5 Handlers](#25-handlers)
     * [2.5.1 Console Handler](#251-console-handler)
-    * [2.5.2 Custom Handler](#252-custom-handler)
+    * [2.5.2 Stream Handler](#252-stream-handler)
+    * [2.5.3 Custom Handler](#253-custom-handler)
   * [2.6 Formatters](#26-formatters)
 
 ## 1. Usage
@@ -219,7 +221,6 @@ The `:metdata` configuration option can include the following symbols:
 * `:time` - the log event time
 * `:file` - the file with a line number the log event is triggered from
 
-
 ### 2.5 Handlers
 
 `TTY::Logger` supports many ways to handle log messages.
@@ -228,8 +229,9 @@ The available handlers by default are:
 
 * `:console` - log messages to the console, enabled by default
 * `:null` - discards any log messages
+* `:stream` - log messages to an `IO` stream, a file, a socket or a console.
 
-You can also implement your own [custom handler](#252-custom-handler).
+You can also implement your own [custom handler](#253-custom-handler).
 
 The handlers can be configured via global or instance configuration with `handlers`. The handler can be a name or a class name:
 
@@ -317,7 +319,42 @@ new_style.error("Custom error")
 ! Dooh    Custom error
 ```
 
-#### 2.5.2 Custom handler
+#### 2.5.2 Stream handler
+
+To send log event data outside of console to another service or `IO` stream, you can use `:stream` handler.
+
+```ruby
+logger = TTY::Logger.new(output: output) do |config|
+  config.handlers = [:stream]
+  config.metadata = [:all]
+end
+```
+
+By default, the output will be a plain text streamed to console. The text contains key and value pairs of all the metadata and the message of the log event.
+
+````
+loggger.info("Info about the deploy", app="myap", env="prod")
+# =>
+# pid=18315 date="2019-07-21" time="15:42:12.463" path="examples/stream.rb:17:in`<main>`" level=info message="Info about the deploy" app=myapp env=prod
+```
+
+You can change stream formatter for ease of working with external services `Logstash`:
+
+```ruby
+logger = TTY::Logger.new(output: output) do |config|
+  config.handlers = [[:stream, formatter: :json]]
+  config.metadata = [:all]
+end
+```
+
+```ruby
+loggger.info("Info about the deploy", app="myap", env="prod")
+# =>
+# {"pid":18513,"date":"2019-07-21","time":"15:54:09.924","path":"examples/stream.rb:17:in`<main>`",
+# "level":"info","message":"Info about the deploy","app":"myapp","env":"prod"}
+```
+
+#### 2.5.3 Custom handler
 
 You can create your own log event handler if the default ones don't match your needs.
 
