@@ -6,6 +6,7 @@ require_relative "logger/formatters/json"
 require_relative "logger/formatters/text"
 require_relative "logger/handlers/console"
 require_relative "logger/handlers/null"
+require_relative "logger/handlers/stream"
 require_relative "logger/levels"
 require_relative "logger/version"
 
