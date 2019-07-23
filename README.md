@@ -148,11 +148,21 @@ logger.success "Deployed", "successfully"
 
 You can delay message evaluation by passing it inside a block:
 
-```
-logger.info { "Dynamically generated info" }
+```ruby
+logger.success { "Dynamically generated info" }
 # =>
-# ✔ success Deployed successfully
+# ✔ success Dynamically generated info
 ```
+
+Similar to regular logging, you cal split your message into chunks inside a block:
+
+```ruby
+logger.success { ["Dynamically", "generated", "info"] }
+# =>
+# ✔ success Dynamically generated info
+```
+
+The above comes handy when paired with [structured data](#23-structured-data).
 
 ### 2.1.1 Exceptions
 
@@ -232,6 +242,14 @@ To only add data for a single log event:
 ```ruby
 logger = TTY::Logger.new
 logger.wait "Ready to deploy", app: "myapp", env: "prod"
+# =>
+# … waiting Ready to deploy           app=myapp env=prod
+```
+
+You can delay data evaluation until it's evaluated by passing it inside a block:
+
+```ruby
+logger.wait { ["Ready to deploy", {app: "myapp", env: "prod"}] }
 # =>
 # … waiting Ready to deploy           app=myapp env=prod
 ```
