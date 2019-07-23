@@ -84,9 +84,7 @@ RSpec.describe TTY::Logger, "#log" do
   end
 
   it "logs a message in a block" do
-    logger = TTY::Logger.new(output: output) do |config|
-      config.level = :debug
-    end
+    logger = TTY::Logger.new(output: output)
 
     logger.info { "Successfully deployed" }
 
@@ -94,6 +92,30 @@ RSpec.describe TTY::Logger, "#log" do
       "\e[32m#{styles[:info][:symbol]}\e[0m ",
       "\e[32minfo\e[0m    ",
       "Successfully deployed    \n"].join)
+  end
+
+  it "logs a message in a block as an array of elements" do
+    logger = TTY::Logger.new(output: output)
+
+    logger.info { ["Successfully", "deployed"] }
+
+    expect(output.string).to eq([
+      "\e[32m#{styles[:info][:symbol]}\e[0m ",
+      "\e[32minfo\e[0m    ",
+      "Successfully deployed    \n"].join)
+  end
+
+  it "logs a message in a block with metadata" do
+    logger = TTY::Logger.new(output: output)
+
+    logger.info { ["Successfully", "deployed", {app: "myapp", env: "prod"}] }
+
+    expect(output.string).to eq([
+      "\e[32m#{styles[:info][:symbol]}\e[0m ",
+      "\e[32minfo\e[0m    ",
+      "Successfully deployed     ",
+      "\e[32mapp\e[0m=myapp \e[32menv\e[0m=prod\n"
+    ].join)
   end
 
   it "doesn't log when lower level" do

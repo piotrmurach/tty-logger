@@ -137,11 +137,22 @@ module TTY
 
     # Log a message given the severtiy level
     #
+    # @example
+    #   logger.log("Deployed successfully")
+    #
+    # @example
+    #   logger.log { "Deployed successfully" }
+    #
     # @api public
     def log(current_level, *msg, **scoped_fields)
+      fields_copy = scoped_fields.dup
       if msg.empty? && block_given?
-        msg = [yield]
+        msg = []
+        Array[yield].flatten(1).each do |el|
+          el.is_a?(::Hash) ? fields_copy.merge!(el) : msg << el
+        end
       end
+
       loc = caller_locations(2,1)[0]
       metadata = {
         level: current_level,
@@ -152,7 +163,8 @@ module TTY
         lineno: loc.lineno,
         method: loc.base_label
       }
-      event = Event.new(msg, @fields.merge(scoped_fields), metadata)
+      event = Event.new(msg, @fields.merge(fields_copy), metadata)
+
       @ready_handlers.each do |handler|
         level = handler.respond_to?(:level) ? handler.level : @config.level
         handler.(event) if log?(level, current_level)
