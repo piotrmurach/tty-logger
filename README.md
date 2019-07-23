@@ -164,7 +164,7 @@ For example, let's say you caught an exception about incorrect data format and u
 begin
   raise ArgumentError, "Wrong data"
 rescue => ex
-  logger.fatal("Error:", error)
+  logger.fatal("Error:", ex)
 end
 ```
 
