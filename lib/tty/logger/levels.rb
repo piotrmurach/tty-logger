@@ -10,33 +10,26 @@ module TTY
       FATAL_LEVEL = 4
 
       LEVEL_NAMES = {
-        DEBUG_LEVEL => :debug,
-        INFO_LEVEL => :info,
-        WARN_LEVEL => :warn,
-        ERROR_LEVEL => :error,
-        FATAL_LEVEL => :fatal
+        debug: DEBUG_LEVEL,
+        info: INFO_LEVEL,
+        warn: WARN_LEVEL,
+        error: ERROR_LEVEL,
+        fatal: FATAL_LEVEL
       }
 
       def level_names
-        [:debug, :info, :warn, :error, :fatal]
+        LEVEL_NAMES.keys
       end
 
       # @api private
       def level_to_number(level)
-        case level.to_s.downcase
-        when "debug" then DEBUG_LEVEL
-        when "info"  then INFO_LEVEL
-        when "warn"  then WARN_LEVEL
-        when "error" then ERROR_LEVEL
-        when "fatal" then FATAL_LEVEL
-        else
-          raise ArgumentError, "Invalid level #{level.inspect}"
-        end
+        LEVEL_NAMES[level.to_s.downcase.to_sym] ||
+          raise(ArgumentError, "Invalid level #{level.inspect}")
       end
 
       # @api private
-      def number_to_level(level)
-        LEVEL_NAMES[level]
+      def number_to_level(number)
+        LEVEL_NAMES.key(number)
       end
 
       # @api private
