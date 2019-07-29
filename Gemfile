@@ -2,6 +2,11 @@ source "https://rubygems.org"
 
 gemspec
 
+if RUBY_VERSION.split(".")[1].to_i > 0
+  gem "rspec-benchmark", git: "https://github.com/piotrmurach/rspec-benchmark"
+  # gem "rspec-benchmark", path: "../rspec-benchmark"
+end
+
 group :test do
   gem 'benchmark-ips', '~> 2.7.2'
   gem 'simplecov', '~> 0.16.1'
