@@ -13,9 +13,9 @@ RSpec.describe TTY::Logger do
     logger = described_class.new(output: output)
 
     expect {
-      native_logger.info("Deployment done!")
-    }.to perform_faster_than {
       logger.info("Deployment done!")
+    }.to perform_slower_than {
+      native_logger.info("Deployment done!")
     }.at_least(3).times
   end
 end
