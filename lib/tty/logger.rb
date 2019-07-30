@@ -152,7 +152,6 @@ module TTY
           el.is_a?(::Hash) ? fields_copy.merge!(el) : msg << el
         end
       end
-
       loc = caller_locations(2,1)[0]
       metadata = {
         level: current_level,
@@ -163,7 +162,7 @@ module TTY
         lineno: loc.lineno,
         method: loc.base_label
       }
-      event = Event.new(msg, @fields.merge(fields_copy), metadata)
+      event = Event.new(filter(*msg), @fields.merge(fields_copy), metadata)
 
       @ready_handlers.each do |handler|
         level = handler.respond_to?(:level) ? handler.level : @config.level
@@ -223,6 +222,27 @@ module TTY
     # @api public
     def wait(*msg, &block)
       log(:info, *msg, &block)
+    end
+
+    # Filter message parts for any sensitive information and
+    # replace with placeholder.
+    #
+    # @param [Array[String]] messages
+    #   the messages to filter
+    #
+    # @return [Array[String]]
+    #   the filtered message
+    #
+    # @api private
+    def filter(*messages)
+      messages.reduce([]) do |acc, msg|
+        acc << msg.dup.tap do |msg_copy|
+          @config.filters.each do |text, placeholder|
+            msg_copy.gsub!(text, placeholder)
+          end
+        end
+        acc
+      end
     end
   end # Logger
 end # TTY
