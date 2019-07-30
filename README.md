@@ -30,6 +30,7 @@
 * Intuitive console output for an increased readability
 * Ability to stream data to any IO object
 * Supports structured data logging
+* Filters sensitive data
 * Formats and truncates messages to avoid clogging logging output
 * Customizable styling of labels and symbols for console output
 * Includes metadata information: time, location, scope
@@ -62,6 +63,7 @@ Or install it yourself as:
   * [2.3 Structured Data](#23-structured-data)
   * [2.4 Configuration](#24-configuration)
     * [2.4.1 Metadata](#241-metadata)
+    * [2.4.2 Filters](#242-filters)
   * [2.5 Handlers](#25-handlers)
     * [2.5.1 Console Handler](#251-console-handler)
     * [2.5.2 Stream Handler](#252-stream-handler)
@@ -89,7 +91,7 @@ logger.info { "Dynamically generated info" }
 Include structured data:
 
 ```ruby
-logger.info "Deployed successfully", myapp: "myapp", env: "prod"
+logger.success "Deployed successfully", myapp: "myapp", env: "prod"
 # =>
 # ✔ success Deployed successfully     app=myapp env=prod
 ```
@@ -292,6 +294,26 @@ The `:metdata` configuration option can include the following symbols:
 * `:date` - the log event date
 * `:time` - the log event time
 * `:file` - the file with a line number the log event is triggered from
+
+### 2.4.2 Filters
+
+You can filter sensitive data out of log output with `filters` configuration option. Each filter is a pair of text to match and replacement placeholder.
+
+For example, to replace "secret" content with placeholder "<SECRET>" do:
+
+```ruby
+logger = TTY::Logger.new do |config|
+  config.filters = { "secret" => "<SECRET>" }
+end
+```
+
+When logged it will produce:
+
+```ruby
+logger.info("Super secret info")
+# =>
+# ℹ info    Super <SECRET> info
+```
 
 ### 2.5 Handlers
 
