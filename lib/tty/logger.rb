@@ -17,6 +17,8 @@ module TTY
     # Error raised by this logger
     class Error < StandardError; end
 
+    FILTERED = "[FILTERED]"
+
     # Logger configuration instance
     #
     # @api public
@@ -238,7 +240,7 @@ module TTY
       messages.reduce([]) do |acc, msg|
         acc << msg.dup.tap do |msg_copy|
           @config.filters.each do |text, placeholder|
-            msg_copy.gsub!(text, placeholder)
+            msg_copy.gsub!(text, placeholder || FILTERED)
           end
         end
         acc
