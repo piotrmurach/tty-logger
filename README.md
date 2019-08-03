@@ -204,17 +204,17 @@ So the order is: `:debug` < `:info` < `:warn` < `:error` < `:fatal`
 
 For example, `:info` takes precedence over `:debug`. If your log level is set to `:info`, `:info`, `:warn`, `:error` and `:fatal` will be printed to the console. If your log level is set to `:warn`, only `:warn`, `:error` and `:fatal` will be printed.
 
-You can set level using the `level` configuration option. The value can be a symbol, a string or level constant. For example, `:info`, `INFO` or `TTY::Logger::INFO_LEVEL` will quality as valid level value.
+You can set level using the `level` configuration option. The value can be a symbol, a string or level constant. For example, `:info`, `INFO` or `TTY::Logger::INFO_LEVEL` will qualify as valid level value.
 
 ```ruby
 TTY::Logger.new do |config|
-  config.level = :info # or "INFO" / TTY::Logger::INFO_LEVEL
+  config.level = :info # or "INFO" or TTY::Logger::INFO_LEVEL
 end
 ```
 
 Or you can specific level for each log events handler.
 
-For example, to log messages above info level to a stream and only error level events to the console do:
+For example, to log messages above `:info` level to a stream and only `:error` level events to the console do:
 
 ```ruby
 logger = TTY::Logger.new do |config|
@@ -367,7 +367,7 @@ logger.add_handler(:console)
 logger.remove_handler(:console)
 ```
 
-#### 2.5.1 Console handler
+#### 2.5.1 Console Handler
 
 The console handler prints log messages to the console. It supports the following options:
 
@@ -382,9 +382,9 @@ The supported options in the `:styles` are:
 * `:color` - the color for the log message.
 * `:levelpad` - the extra amount of padding used to display log label.
 
-See the [TTY::Logger::Handlers::Console]() for full list of styles.
+See the [TTY::Logger::Handlers::Console](https://github.com/piotrmurach/tty-logger/blob/master/lib/tty/logger/handlers/console.rb) for full list of styles.
 
-Console handler has many defaults styles such as `success` and `error`:
+Console handler has many default styles such as `success` and `error`:
 
 ```ruby
 logger = TTY::Logger.new
@@ -395,7 +395,7 @@ logger.error("Default error")
 # ⨯ error   Default error
 ```
 
-You can change console handler default style with a tuple of handler name and options hash.
+You can change the default styling with a tuple of handler name and options hash.
 
 In our example, we want to change the styling of `success` and `error`:
 
@@ -409,7 +409,7 @@ new_styles = {
     error: {
       symbol: "!",
       label: "Dooh",
-      levelpad: 3
+      levelpad: 3 # the amount of extra padding to align level names in a column
     }
   }
 }
@@ -418,12 +418,12 @@ new_styles = {
 And then use the `new_styles` when providing `handlers` configuration:
 
 ```ruby
-new_style = TTY::Logger.new do |config|
-  config.handlers = [:console, new_styles]
+styled_logger = TTY::Logger.new do |config|
+  config.handlers = [[:console, new_styles]]
 end
 
-new_style.success("Custom success")
-new_style.error("Custom error")
+styled_logger.success("Custom success")
+styled_logger.error("Custom error")
 # =>
 # + Ohh yes Custom success
 # ! Dooh    Custom error
@@ -443,7 +443,7 @@ end
 By default, the output will be a plain text streamed to console. The text contains key and value pairs of all the metadata and the message of the log event.
 
 ```ruby
-loggger.info("Info about the deploy", app="myap", env="prod")
+loggger.info("Info about the deploy", app:"myap", env:"prod")
 # =>
 # pid=18315 date="2019-07-21" time="15:42:12.463" path="examples/stream.rb:17:in`<main>`"
 # level=info message="Info about the deploy" app=myapp env=prod
