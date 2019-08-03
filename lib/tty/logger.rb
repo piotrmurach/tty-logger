@@ -19,6 +19,43 @@ module TTY
 
     FILTERED = "[FILTERED]"
 
+    LOG_TYPES = {
+      debug: { level: :debug },
+      info: { level: :info },
+      warn: { level: :warn },
+      error: { level: :error },
+      fatal: { level: :fatal },
+      success: { level: :info },
+      wait: { level: :info }
+    }
+
+    # Macro to dynamically define log types
+    #
+    # @api private
+    def self.define_level(name)
+      const_level = LOG_TYPES[name.to_sym][:level]
+
+      loc = caller_locations(0,1)[0]
+      if loc
+        file, line = loc.path, loc.lineno + 7
+      else
+        file, line = __FILE__, __LINE__ + 3
+      end
+      class_eval(<<-EOL, file, line)
+        def #{name}(*msg, &block)
+          log(:#{const_level}, *msg, &block)
+        end
+      EOL
+    end
+
+    define_level :debug
+    define_level :info
+    define_level :warn
+    define_level :error
+    define_level :fatal
+    define_level :success
+    define_level :wait
+
     # Logger configuration instance
     #
     # @api public
@@ -171,59 +208,6 @@ module TTY
         handler.(event) if log?(level, current_level)
       end
       self
-    end
-
-    # Log a message at :debug level
-    #
-    # @api public
-    def debug(*msg, &block)
-      log(:debug, *msg, &block)
-    end
-
-    # Log a message at :info level
-    #
-    # @examples
-    #   logger.info "Successfully deployed"
-    #   logger.info { "Dynamically generated info" }
-    #
-    # @api public
-    def info(*msg, &block)
-      log(:info, *msg, &block)
-    end
-
-    # Log a message at :warn level
-    #
-    # @api public
-    def warn(*msg, &block)
-      log(:warn, *msg, &block)
-    end
-
-    # Log a message at :error level
-    #
-    # @api public
-    def error(*msg, &block)
-      log(:error, *msg, &block)
-    end
-
-    # Log a message at :fatal level
-    #
-    # @api public
-    def fatal(*msg, &block)
-      log(:fatal, *msg, &block)
-    end
-
-    # Log a message with a success label
-    #
-    # @api public
-    def success(*msg, &block)
-      log(:info, *msg, &block)
-    end
-
-    # Log a message with a wait label
-    #
-    # @api public
-    def wait(*msg, &block)
-      log(:info, *msg, &block)
     end
 
     # Filter message parts for any sensitive information and
