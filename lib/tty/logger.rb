@@ -27,13 +27,13 @@ module TTY
       fatal: { level: :fatal },
       success: { level: :info },
       wait: { level: :info }
-    }
+    }.freeze
 
     # Macro to dynamically define log types
     #
     # @api private
-    def self.define_level(name)
-      const_level = LOG_TYPES[name.to_sym][:level]
+    def self.define_level(name, log_level = nil)
+      const_level = (LOG_TYPES[name.to_sym] || log_level)[:level]
 
       loc = caller_locations(0,1)[0]
       if loc
@@ -90,9 +90,26 @@ module TTY
       @output = output || @config.output
       @ready_handlers = []
 
+      @config.types.each do |name, log_level|
+        add_type(name, log_level)
+      end
+
       @handlers.each do |handler|
         add_handler(handler)
       end
+    end
+
+    # Add new log type
+    #
+    # @example
+    #   add_type(:thanks, {level: :info})
+    #
+    # @api private
+    def add_type(name, log_level)
+      if respond_to?(name)
+        raise Error, "Already defined log type #{name.inspect}"
+      end
+      self.class.define_level(name, log_level)
     end
 
     # Add handler for logging messages

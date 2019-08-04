@@ -163,4 +163,39 @@ RSpec.describe TTY::Logger, "#log" do
       "Successfully deployed     ",
       "\e[32mapp\e[0m=myapp \e[32menv\e[0m=prod\n"].join)
   end
+
+  it "adds new custom log type" do
+    heart = "❤"
+    logger = TTY::Logger.new(output: output) do |config|
+      config.types = {thanks: {level: :info}}
+      config.handlers = [
+        [:console, {
+          styles: {
+            thanks: {
+              symbol: heart,
+              label: "thanks",
+              color: :red,
+              levelpad: 1
+            }
+          }
+        }]
+      ]
+    end
+
+    logger.thanks("Great work!", app: "myapp", env: "prod")
+
+    expect(output.string).to eq([
+      "\e[31m#{heart}\e[0m ",
+      "\e[31mthanks\e[0m  ",
+      "Great work!               ",
+      "\e[31mapp\e[0m=myapp \e[31menv\e[0m=prod\n"].join)
+  end
+
+  it "fails to add already defined log type" do
+    expect {
+      TTY::Logger.new do |config|
+        config.types = {success: {level: :info}}
+      end
+    }.to raise_error(TTY::Logger::Error, "Already defined log type :success")
+  end
 end

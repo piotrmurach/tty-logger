@@ -138,7 +138,7 @@ module TTY
         #
         # @api private
         def configure_styles(event)
-          style = STYLES[event.metadata[:name].to_sym].dup
+          style = STYLES.fetch(event.metadata[:name].to_sym, {}).dup
           (@styles[event.metadata[:name].to_sym] || {}).each do |k, v|
             style[k] = v
           end
