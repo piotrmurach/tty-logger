@@ -62,7 +62,8 @@ RSpec.describe TTY::Logger::Config do
       max_depth: 3,
       metadata: [],
       output: $stderr,
-      time_format: "%T.%3N"
+      time_format: "%T.%3N",
+      types: {}
     })
   end
 
