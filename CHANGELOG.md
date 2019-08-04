@@ -6,6 +6,10 @@
 * Add ability to add structured data inside logging block
 * Add ability to filter sensitive data
 * Add performance tests
+* Add ability to define custom log types
+
+### Changed
+* Change to dynamically define log types
 
 ## [v0.1.0] - 2019-07-21
 
