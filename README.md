@@ -31,6 +31,7 @@
 * Ability to stream data to any IO object
 * Supports structured data logging
 * Filters sensitive data
+* Allows to define custom log types
 * Formats and truncates messages to avoid clogging logging output
 * Customizable styling of labels and symbols for console output
 * Includes metadata information: time, location, scope
@@ -59,6 +60,7 @@ Or install it yourself as:
 * [2. Synopsis](#2-synopsis)
   * [2.1 Logging](#21-logging)
     * [2.1.1 Exceptions](#211-exceptions)
+    * [2.1.2 Types](#222-types)
   * [2.2 Levels](#22-levels)
   * [2.3 Structured Data](#23-structured-data)
   * [2.4 Configuration](#24-configuration)
@@ -166,7 +168,7 @@ logger.success { ["Dynamically", "generated", "info"] }
 
 The above comes handy when paired with [structured data](#23-structured-data).
 
-### 2.1.1 Exceptions
+#### 2.1.1 Exceptions
 
 You can also report on exceptions.
 
@@ -189,6 +191,51 @@ This will result in a message followed by a full backtrace:
 #    rspec-core-3.8.2/lib/rspec/core/example.rb:257:in `instance_exec'
 #    rspec-core-3.8.2/lib/rspec/core/example.rb:257:in `block in run'
 ```
+
+#### 2.1.2 Types
+
+You can define custom log types via the `types` configuration option:
+
+For example, if you want to add `thanks` and `done` log types, you need to provide their names along with logging levels. You can further customise the `:console` output with your desired styling:
+
+```ruby
+logger = TTY::Logger.new do |config|
+  config.types = {
+    thanks: {level: :info},
+    done: {level: :info}
+  }
+  config.handlers = [
+    [:console, {
+      styles: {
+        thanks: {
+          symbol: "❤️ ",
+          label: "thanks",
+          color: :magenta,
+          levelpad: 0
+        },
+        done: {
+          symbol: "!!",
+          label: "done",
+          color: :green,
+          levelpad: 2
+        }
+      }
+    }]
+  ]
+end
+```
+
+Once defined, you can call new log types:
+
+```ruby
+logger.thanks("Great work!")
+logger.done("Work done!")
+# =>
+# ❤️  thanks Great work!
+# !! done   Work done!
+```
+
+![](assets/tty-logger-custom-log-types.png)
 
 ### 2.2 Levels
 
@@ -260,12 +307,14 @@ logger.wait { ["Ready to deploy", {app: "myapp", env: "prod"}] }
 
 All the configuration options can be changed globally via `configure` or per logger instance via object initialization.
 
+* `:filters` - the storage of placeholders to filter sensitive data out from the logs. defaults to `{}`.
 * `:formatter` - the formatter used to display structured data. Defaults to `:text`. see [Formatters](#26-formatters) for more details.
 * `:handlers` - the handlers used to log messages. Defaults to `[:console]`. See [Handlers](#25-handlers) for more details.
 * `:level` - the logging level. Any message logged below this level will be simply ignored. Each handler may have it's own default level. Defaults to `:info`
 * `:max_bytes` - the maximum message size to be logged in bytes. Defaults to `8192` bytes. The truncated message will have `...` at the end.
 * `:max_depth` - the maximum depth for nested structured data. Defaults to `3`.
 * `:metadata` - the meta info to display before the message, can be `:pid`, `:date`, `:time` or `:file`. Defaults to empty array `[]`, no metadata. Setting this to `:all` will print all the metadata.
+* `:types` - the new custom log types. Defaults to `{}`.
 
 For example, to configure `:max_bytes`, `:level` and `:metadata` for all logger instances do:
 
