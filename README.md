@@ -60,19 +60,20 @@ Or install it yourself as:
 * [2. Synopsis](#2-synopsis)
   * [2.1 Logging](#21-logging)
     * [2.1.1 Exceptions](#211-exceptions)
-    * [2.1.2 Types](#222-types)
+    * [2.1.2 Types](#212-types)
   * [2.2 Levels](#22-levels)
   * [2.3 Structured Data](#23-structured-data)
   * [2.4 Configuration](#24-configuration)
     * [2.4.1 Metadata](#241-metadata)
     * [2.4.2 Filters](#242-filters)
-  * [2.5 Handlers](#25-handlers)
-    * [2.5.1 Console Handler](#251-console-handler)
-    * [2.5.2 Stream Handler](#252-stream-handler)
-    * [2.5.3 Custom Handler](#253-custom-handler)
-    * [2.5.4 Multiple Handlers](#254-multiple-handlers)
-  * [2.6 Formatters](#26-formatters)
-  * [2.7 Output streams](#27-output-streams)
+  * [2.5 Cloning](#25-cloning)
+  * [2.6 Handlers](#26-handlers)
+    * [2.6.1 Console Handler](#261-console-handler)
+    * [2.6.2 Stream Handler](#262-stream-handler)
+    * [2.6.3 Custom Handler](#263-custom-handler)
+    * [2.6.4 Multiple Handlers](#264-multiple-handlers)
+  * [2.7 Formatters](#27-formatters)
+  * [2.8 Output streams](#28-output-streams)
 
 ## 1. Usage
 
@@ -82,7 +83,7 @@ Create logger:
 logger = TTY::Logger.new
 ```
 
-And log information using any of the logger [types](#21-types):
+And log information using any of the logger [built-in types](#21-types):
 
 ```ruby
 logger.info "Deployed successfully"
@@ -109,7 +110,7 @@ logger.info "Deployed successfully", myapp: "myapp", env: "prod"
 # [2019-07-17] [23:21:55.287] › ℹ info    Info about the deploy     app=myapp env=prod
 ```
 
-Or change structured data [formatting](#26-formatters) display to `JSON`:
+Or change structured data [formatting](#27-formatters) display to `JSON`:
 
 ```ruby
 logger = TTY::Logger.new do |config|
@@ -272,7 +273,7 @@ logger = TTY::Logger.new do |config|
 end
 ```
 
-You can also change the [output streams](#27-output-streams) for each handler.
+You can also change the [output streams](#28-output-streams) for each handler.
 
 ### 2.3 Structured data
 
@@ -307,9 +308,9 @@ logger.wait { ["Ready to deploy", {app: "myapp", env: "prod"}] }
 
 All the configuration options can be changed globally via `configure` or per logger instance via object initialization.
 
-* `:filters` - the storage of placeholders to filter sensitive data out from the logs. defaults to `{}`.
-* `:formatter` - the formatter used to display structured data. Defaults to `:text`. see [Formatters](#26-formatters) for more details.
-* `:handlers` - the handlers used to log messages. Defaults to `[:console]`. See [Handlers](#25-handlers) for more details.
+* `:filters` - the storage of placeholders to filter sensitive data out from the logs. Defaults to `{}`.
+* `:formatter` - the formatter used to display structured data. Defaults to `:text`. See [Formatters](#27-formatters) for more details.
+* `:handlers` - the handlers used to log messages. Defaults to `[:console]`. See [Handlers](#26-handlers) for more details.
 * `:level` - the logging level. Any message logged below this level will be simply ignored. Each handler may have it's own default level. Defaults to `:info`
 * `:max_bytes` - the maximum message size to be logged in bytes. Defaults to `8192` bytes. The truncated message will have `...` at the end.
 * `:max_depth` - the maximum depth for nested structured data. Defaults to `3`.
@@ -380,7 +381,33 @@ logger.info("Super secret info")
 # ℹ info    Super <SECRET> info
 ```
 
-### 2.5 Handlers
+### 2.5 Cloning
+
+You can create a copy of a logger with the current configuration using the `copy` method.
+
+For example, given the following logger with `:app` and `:env` data:
+
+```ruby
+logger = TTY::Logger.new(fields: {app: "parent", env: "prod"})
+```
+
+We can create a copy with a custom configuration that changes filtered message content and `:app` data:
+
+```ruby
+child_logger = logger.copy(app: "child") do |config|
+  config.filters = ["logging"]
+end
+```
+
+```ruby
+logger.info("Parent logging")
+child_logger.warn("Child logging")
+# =>
+# ℹ info    Parent logging            app=parent env=prod
+# ⚠ warning Child [FILTERED]          app=child env=prod
+```
+
+### 2.6 Handlers
 
 `TTY::Logger` supports many ways to handle log messages.
 
@@ -390,7 +417,7 @@ The available handlers by default are:
 * `:null` - discards any log messages
 * `:stream` - log messages to an `IO` stream, a file, a socket or a console.
 
-You can also implement your own [custom handler](#253-custom-handler).
+You can also implement your own [custom handler](#263-custom-handler).
 
 The handlers can be configured via global or instance configuration with `handlers`. The handler can be a name or a class name:
 
@@ -416,7 +443,7 @@ logger.add_handler(:console)
 logger.remove_handler(:console)
 ```
 
-#### 2.5.1 Console Handler
+#### 2.6.1 Console Handler
 
 The console handler prints log messages to the console. It supports the following options:
 
@@ -478,7 +505,7 @@ styled_logger.error("Custom error")
 # ! Dooh    Custom error
 ```
 
-#### 2.5.2 Stream handler
+#### 2.6.2 Stream handler
 
 To send log event data outside of console to another service or `IO` stream, you can use `:stream` handler.
 
@@ -516,7 +543,7 @@ loggger.info("Info about the deploy", app="myap", env="prod")
 # "level":"info","message":"Info about the deploy","app":"myapp","env":"prod"}
 ```
 
-#### 2.5.3 Custom Handler
+#### 2.6.3 Custom Handler
 
 You can create your own log event handler if the default ones don't match your needs.
 
@@ -576,7 +603,7 @@ logger = TTY::Logger.new
 logger.add_handler [MyHandler, label: "myhandler"]
 ```
 
-#### 2.5.4 Multiple Handlers
+#### 2.6.4 Multiple Handlers
 
 You can define as many handlers as you need. For example, you may log messages both to console and stream:
 
@@ -597,7 +624,7 @@ logger = TTY::Logger.new do |config|
 end
 ```
 
-### 2.6 Formatters
+### 2.7 Formatters
 
 The available formatters are:
 
@@ -619,7 +646,7 @@ TTY::Logger.new do |config|
   config.handlers = [:console, [:console, formatter: :json]]
 end
 ```
-### 2.7 Output Streams
+### 2.8 Output Streams
 
 By default all log events are output to `stderr`. You can change this using configuration `output` option. Any `IO`-like stream such as file, socket or console can be used. For example, to log all messages to a file do:
 
