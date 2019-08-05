@@ -62,11 +62,11 @@ module TTY
         -> (config) {
           config.date_format = @date_format.dup
           config.filters = @filters.dup
-          config.formatter = @formatter.dup
+          config.formatter = @formatter
           config.handlers = @handlers.dup
-          config.level =  @level.dup
-          config.max_bytes = @max_bytes.dup
-          config.max_depth = @max_depth.dup
+          config.level =  @level
+          config.max_bytes = @max_bytes
+          config.max_depth = @max_depth
           config.metadata = @metadata.dup
           config.output = @output.dup
           config.time_format = @time_format.dup
