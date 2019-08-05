@@ -5,7 +5,7 @@ RSpec.describe TTY::Logger, "#copy" do
   let(:styles) { TTY::Logger::Handlers::Console::STYLES }
 
   it "copies ouptut, fields and configuration over to child logger" do
-    logger = TTY::Logger.new(output: output, fields: {app: "parent"})
+    logger = TTY::Logger.new(output: output, fields: {app: "parent", env: "prod"})
     child_logger = logger.copy(app: "child") do |config|
       config.filters = ["logging"]
     end
@@ -16,10 +16,12 @@ RSpec.describe TTY::Logger, "#copy" do
     expect(output.string).to eq([
       "\e[32m#{styles[:info][:symbol]}\e[0m ",
       "\e[32minfo\e[0m    ",
-      "Parent logging            \e[32mapp\e[0m=parent\n",
+      "Parent logging            ",
+      "\e[32mapp\e[0m=parent \e[32menv\e[0m=prod\n",
       "\e[33m#{styles[:warn][:symbol]}\e[0m ",
       "\e[33mwarning\e[0m ",
-      "Child [FILTERED]          \e[33mapp\e[0m=child\n"
+      "Child [FILTERED]          ",
+      "\e[33mapp\e[0m=child \e[33menv\e[0m=prod\n"
     ].join)
   end
 end
