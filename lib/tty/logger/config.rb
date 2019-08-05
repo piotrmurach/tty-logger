@@ -55,6 +55,26 @@ module TTY
         @types = options.fetch(:types) { {} }
       end
 
+      # Clone settings
+      #
+      # @api public
+      def to_proc
+        -> (config) {
+          config.date_format = @date_format.dup
+          config.filters = @filters.dup
+          config.formatter = @formatter.dup
+          config.handlers = @handlers.dup
+          config.level =  @level.dup
+          config.max_bytes = @max_bytes.dup
+          config.max_depth = @max_depth.dup
+          config.metadata = @metadata.dup
+          config.output = @output.dup
+          config.time_format = @time_format.dup
+          config.types = @types.dup
+          config
+        }
+      end
+
       # Hash representation of this config
       #
       # @return [Hash[Symbol]]

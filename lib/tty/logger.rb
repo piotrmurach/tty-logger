@@ -168,18 +168,24 @@ module TTY
       raise Error, "Handler needs to be a class name or a symbol name"
     end
 
-    # Add structured data
+    # Copy this logger
     #
     # @example
     #   logger = TTY::Logger.new
-    #   logger.with(app: "myenv", env: "prod").debug("Deplying")
+    #   child_logger = logger.copy(app: "myenv", env: "prod")
+    #   child_logger.info("Deploying")
     #
     # @return [TTY::Logger]
     #   a new copy of this logger
     #
     # @api public
-    def with(new_fields)
-      self.class.new(fields: @fields.merge(new_fields), output: @output)
+    def copy(new_fields)
+      new_config = @config.to_proc.call(Config.new)
+      if block_given?
+        yield(new_config)
+      end
+      self.class.new(fields: @fields.merge(new_fields),
+                     output: @output, &new_config)
     end
 
     # Check current level against another

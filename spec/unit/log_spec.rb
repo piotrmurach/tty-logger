@@ -140,18 +140,6 @@ RSpec.describe TTY::Logger, "#log" do
       "\e[32mapp\e[0m=myapp \e[32menv\e[0m=prod\n"].join)
   end
 
-  it "logs message with fields" do
-    logger = TTY::Logger.new(output: output)
-
-    logger.with(app: 'myapp', env: 'prod').info("Successfully deployed")
-
-    expect(output.string).to eq([
-      "\e[32m#{styles[:info][:symbol]}\e[0m ",
-      "\e[32minfo\e[0m    ",
-      "Successfully deployed     ",
-      "\e[32mapp\e[0m=myapp \e[32menv\e[0m=prod\n"].join)
-  end
-
   it "logs message with scoped fields" do
     logger = TTY::Logger.new(output: output)
 
