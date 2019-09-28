@@ -4,6 +4,19 @@ module TTY
   class Logger
     module Handlers
       module Base
+        # Change current log level for the duration of the block
+        #
+        # @param [String] tmp_level
+        #   the temporary log level
+        #
+        # @api public
+        def log_at(tmp_level)
+          old_level, @level = level, tmp_level
+          yield
+        ensure
+          @level = old_level
+        end
+
         # Coerce formatter name into constant
         #
         # @api private

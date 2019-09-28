@@ -233,6 +233,23 @@ module TTY
       self
     end
 
+    # Change current log level for the duration of the block
+    #
+    # @example
+    #   logger.log_at :debug do
+    #     logger.debug("logged")
+    #   end
+    #
+    # @param [String] tmp_level
+    #   the temporary log level
+    #
+    # @api public
+    def log_at(tmp_level, &block)
+      @ready_handlers.each do |handler|
+        handler.log_at(tmp_level, &block)
+      end
+    end
+
     # Filter message parts for any sensitive information and
     # replace with placeholder.
     #
