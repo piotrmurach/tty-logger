@@ -62,6 +62,7 @@ Or install it yourself as:
     * [2.1.1 Exceptions](#211-exceptions)
     * [2.1.2 Types](#212-types)
   * [2.2 Levels](#22-levels)
+    * [2.2.1 Scoped Level](#22-scoped-levels)
   * [2.3 Structured Data](#23-structured-data)
   * [2.4 Configuration](#24-configuration)
     * [2.4.1 Metadata](#241-metadata)
@@ -83,7 +84,7 @@ Create logger:
 logger = TTY::Logger.new
 ```
 
-And log information using any of the logger [built-in types](#21-types):
+And log information using any of the logger [built-in types](#212-types):
 
 ```ruby
 logger.info "Deployed successfully"
@@ -274,6 +275,33 @@ end
 ```
 
 You can also change the [output streams](#28-output-streams) for each handler.
+
+#### 2.2.1 Scoped Level
+
+You can temporarily change level, raise it or lower it by using the `log_at` call. By default messages are logged at `:info` level, but you can change this for the duration of a block:
+
+```ruby
+logger = TTY::Logger.new
+
+logger.info("not logged")
+
+logger.log_at :debug do
+  logger.debug("logged")
+end
+# =>
+# • debug   logged
+```
+
+Or elevating level to error with a constant `ERROR_LEVEL`:
+
+```ruby
+logger.log_at TTY::Logger::ERROR_LEVEL do
+  logger.debug("not logged")
+  logger.error("logged")
+end
+# =>
+# ⨯ error   logged
+```
 
 ### 2.3 Structured data
 
