@@ -75,6 +75,12 @@ module TTY
     # @example
     #   logger = TTY::Logger.new(output: $stdout)
     #
+    # @param [IO] output
+    #   the output object, can be stream
+    #
+    # @param [Hash] fields
+    #   the data fields for each log message
+    #
     # @api public
     def initialize(output: nil, fields: {})
       @fields = fields
@@ -200,10 +206,10 @@ module TTY
     # Log a message given the severtiy level
     #
     # @example
-    #   logger.log("Deployed successfully")
+    #   logger.log(:info, "Deployed successfully")
     #
     # @example
-    #   logger.log { "Deployed successfully" }
+    #   logger.log(:info) { "Deployed successfully" }
     #
     # @api public
     def log(current_level, *msg, **scoped_fields)

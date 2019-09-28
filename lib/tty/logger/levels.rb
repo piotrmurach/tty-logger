@@ -17,21 +17,43 @@ module TTY
         fatal: FATAL_LEVEL
       }
 
+      # All the default level names
+      #
+      # @return [Array[Symbol]]
+      #
+      # @api private
       def level_names
         LEVEL_NAMES.keys
       end
 
+      # Convert level name to level number
+      #
+      # @param [Symbol] level
+      #
+      # @return [Integer]
+      #
       # @api private
       def level_to_number(level)
         LEVEL_NAMES[level.to_s.downcase.to_sym] ||
           raise(ArgumentError, "Invalid level #{level.inspect}")
       end
 
+      # Convert level number to level name
+      #
+      # @param [Integer] number
+      #
+      # @return [Symbol]
+      #
       # @api private
       def number_to_level(number)
         LEVEL_NAMES.key(number)
       end
 
+      # Compares two levels by name or number
+      #
+      # @return [Symbol]
+      #   either :lt, :gt or :eq
+      #
       # @api private
       def compare_levels(left, right)
         left = left.is_a?(Integer) ? left : level_to_number(left)
