@@ -220,12 +220,14 @@ module TTY
           el.is_a?(::Hash) ? fields_copy.merge!(el) : msg << el
         end
       end
-      loc = caller_locations(2,1)[0]
+      top_caller = caller_locations(1,1)[0]
+      loc = caller_locations(2,1)[0] || top_caller
+      label = top_caller.label
       metadata = {
         level: current_level,
         time: Time.now,
         pid: Process.pid,
-        name: caller_locations(1,1)[0].label,
+        name: /<top\s+\(required\)>|<main>/ =~ label ? current_level : label,
         path: loc.path,
         lineno: loc.lineno,
         method: loc.base_label

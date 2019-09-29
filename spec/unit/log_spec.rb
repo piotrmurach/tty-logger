@@ -4,6 +4,20 @@ RSpec.describe TTY::Logger, "#log" do
   let(:output) { StringIO.new }
   let(:styles) { TTY::Logger::Handlers::Console::STYLES }
 
+  it "logs without a method name directly using level" do
+    logger = TTY::Logger.new(output: output) do |config|
+      config.level = :debug
+    end
+
+    logger.log(:debug, "Deploying...")
+
+    expect(output.string).to eq([
+      "\e[36m#{styles[:debug][:symbol]}\e[0m ",
+      "\e[36mdebug\e[0m   ",
+      "Deploying...             \n"
+    ].join)
+  end
+
   it "logs a message at debug level" do
     logger = TTY::Logger.new(output: output) do |config|
       config.level = :debug
