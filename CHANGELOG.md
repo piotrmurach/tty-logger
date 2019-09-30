@@ -1,6 +1,6 @@
 # Change log
 
-## [v0.2.0] - 2019-09-xx
+## [v0.2.0] - 2019-09-30
 
 ### Added
 * Add ability to add structured data inside logging block
