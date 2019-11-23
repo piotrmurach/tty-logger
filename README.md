@@ -547,7 +547,7 @@ end
 By default, the output will be a plain text streamed to console. The text contains key and value pairs of all the metadata and the message of the log event.
 
 ```ruby
-loggger.info("Info about the deploy", app:"myap", env:"prod")
+logger.info("Info about the deploy", app:"myap", env:"prod")
 # =>
 # pid=18315 date="2019-07-21" time="15:42:12.463" path="examples/stream.rb:17:in`<main>`"
 # level=info message="Info about the deploy" app=myapp env=prod
@@ -565,7 +565,7 @@ end
 This will output JSON formatted text streamed to console.
 
 ```ruby
-loggger.info("Info about the deploy", app="myap", env="prod")
+logger.info("Info about the deploy", app="myap", env="prod")
 # =>
 # {"pid":18513,"date":"2019-07-21","time":"15:54:09.924","path":"examples/stream.rb:17:in`<main>`",
 # "level":"info","message":"Info about the deploy","app":"myapp","env":"prod"}
