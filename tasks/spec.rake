@@ -19,7 +19,7 @@ begin
       task.pattern = "spec/integration{,/*/**}/*_spec.rb"
     end
 
-    desc "Run integration specs"
+    desc "Run performance specs"
     RSpec::Core::RakeTask.new(:perf) do |task|
       task.pattern = "spec/perf{,/*/**}/*_spec.rb"
     end
