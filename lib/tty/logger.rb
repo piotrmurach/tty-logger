@@ -212,7 +212,8 @@ module TTY
     #   logger.log(:info) { "Deployed successfully" }
     #
     # @api public
-    def log(current_level, *msg, **scoped_fields)
+    def log(current_level, *msg)
+      scoped_fields = msg.last.is_a?(::Hash) ? msg.pop : {}
       fields_copy = scoped_fields.dup
       if msg.empty? && block_given?
         msg = []
