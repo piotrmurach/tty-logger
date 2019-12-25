@@ -129,7 +129,7 @@ module TTY
       name = coerce_handler(h)
       global_opts = { output: @output, config: @config }
       opts = global_opts.merge(options)
-      ready_handler = name.new(opts)
+      ready_handler = name.new(**opts)
       @ready_handlers << ready_handler
     end
 

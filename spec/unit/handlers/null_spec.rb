@@ -5,7 +5,7 @@ RSpec.describe TTY::Logger::Handlers::Null, "null handler" do
 
   it "doesn't log with a null handler" do
     logger = TTY::Logger.new(output: output) do |config|
-      config.handlers = [:null]
+      config.handlers = [[:null, formatter: :json]]
     end
 
     logger.info("Logging")
