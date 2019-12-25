@@ -11,8 +11,11 @@ module TTY
       # The format used for time display
       attr_accessor :time_format
 
-      # The storage of placholders to filter sensitive data out from the logs. Defaults to {}
+      # The filters to hide sensitive data from the messages. Defaults to []
       attr_accessor :filters
+
+      # The filters to hide sensitive info in structured data. Defaults to []
+      attr_accessor :data_filters
 
       # The format used for displaying structured data
       attr_accessor :formatter
@@ -47,6 +50,7 @@ module TTY
         @level = options.fetch(:level) { :info }
         @metadata = options.fetch(:metadata) { [] }
         @filters  = options.fetch(:filters) { {} }
+        @data_filters = options.fetch(:data_filters) { [] }
         @handlers = options.fetch(:handlers) { [:console] }
         @formatter = options.fetch(:formatter) { :text }
         @date_format = options.fetch(:date_format) { "%F" }
@@ -83,6 +87,7 @@ module TTY
       def to_h
         {
           date_format: date_format,
+          data_filters: data_filters,
           filters: filters,
           formatter: formatter,
           handlers: handlers,
