@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "logger/config"
+require_relative "logger/data_filter"
 require_relative "logger/event"
 require_relative "logger/formatters/json"
 require_relative "logger/formatters/text"
@@ -95,6 +96,7 @@ module TTY
       @handlers = @config.handlers
       @output = output || @config.output
       @ready_handlers = []
+      @data_filter = DataFilter.new(@config.data_filters)
 
       @config.types.each do |name, log_level|
         add_type(name, log_level)
@@ -233,7 +235,8 @@ module TTY
         lineno: loc.lineno,
         method: loc.base_label
       }
-      event = Event.new(filter(*msg), @fields.merge(fields_copy), metadata)
+      event = Event.new(filter(*msg),
+                        @data_filter.filter(@fields.merge(fields_copy)), metadata)
 
       @ready_handlers.each do |handler|
         level = handler.respond_to?(:level) ? handler.level : @config.level

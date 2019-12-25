@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "../../lib/tty/logger/data_filter"
-
 RSpec.describe TTY::Logger::DataFilter, "#filter" do
   [
     [{"aaa" => "bbb"}, {"aaa" => "bbb"}, %w[aaaa]],
