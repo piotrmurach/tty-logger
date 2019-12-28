@@ -6,7 +6,7 @@ RSpec.describe TTY::Logger, "filters" do
 
   it "filters a sensitive data from a message" do
     logger = TTY::Logger.new(output: output) do |config|
-      config.filters = ["secret", "password"]
+      config.filters.message = ["secret", "password"]
     end
 
     logger.info("Super secret info with password")
@@ -19,7 +19,7 @@ RSpec.describe TTY::Logger, "filters" do
 
   it "filters a sensitive data from a message with custom placeholder" do
     logger = TTY::Logger.new(output: output) do |config|
-      config.filters = { "secret" => "<SECRET>" }
+      config.filters.message = { "secret" => "<SECRET>" }
     end
 
     logger.info("Super secret info")
@@ -32,7 +32,7 @@ RSpec.describe TTY::Logger, "filters" do
 
   it "filters sensitive information from structured data matching keys" do
     logger = TTY::Logger.new(output: output) do |config|
-      config.data_filters = %w[password]
+      config.filters.data = %w[password]
     end
 
     logger.info("Secret password",
@@ -49,7 +49,7 @@ RSpec.describe TTY::Logger, "filters" do
 
   it "filters sensitive information from structured data matching composite key" do
     logger = TTY::Logger.new(output: output) do |config|
-      config.data_filters = %w[params.password]
+      config.filters.data = %w[params.password]
     end
 
     logger.info("Secret password", params: {password: "Secret123",

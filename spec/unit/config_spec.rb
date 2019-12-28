@@ -50,9 +50,10 @@ RSpec.describe TTY::Logger::Config do
     expect(config.output).to eq($stderr)
   end
 
-  it "defaults data_filters to []" do
+  it "defaults filters to []" do
     config = described_class.new
-    expect(config.data_filters).to eq([])
+    expect(config.filters.data).to eq([])
+    expect(config.filters.message).to eq([])
   end
 
   it "serializes data into hash" do
@@ -60,8 +61,7 @@ RSpec.describe TTY::Logger::Config do
     expect(config.to_h).to eq({
       date_format: "%F",
       formatter: :text,
-      data_filters: [],
-      filters: {},
+      filters: {data: [], message: []},
       handlers: [:console],
       level: :info,
       max_bytes: 8192,

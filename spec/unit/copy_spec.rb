@@ -7,7 +7,7 @@ RSpec.describe TTY::Logger, "#copy" do
   it "copies ouptut, fields and configuration over to child logger" do
     logger = TTY::Logger.new(output: output, fields: {app: "parent", env: "prod"})
     child_logger = logger.copy(app: "child") do |config|
-      config.filters = ["logging"]
+      config.filters.message = ["logging"]
     end
 
     logger.info("Parent logging")

@@ -96,7 +96,7 @@ module TTY
       @handlers = @config.handlers
       @output = output || @config.output
       @ready_handlers = []
-      @data_filter = DataFilter.new(@config.data_filters)
+      @data_filter = DataFilter.new(@config.filters.data)
 
       @config.types.each do |name, log_level|
         add_type(name, log_level)
@@ -275,7 +275,7 @@ module TTY
     def filter(*messages)
       messages.reduce([]) do |acc, msg|
         acc << msg.dup.tap do |msg_copy|
-          @config.filters.each do |text, placeholder|
+          @config.filters.message.each do |text, placeholder|
             msg_copy.gsub!(text, placeholder || FILTERED)
           end
         end
