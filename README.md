@@ -375,15 +375,17 @@ The `:metdata` configuration option can include the following symbols:
 
 ### 2.4.2 Filters
 
-You can filter sensitive data out of log output with `filters` configuration option. As a value provide a list of sensitive data items:
+You can filter sensitive data out of log output with `filters` configuration option. The `filters` can be further configured to remove info from log message with `message` or structured data with `data`. Both methods, as a value accept a list of sensitive items to search for.
+
+If you want to filter sensitive information from log messages use `message`:
 
 ```ruby
 logger = TTY::Logger.new(output: output) do |config|
-  config.filters = ["secret", "password"]
+  config.filters.message = %w[secret password]
 end
 ```
 
-Which by default will replace each data item with `[FILTERED]` placeholder:
+Which by default will replace each matching string with `[FILTERED]` placeholder:
 
 ```ruby
 logger.info("Super secret info with password")
@@ -391,13 +393,14 @@ logger.info("Super secret info with password")
 # ℹ info    Super [FILTERED] info with [FILTERED]
 ```
 
-You can also replace each data item with a custom placeholder. To do so use a hash with pairs of matched text and replacement placeholder.
+You can also replace each data item with a custom placeholder. To do so use a `:mask` keyword with a replacement placeholder.
 
-For example, to replace "secret" content with placeholder "<SECRET>" do:
+For example, to replace "secret" content with placeholder `"<SECRET>"` do:
 
 ```ruby
 logger = TTY::Logger.new do |config|
-  config.filters = { "secret" => "<SECRET>" }
+  config.filters.message = %w[secret]
+  config.filters.mask = "<SECRET>"
 end
 ```
 
