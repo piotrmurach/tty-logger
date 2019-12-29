@@ -19,7 +19,8 @@ RSpec.describe TTY::Logger, "filters" do
 
   it "filters a sensitive data from a message with custom placeholder" do
     logger = TTY::Logger.new(output: output) do |config|
-      config.filters.message = { "secret" => "<SECRET>" }
+      config.filters.message = %w[secret]
+      config.filters.mask = "<SECRET>"
     end
 
     logger.info("Super secret info")

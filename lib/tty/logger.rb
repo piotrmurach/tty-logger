@@ -276,7 +276,7 @@ module TTY
       messages.reduce([]) do |acc, msg|
         acc << msg.dup.tap do |msg_copy|
           @config.filters.message.each do |text, placeholder|
-            msg_copy.gsub!(text, placeholder || FILTERED)
+            msg_copy.gsub!(text, @config.filters.mask || FILTERED)
           end
         end
         acc
