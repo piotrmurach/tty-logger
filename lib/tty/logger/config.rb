@@ -55,15 +55,16 @@ module TTY
       end
 
       class FiltersProvider
-        attr_accessor :message, :data
+        attr_accessor :message, :data, :mask
 
         def initialize
           @message = []
           @data = []
+          @mask = nil
         end
 
         def to_h
-          {message: @message, data: @data}
+          {message: @message, data: @data, mask: @mask}
         end
 
         def to_s

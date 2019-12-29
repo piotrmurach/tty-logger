@@ -61,7 +61,7 @@ RSpec.describe TTY::Logger::Config do
     expect(config.to_h).to eq({
       date_format: "%F",
       formatter: :text,
-      filters: {data: [], message: []},
+      filters: {data: [], mask: nil, message: []},
       handlers: [:console],
       level: :info,
       max_bytes: 8192,
