@@ -412,6 +412,64 @@ logger.info("Super secret info")
 # ℹ info    Super <SECRET> info
 ```
 
+To filter out sensitive information out of structured data use `data` method. By default any value matching a parameter name will be filtered regardless of the level of nesting. If you wish to filter only a specific deeply nested key use a dot notation like `params.card.password` to only filter `{params: {card: {password: "Secret123"}}}`.
+
+For example to filter out a `:password` from data do:
+
+```ruby
+logger = TTY::Logger.new do |config|
+  config.filters.data = %i[password]
+end
+```
+
+This will filter out any key matching password:
+
+```ruby
+logger.info("Secret info", password: "Secret123", email: "")
+# =>
+# ℹ info    Secret info     password="[FILTERED]" email="secret@example.com"
+```
+
+But also any nested data item:
+
+```ruby
+logger.info("Secret info", params: {password: "Secret123", email: ""})
+# =>
+# ℹ info    Secret info     params={password="[FILTERED]" email="secret@example.com"}
+```
+
+You're not limited to using only direct string comparison. You can also match based on regular expressions. For example, to match keys starting with `ba` we can add a following filter:
+
+```ruby
+logger = TTY::Logger.new do |config|
+  config.filters.data = [/ba/]
+end
+```
+
+Then appropriate values will be masked:
+
+```ruby
+logger.info("Filtering data", {"foo" => {"bar" => "val", "baz" => "val"}})
+# =>
+# ℹ info    Filtering data            foo={bar="[FILTERED]" baz="[FILTERED]"}
+```
+
+You can mix and match. To filter keys based on pattern inside a deeply nested hash use dot notation with regular expression. For example, to find keys for the `:foo` parent key that starts with `:b` character, we could do:
+
+```ruby
+logger = TTY::Logger.new do |config|
+  config.filters.data = [/^foo\.b/]
+end
+```
+
+Then only keys under the `:foo` key will be filtered:
+
+```ruby
+logger.info("Filtering data", {"foo" => {"bar" => "val"}, "baz" => {"bar" => val"}})
+# =>
+# ℹ info    Filtering data            foo={bar="[FILTERED]"} baz={bar=val}
+```
+
 ### 2.5 Cloning
 
 You can create a copy of a logger with the current configuration using the `copy` method.
