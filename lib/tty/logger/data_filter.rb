@@ -6,7 +6,7 @@ module TTY
       FILTERED = "[FILTERED]"
       DOT = "."
 
-      attr_reader :filters, :mask
+      attr_reader :filters, :compiled_filters, :mask
 
       # Create a data filter instance with filters.
       #
@@ -20,6 +20,7 @@ module TTY
       def initialize(filters = [], mask: nil)
         @mask = mask || FILTERED
         @filters = filters
+        @compiled_filters = compile(filters)
       end
 
       # Filter object for keys matching provided filters.
@@ -43,6 +44,46 @@ module TTY
 
       private
 
+      def compile(filters)
+        compiled = {
+          regexps: [],
+          nested_regexps: [],
+          blocks: [],
+        }
+        strings = []
+        nested_strings = []
+
+        filters.each do |filter|
+          case filter
+          when Proc
+            compiled[:blocks] << filter
+          when Regexp
+            if filter.to_s.include?(DOT)
+              compiled[:nested_regexps] << filter
+            else
+              compiled[:regexps] << filter
+            end
+          else
+            exp = Regexp.escape(filter)
+            if exp.include?(DOT)
+              nested_strings << exp
+            else
+              strings << exp
+            end
+          end
+        end
+
+        if !strings.empty?
+          compiled[:regexps] << /^(#{strings.join("|")})$/
+        end
+
+        if !nested_strings.empty?
+          compiled[:nested_regexps] << /^(#{nested_strings.join("|")})$/
+        end
+
+        compiled
+      end
+
       def filter_val(key, val, composite = [])
         return mask if filtered?(key, composite)
 
@@ -55,26 +96,10 @@ module TTY
 
       def filtered?(key, composite)
         composite_key = composite + [key]
-        filters.any? do |filter|
-          case filter
-          when Proc
-            filter.(composite_key.dup)
-          when Regexp
-            if filter.to_s.include?(DOT)
-              !!filter.match(composite_key.join(DOT))
-            else
-              !!filter.match(key.to_s)
-            end
-          else
-            exp = Regexp.escape(filter)
-            reg = Regexp.new("^#{exp}$")
-            if exp.include?(DOT)
-              !!reg.match(composite_key.join(DOT))
-            else
-              !!reg.match(key.to_s)
-            end
-          end
-        end
+        joined_key = composite_key.join(DOT)
+        @compiled_filters[:regexps].any? { |reg| !!reg.match(key.to_s) } ||
+          @compiled_filters[:nested_regexps].any? { |reg| !!reg.match(joined_key) } ||
+          @compiled_filters[:blocks].any? { |block| block.(composite_key.dup) }
       end
 
       def filter_obj(_key, obj, composite)

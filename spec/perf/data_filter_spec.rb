@@ -18,7 +18,7 @@ RSpec.describe TTY::Logger::DataFilter do
       data_filter.filter(deep_data)
     }.to perform_slower_than {
       ::JSON.dump(deep_data)
-    }.at_least(25).times
+    }.at_most(14).times
   end
 
   it "filters shallow data with many keys efficiently" do
@@ -33,6 +33,6 @@ RSpec.describe TTY::Logger::DataFilter do
       data_filter.filter(large_data)
     }.to perform_slower_than {
       ::JSON.dump(large_data)
-    }.at_least(230).times
+    }.at_most(12).times
   end
 end
