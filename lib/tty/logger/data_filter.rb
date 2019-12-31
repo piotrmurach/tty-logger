@@ -17,8 +17,8 @@ module TTY
       #   the mask to replace object with. Defaults to `"[FILTERED]"`
       #
       # @api private
-      def initialize(filters = [], mask: FILTERED)
-        @mask = mask
+      def initialize(filters = [], mask: nil)
+        @mask = mask || FILTERED
         @filters = filters
       end
 

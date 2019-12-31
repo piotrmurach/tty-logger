@@ -96,7 +96,7 @@ module TTY
       @handlers = @config.handlers
       @output = output || @config.output
       @ready_handlers = []
-      @data_filter = DataFilter.new(@config.filters.data)
+      @data_filter = DataFilter.new(@config.filters.data, mask: @config.filters.mask)
 
       @config.types.each do |name, log_level|
         add_type(name, log_level)

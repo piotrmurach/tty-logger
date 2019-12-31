@@ -51,6 +51,7 @@ RSpec.describe TTY::Logger, "filters" do
   it "filters sensitive information from structured data matching composite key" do
     logger = TTY::Logger.new(output: output) do |config|
       config.filters.data = %w[params.password]
+      config.filters.mask = "<SECRET>"
     end
 
     logger.info("Secret password", params: {password: "Secret123",
@@ -60,7 +61,7 @@ RSpec.describe TTY::Logger, "filters" do
       "\e[32m#{styles[:info][:symbol]}\e[0m ",
       "\e[32minfo\e[0m    ",
       "Secret password           ",
-      "\e[32mparams={password\e[0m=\"[FILTERED]\" ",
+      "\e[32mparams={password\e[0m=<SECRET> ",
       "\e[32memail\e[0m=\"secret@example.com\"}\n",
     ].join)
   end
