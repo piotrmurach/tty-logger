@@ -56,7 +56,7 @@ RSpec.describe TTY::Logger, "formatter" do
       config.handlers = [:console, [:console, {formatter: :JSON}]]
     end
 
-    logger.info("Logging", "[params]": {"{app}" => "myapp", env: "prod"})
+    logger.info("Logging", "[params]" => {"{app}" => "myapp", env: "prod"})
 
     expect(output.string).to eq([
       "\e[32m#{styles[:info][:symbol]}\e[0m ",
