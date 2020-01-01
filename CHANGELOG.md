@@ -1,5 +1,13 @@
 # Change log
 
+## [v0.3.0] - 2020-01-01
+
+### Added
+* Add ability to filter sensitive information out of structured data
+
+### Fixed
+* Fix console handler highlighting of nested hash keys
+
 ## [v0.2.0] - 2019-09-30
 
 ### Added
@@ -16,5 +24,6 @@
 
 * Initial implementation and release
 
+[v0.3.0]: https://github.com/piotrmurach/tty-logger/compare/v0.2.0..v0.3.0
 [v0.2.0]: https://github.com/piotrmurach/tty-logger/compare/v0.1.0..v0.2.0
 [v0.1.0]: https://github.com/piotrmurach/tty-logger/compare/v0.1.0
