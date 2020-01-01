@@ -5,6 +5,8 @@ require_relative "handlers/console"
 module TTY
   class Logger
     class Config
+      FILTERED = "[FILTERED]"
+
       # The format used for date display
       attr_accessor :date_format
 
@@ -60,7 +62,7 @@ module TTY
         def initialize
           @message = []
           @data = []
-          @mask = nil
+          @mask = FILTERED
         end
 
         def to_h

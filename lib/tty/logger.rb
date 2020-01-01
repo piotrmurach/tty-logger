@@ -18,8 +18,6 @@ module TTY
     # Error raised by this logger
     class Error < StandardError; end
 
-    FILTERED = "[FILTERED]"
-
     LOG_TYPES = {
       debug: { level: :debug },
       info: { level: :info },
@@ -278,7 +276,7 @@ module TTY
       messages.reduce([]) do |acc, msg|
         acc << msg.dup.tap do |msg_copy|
           @config.filters.message.each do |text|
-            msg_copy.gsub!(text, @config.filters.mask || FILTERED)
+            msg_copy.gsub!(text, @config.filters.mask)
           end
         end
         acc
