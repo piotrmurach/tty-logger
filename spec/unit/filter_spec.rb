@@ -61,7 +61,7 @@ RSpec.describe TTY::Logger, "filters" do
       "\e[32m#{styles[:info][:symbol]}\e[0m ",
       "\e[32minfo\e[0m    ",
       "Secret password           ",
-      "\e[32mparams={password\e[0m=<SECRET> ",
+      "\e[32mparams\e[0m={\e[32mpassword\e[0m=<SECRET> ",
       "\e[32memail\e[0m=\"secret@example.com\"}\n",
     ].join)
   end
