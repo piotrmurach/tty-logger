@@ -5,6 +5,9 @@
 ### Added
 * Add ability to filter sensitive information out of structured data
 
+### Changed
+* Remove the test and task files from the gemspec
+
 ### Fixed
 * Fix console handler highlighting of nested hash keys
 
