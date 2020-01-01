@@ -19,13 +19,11 @@ Gem::Specification.new do |spec|
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/piotrmurach/tty-logger"
 
-  spec.files         = Dir['{lib,spec,examples}/**/*.rb']
-  spec.files        += Dir['tasks/*', 'tty-logger.gemspec']
-  spec.files        += Dir['README.md', 'CHANGELOG.md', 'LICENSE.txt', 'Rakefile']
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.files         = Dir["lib/**/*.rb", "tty-logger.gemspec"]
+  spec.files        += Dir["README.md", "CHANGELOG.md", "LICENSE.txt"]
+  spec.executables   = []
   spec.require_paths = ["lib"]
-
-  spec.required_ruby_version = '>= 2.0.0'
+  spec.required_ruby_version = ">= 2.0.0"
 
   spec.add_dependency "pastel", "~> 0.7.0"
 
