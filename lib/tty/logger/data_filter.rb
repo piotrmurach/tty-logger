@@ -35,6 +35,8 @@ module TTY
       #
       # @api public
       def filter(obj)
+        return obj if filters.empty?
+
         hash = obj.reduce({}) do |acc, (k, v)|
           acc[k] = filter_val(k, v)
           acc
