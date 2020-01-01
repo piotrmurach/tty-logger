@@ -57,6 +57,14 @@ module TTY
           }
         }
 
+        TEXT_REGEXP = /([{}()\[\]])?(["']?)(\S+?)(["']?=)/.freeze
+        JSON_REGEXP = /\"([^,]+?)\"(?=:)/.freeze
+
+        COLOR_PATTERNS = {
+          text: [TEXT_REGEXP, ->(c) { "\\1\\2" + c.("\\3") + "\\4" }],
+          json: [JSON_REGEXP, ->(c) { "\"" + c.("\\1") + "\"" }]
+        }.freeze
+
         attr_reader :output
 
         attr_reader :config
@@ -67,6 +75,8 @@ module TTY
                        styles: {})
           @output = Array[output].flatten
           @formatter = coerce_formatter(formatter || config.formatter).new
+          @formatter_name = @formatter.class.name.split("::").last.downcase
+          @color_pattern = COLOR_PATTERNS[@formatter_name.to_sym]
           @config = config
           @styles = styles
           @level = level || @config.level
@@ -108,12 +118,10 @@ module TTY
           fmt << color.(style[:label]) + (" " * style[:levelpad])
           fmt << "%-25s" % event.message.join(" ")
           unless event.fields.empty?
+            pattern, replacement = *@color_pattern
             fmt << @formatter.dump(event.fields, max_bytes: config.max_bytes,
-                                   max_depth: config.max_depth)
-                             .gsub(/([{}()\[\]])?(["']?)(\S+?)(["']?=)/,
-                                   "\\1\\2" + color.("\\3") + "\\4")
-                             .gsub(/\"([^,]+?)\"(?=:)/,
-                                   "\"" + color.("\\1") + "\"")
+                                                 max_depth: config.max_depth)
+                             .gsub(pattern, replacement.(color))
           end
           unless event.backtrace.empty?
             fmt << "\n" + format_backtrace(event)
