@@ -36,7 +36,7 @@ module TTY
     def self.define_level(name, log_level = nil)
       const_level = (LOG_TYPES[name.to_sym] || log_level)[:level]
 
-      loc = caller_locations(0,1)[0]
+      loc = caller_locations(0, 1)[0]
       if loc
         file, line = loc.path, loc.lineno + 7
       else
@@ -96,7 +96,8 @@ module TTY
       @handlers = @config.handlers
       @output = output || @config.output
       @ready_handlers = []
-      @data_filter = DataFilter.new(@config.filters.data, mask: @config.filters.mask)
+      @data_filter = DataFilter.new(@config.filters.data,
+                                    mask: @config.filters.mask)
 
       @config.types.each do |name, log_level|
         add_type(name, log_level)
@@ -223,8 +224,8 @@ module TTY
           el.is_a?(::Hash) ? fields_copy.merge!(el) : msg << el
         end
       end
-      top_caller = caller_locations(1,1)[0]
-      loc = caller_locations(2,1)[0] || top_caller
+      top_caller = caller_locations(1, 1)[0]
+      loc = caller_locations(2, 1)[0] || top_caller
       label = top_caller.label
       metadata = {
         level: current_level,
@@ -236,7 +237,8 @@ module TTY
         method: loc.base_label
       }
       event = Event.new(filter(*msg),
-                        @data_filter.filter(@fields.merge(fields_copy)), metadata)
+                        @data_filter.filter(@fields.merge(fields_copy)),
+                        metadata)
 
       @ready_handlers.each do |handler|
         level = handler.respond_to?(:level) ? handler.level : @config.level
