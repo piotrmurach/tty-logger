@@ -8,7 +8,7 @@ RSpec.describe TTY::Logger do
 
   let(:output) { StringIO.new }
 
-  it "performs 3x slower than native logger" do
+  it "performs at most 4.5x slower than native logger" do
     native_logger = Logger.new(output)
     logger = described_class.new(output: output)
 
@@ -16,6 +16,6 @@ RSpec.describe TTY::Logger do
       logger.info("Deployment done!")
     }.to perform_slower_than {
       native_logger.info("Deployment done!")
-    }.at_least(3).times
+    }.at_most(4.5).times
   end
 end
