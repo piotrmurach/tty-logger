@@ -27,10 +27,6 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "pastel", "~> 0.7.0"
 
-  spec.add_development_dependency "bundler", ">= 1.5"
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec", "~> 3.0"
-  if RUBY_VERSION.split(".")[1].to_i > 0
-    #spec.add_development_dependency "rspec-benchmark", "~> 0.5"
-  end
 end
