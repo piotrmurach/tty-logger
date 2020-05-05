@@ -73,6 +73,15 @@ RSpec.describe TTY::Logger::Config do
     })
   end
 
+  it "yields logger's own configuration" do
+    logger = TTY::Logger.new(output: output)
+    config = double(:configure)
+    allow(logger).to receive(:configure).and_yield(config)
+    expect { |block|
+      logger.configure(&block)
+    }.to yield_with_args(config)
+  end
+
   it "yields configuration instance" do
     config = double(:config)
     allow(TTY::Logger).to receive(:config).and_return(config)
