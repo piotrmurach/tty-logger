@@ -69,6 +69,13 @@ module TTY
       yield config
     end
 
+    # Instance logger configuration
+    #
+    # @api public
+    def configure
+      yield @config
+    end
+
     # Create a logger instance
     #
     # @example

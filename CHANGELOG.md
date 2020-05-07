@@ -1,5 +1,11 @@
 # Change log
 
+## Unreleased
+
+### Added
+
+* Allow editing logger configuration at runtime ([#10](https://github.com/piotrmurach/tty-logger/pull/10))
+
 ## [v0.3.0] - 2020-01-01
 
 ### Added

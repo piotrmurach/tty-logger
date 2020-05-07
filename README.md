@@ -334,7 +334,7 @@ logger.wait { ["Ready to deploy", {app: "myapp", env: "prod"}] }
 
 ### 2.4 Configuration
 
-All the configuration options can be changed globally via `configure` or per logger instance via object initialization.
+All the configuration options can be changed globally via `configure` or per logger instance.
 
 * `:filters` - the storage of placeholders to filter sensitive data out from the logs. Defaults to `{}`.
 * `:formatter` - the formatter used to display structured data. Defaults to `:text`. See [Formatters](#27-formatters) for more details.
@@ -361,6 +361,14 @@ Or if you wish to setup configuration per logger instance use block:
 logger = TTY::Logger.new do |config|
   config.max_bytes = 2**20
   config.metadata = [:all]
+end
+```
+
+You can also change the logger's configuration at runtime:
+
+```ruby
+logger.configure do |config|
+  config.level = :debug
 end
 ```
 
