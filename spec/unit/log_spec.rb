@@ -200,4 +200,14 @@ RSpec.describe TTY::Logger, "#log" do
       end
     }.to raise_error(TTY::Logger::Error, "Already defined log type :success")
   end
+
+  it "logs streaming output" do
+    logger = TTY::Logger.new(output: output)
+
+    logger << "Deploying..."
+
+    expect(output.string).to eq([
+      "Deploying...             \n"
+    ].join)
+  end
 end

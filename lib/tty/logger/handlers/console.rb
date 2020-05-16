@@ -114,8 +114,10 @@ module TTY
             end
           end
           fmt << ARROW unless config.metadata.empty?
-          fmt << color.(style[:symbol])
-          fmt << color.(style[:label]) + (" " * style[:levelpad])
+          unless style.empty?
+            fmt << color.(style[:symbol])
+            fmt << color.(style[:label]) + (" " * style[:levelpad])
+          end
           fmt << "%-25s" % event.message.join(" ")
           unless event.fields.empty?
             pattern, replacement = *@color_pattern
@@ -148,11 +150,11 @@ module TTY
         #
         # @api private
         def configure_styles(event)
-          style = STYLES.fetch(event.metadata[:name].to_sym, {}).dup
-          (@styles[event.metadata[:name].to_sym] || {}).each do |k, v|
-            style[k] = v
-          end
-          style
+          return {}  if event.metadata[:name].nil?
+
+          STYLES.fetch(event.metadata[:name].to_sym, {})
+            .dup
+            .merge!(@styles[event.metadata[:name].to_sym] || {})
         end
 
         def configure_color(style)

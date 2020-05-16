@@ -5,6 +5,7 @@
 ### Added
 
 * Allow editing logger configuration at runtime ([#10](https://github.com/piotrmurach/tty-logger/pull/10))
+* Support for the `<<` streaming operator ([#9](https://github.com/piotrmurach/tty-logger/pull/9)))
 
 ## [v0.3.0] - 2020-01-01
 
