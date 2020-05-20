@@ -11,7 +11,7 @@ module TTY
 
       attr_reader :backtrace
 
-      def initialize(message, fields, metadata)
+      def initialize(message, fields = {}, metadata = {})
         @message = message
         @fields = fields
         @metadata = metadata

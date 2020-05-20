@@ -211,6 +211,24 @@ module TTY
       compare_levels(level, other_level) != :gt
     end
 
+    # Logs streaming output.
+    #
+    # @example
+    #   logger << "Example output"
+    #
+    # @api public
+    def write(*msg)
+      event = Event.new(filter(*msg))
+
+      @ready_handlers.each do |handler|
+        handler.(event)
+      end
+
+      self
+    end
+
+    alias_method :<<, :write
+
     # Log a message given the severtiy level
     #
     # @example
@@ -236,7 +254,7 @@ module TTY
         level: current_level,
         time: Time.now,
         pid: Process.pid,
-        name: /<top\s+\(required\)>|<main>/ =~ label ? current_level : label,
+        name: /<top\s+\(required\)>|<main>|<</ =~ label ? current_level : label,
         path: loc.path,
         lineno: loc.lineno,
         method: loc.base_label
