@@ -1,11 +1,17 @@
 # Change log
 
-## Unreleased
+## [v0.4.0] - 2020-07-29
 
 ### Added
 
 * Allow editing logger configuration at runtime ([#10](https://github.com/piotrmurach/tty-logger/pull/10))
 * Support for the `<<` streaming operator ([#9](https://github.com/piotrmurach/tty-logger/pull/9)))
+
+### Changed
+* Change gemspec to update pastel version and restrict only to minor version
+
+### Fixed
+* Fix to filter sensitive information from exceptions
 
 ## [v0.3.0] - 2020-01-01
 
@@ -34,6 +40,7 @@
 
 * Initial implementation and release
 
+[v0.4.0]: https://github.com/piotrmurach/tty-logger/compare/v0.3.0..v0.4.0
 [v0.3.0]: https://github.com/piotrmurach/tty-logger/compare/v0.2.0..v0.3.0
 [v0.2.0]: https://github.com/piotrmurach/tty-logger/compare/v0.1.0..v0.2.0
 [v0.1.0]: https://github.com/piotrmurach/tty-logger/compare/v0.1.0
