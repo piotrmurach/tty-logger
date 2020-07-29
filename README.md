@@ -779,7 +779,7 @@ end
 
 ### 3.1 Sentry Handler
 
-[tty-logger-raven][https://github.com/ianks/tty-logger-raven] is an extension for Sentry.io.
+[tty-logger-raven](https://github.com/ianks/tty-logger-raven) provides an extension for Sentry.io.
 
 ## Development
 
