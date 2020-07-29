@@ -75,6 +75,8 @@ Or install it yourself as:
     * [2.6.4 Multiple Handlers](#264-multiple-handlers)
   * [2.7 Formatters](#27-formatters)
   * [2.8 Output streams](#28-output-streams)
+* [3. Community Extensions](#3-community-extensions)
+  * [3.1 Sentry Handler](#31-sentry-handler)
 
 ## 1. Usage
 
@@ -743,6 +745,7 @@ TTY::Logger.new do |config|
   config.handlers = [:console, [:console, formatter: :json]]
 end
 ```
+
 ### 2.8 Output Streams
 
 By default all log events are output to `stderr`. You can change this using configuration `output` option. Any `IO`-like stream such as file, socket or console can be used. For example, to log all messages to a file do:
@@ -771,6 +774,12 @@ logger = TTY::Logger.new do |config|
   ]
 end
 ```
+
+## 3. Community Extensions
+
+### 3.1 Sentry Handler
+
+[tty-logger-raven][https://github.com/ianks/tty-logger-raven] is an extension for Sentry.io.
 
 ## Development
 
