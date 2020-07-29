@@ -290,21 +290,50 @@ module TTY
     # Filter message parts for any sensitive information and
     # replace with placeholder.
     #
-    # @param [Array[String]] messages
+    # @param [Array[Object]] objects
     #   the messages to filter
     #
     # @return [Array[String]]
     #   the filtered message
     #
     # @api private
-    def filter(*messages)
-      messages.reduce([]) do |acc, msg|
-        acc << msg.dup.tap do |msg_copy|
-          @config.filters.message.each do |text|
-            msg_copy.gsub!(text, @config.filters.mask)
-          end
+    def filter(*objects)
+      objects.map do |obj|
+        case obj
+        when Exception
+          backtrace = Array(obj.backtrace).map { |line| swap_filtered(line) }
+          copy_error(obj, swap_filtered(obj.message), backtrace)
+        else
+          swap_filtered(obj.to_s)
         end
-        acc
+      end
+    end
+
+    # Create a new error instance copy
+    #
+    # @param [Exception] error
+    # @param [String] message
+    # @param [Array,nil] backtrace
+    #
+    # @return [Exception]
+    #
+    # @api private
+    def copy_error(error, message, backtrace = nil)
+      new_error = error.exception(message)
+      new_error.set_backtrace(backtrace)
+      new_error
+    end
+
+    # Swap string content for filtered content
+    #
+    # @param [String] obj
+    #
+    # @api private
+    def swap_filtered(obj)
+      obj.dup.tap do |obj_copy|
+        @config.filters.message.each do |text|
+          obj_copy.gsub!(text, @config.filters.mask)
+        end
       end
     end
   end # Logger

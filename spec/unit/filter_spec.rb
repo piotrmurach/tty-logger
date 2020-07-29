@@ -65,4 +65,39 @@ RSpec.describe TTY::Logger, "filters" do
       "\e[32memail\e[0m=\"secret@example.com\"}\n",
     ].join)
   end
+
+  it "filters sensitive data from an error message with backtrace" do
+    logger = TTY::Logger.new(output: output) do |config|
+      config.filters.message = ["secret"]
+    end
+
+    arg_error = ArgumentError.new("wrong argument secret")
+    arg_error.set_backtrace(["secret error info", "and more secret info"])
+
+    logger.fatal(arg_error)
+
+    expect(output.string).to eq([
+      "\e[31m#{styles[:fatal][:symbol]}\e[0m ",
+      "\e[31mfatal\e[0m   ",
+      "wrong argument [FILTERED] \n",
+      "    [FILTERED] error info\n",
+      "    and more [FILTERED] info\n"
+    ].join)
+  end
+
+  it "filters sensitive data from an error message without backtrace" do
+    logger = TTY::Logger.new(output: output) do |config|
+      config.filters.message = ["secret"]
+    end
+
+    arg_error = ArgumentError.new("wrong argument secret")
+
+    logger.fatal(arg_error)
+
+    expect(output.string).to eq([
+      "\e[31m#{styles[:fatal][:symbol]}\e[0m ",
+      "\e[31mfatal\e[0m   ",
+      "wrong argument [FILTERED]\n",
+    ].join)
+  end
 end
