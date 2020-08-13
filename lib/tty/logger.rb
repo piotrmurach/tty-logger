@@ -104,6 +104,7 @@ module TTY
       @data_filter = DataFilter.new(@config.filters.data,
                                     mask: @config.filters.mask)
 
+      @types = LOG_TYPES.dup
       @config.types.each do |name, log_level|
         add_type(name, log_level)
       end
@@ -120,9 +121,11 @@ module TTY
     #
     # @api private
     def add_type(name, log_level)
-      if respond_to?(name)
+      if @types.include?(name)
         raise Error, "Already defined log type #{name.inspect}"
       end
+
+      @types[name.to_sym] = log_level
       self.class.define_level(name, log_level)
     end
 
@@ -254,7 +257,7 @@ module TTY
         level: current_level,
         time: Time.now,
         pid: Process.pid,
-        name: /<top\s+\(required\)>|<main>|<</ =~ label ? current_level : label,
+        name: @types.include?(label.to_sym) ? label : current_level,
         path: loc.path,
         lineno: loc.lineno,
         method: loc.base_label
