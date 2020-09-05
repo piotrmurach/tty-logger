@@ -1,5 +1,11 @@
 # Change log
 
+## [v0.5.0] - unreleased
+
+### Fixed
+* Fix to select event name from valid log types or current level by Ryan Schlesinger
+(@ryansch)
+
 ## [v0.4.0] - 2020-07-29
 
 ### Added
@@ -40,6 +46,7 @@
 
 * Initial implementation and release
 
+[v0.5.0]: https://github.com/piotrmurach/tty-logger/compare/v0.4.0..v0.5.0
 [v0.4.0]: https://github.com/piotrmurach/tty-logger/compare/v0.3.0..v0.4.0
 [v0.3.0]: https://github.com/piotrmurach/tty-logger/compare/v0.2.0..v0.3.0
 [v0.2.0]: https://github.com/piotrmurach/tty-logger/compare/v0.1.0..v0.2.0
