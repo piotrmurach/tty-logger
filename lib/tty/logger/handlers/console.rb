@@ -72,7 +72,7 @@ module TTY
         attr_reader :level
 
         def initialize(output: $stderr, formatter: nil, config: nil, level: nil,
-                       styles: {}, message_padding: 100)
+                       styles: {}, message_padding: 25)
           @output = Array[output].flatten
           @formatter = coerce_formatter(formatter || config.formatter).new
           @formatter_name = @formatter.class.name.split("::").last.downcase
