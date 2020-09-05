@@ -45,6 +45,39 @@ RSpec.describe TTY::Logger, 'handlers' do
       "Logging                  \n"].join)
   end
 
+  it "defaults message_padding to 25 spaces" do
+    logger = TTY::Logger.new(output: output)
+    message = "Logging"
+    expected_padding = 25 - message.size
+
+    logger.info(message)
+
+    expect(output.string).to eq("\e[32m#{styles[:info][:symbol]}\e[0m \e[32minfo\e[0m    Logging#{' ' * expected_padding}\n")
+  end
+
+  it "changes default message_padding" do
+    padding = 10
+    logger = TTY::Logger.new(output: output) do |config|
+      config.handlers = [[:console, {message_padding: padding}]]
+    end
+    message = "Logging"
+    expected_padding = padding - message.size
+
+    logger.info(message)
+
+    expect(output.string).to eq("\e[32m#{styles[:info][:symbol]}\e[0m \e[32minfo\e[0m    Logging#{' ' * expected_padding}\n")
+  end
+
+  it "overflows padding when necessary" do
+    logger = TTY::Logger.new(output: output) do |config|
+      config.handlers = [[:console, {message_padding: 0}]]
+    end
+
+    logger.info("Logging")
+
+    expect(output.string).to eq("\e[32m#{styles[:info][:symbol]}\e[0m \e[32minfo\e[0m    Logging\n")
+  end
+
   it "logs different levels for each handler" do
     logger = TTY::Logger.new(output: output) do |config|
       config.handlers = [
