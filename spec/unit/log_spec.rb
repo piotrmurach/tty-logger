@@ -18,6 +18,26 @@ RSpec.describe TTY::Logger, "#log" do
     ].join)
   end
 
+  it "logs when called from another method" do
+    logger = TTY::Logger.new(output: output) do |config|
+      config.level = :debug
+    end
+
+    log_wrapper(logger).call(:debug, "Deploying...")
+
+    expect(output.string).to eq([
+      "\e[36m#{styles[:debug][:symbol]}\e[0m ",
+      "\e[36mdebug\e[0m   ",
+      "Deploying...             \n"
+    ].join)
+  end
+
+  def log_wrapper(logger)
+    ->(level, message) do
+      logger.log(level, message)
+    end
+  end
+
   it "logs a message at debug level" do
     logger = TTY::Logger.new(output: output) do |config|
       config.level = :debug
