@@ -547,6 +547,7 @@ logger.remove_handler(:console)
 The console handler prints log messages to the console. It supports the following options:
 
 * `:styles` - a hash of styling options.
+* `:message_padding` - the extra amount of padding used to display log message.
 * `:formatter` - the formatter for log messages. Defaults to `:text`
 * `:output` - the device to log error messages to. Defaults to `$stderr`
 

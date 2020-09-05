@@ -72,13 +72,14 @@ module TTY
         attr_reader :level
 
         def initialize(output: $stderr, formatter: nil, config: nil, level: nil,
-                       styles: {})
+                       styles: {}, message_padding: 100)
           @output = Array[output].flatten
           @formatter = coerce_formatter(formatter || config.formatter).new
           @formatter_name = @formatter.class.name.split("::").last.downcase
           @color_pattern = COLOR_PATTERNS[@formatter_name.to_sym]
           @config = config
           @styles = styles
+          @message_padding = message_padding
           @level = level || @config.level
           @mutex = Mutex.new
           @pastel = Pastel.new
@@ -118,7 +119,7 @@ module TTY
             fmt << color.(style[:symbol])
             fmt << color.(style[:label]) + (" " * style[:levelpad])
           end
-          fmt << "%-25s" % event.message.join(" ")
+          fmt << "%-#{@message_padding}s" % event.message.join(" ")
           unless event.fields.empty?
             pattern, replacement = *@color_pattern
             fmt << @formatter.dump(event.fields, max_bytes: config.max_bytes,
