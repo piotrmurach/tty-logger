@@ -7,11 +7,14 @@ module TTY
     class Config
       FILTERED = "[FILTERED]"
 
-      # The format used for date display
+      # The format used for date display. uses strftime format
       attr_accessor :date_format
 
-      # The format used for time display
+      # The format used for time display. uses strftime format
       attr_accessor :time_format
+
+      # The format used for message display. uses sprintf format
+      attr_accessor :message_format
 
       # The filters to hide sensitive data from the messages and data.
       attr_accessor :filters
@@ -52,6 +55,7 @@ module TTY
         @formatter = options.fetch(:formatter) { :text }
         @date_format = options.fetch(:date_format) { "%F" }
         @time_format = options.fetch(:time_format) { "%T.%3N" }
+        @message_format = options.fetch(:message_format) { "%-25s" }
         @output = options.fetch(:output) { $stderr }
         @types = options.fetch(:types) { {} }
       end
@@ -92,6 +96,8 @@ module TTY
       def to_proc
         -> (config) {
           config.date_format = @date_format.dup
+          config.time_format = @time_format.dup
+          config.message_format = @message_format.dup
           config.filters = @filters.dup
           config.formatter = @formatter
           config.handlers = @handlers.dup
@@ -100,7 +106,6 @@ module TTY
           config.max_depth = @max_depth
           config.metadata = @metadata.dup
           config.output = @output.dup
-          config.time_format = @time_format.dup
           config.types = @types.dup
           config
         }

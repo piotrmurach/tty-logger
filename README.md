@@ -346,6 +346,9 @@ All the configuration options can be changed globally via `configure` or per log
 * `:max_depth` - the maximum depth for nested structured data. Defaults to `3`.
 * `:metadata` - the meta info to display before the message, can be `:pid`, `:date`, `:time` or `:file`. Defaults to empty array `[]`, no metadata. Setting this to `:all` will print all the metadata.
 * `:types` - the new custom log types. Defaults to `{}`.
+* `:date_format` - uses `strftime` format to display dates. Defaults to `"%F"`.
+* `:time_format` - uses `strftime` format to display times. Defaults to `"%T.%3N"`.
+* `:message_format` - uses `sprintf` format display messages. Defaults to `"%-25s"`.
 
 For example, to configure `:max_bytes`, `:level` and `:metadata` for all logger instances do:
 
@@ -547,7 +550,6 @@ logger.remove_handler(:console)
 The console handler prints log messages to the console. It supports the following options:
 
 * `:styles` - a hash of styling options.
-* `:message_padding` - the extra amount of padding used to display log message.
 * `:formatter` - the formatter for log messages. Defaults to `:text`
 * `:output` - the device to log error messages to. Defaults to `$stderr`
 
