@@ -1,3 +1,6 @@
+AllCops:
+  NewCops: enable
+
 Lint/AssignmentInCondition:
   Enabled: false
 
