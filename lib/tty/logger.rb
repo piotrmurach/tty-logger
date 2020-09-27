@@ -229,8 +229,7 @@ module TTY
 
       self
     end
-
-    alias_method :<<, :write
+    alias << write
 
     # Log a message given the severtiy level
     #
