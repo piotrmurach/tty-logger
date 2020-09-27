@@ -2,6 +2,6 @@
 
 module TTY
   class Logger
-    VERSION = "0.4.0"
-  end
-end
+    VERSION = "0.5.0"
+  end # Logger
+end # TTY
