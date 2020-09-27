@@ -1,15 +1,19 @@
 # Change log
 
-## [v0.5.0] - unreleased
+## [v0.5.0] - 2020-09-27
+
+### Added
+* Add :message_format option to customize how messages are displayed in the console
+  by Josh Greenwood (@JoshTGreenwood)
 
 ### Fixed
-* Fix to select event name from valid log types or current level by Ryan Schlesinger
-(@ryansch)
+* Fix to select event name from valid log types or current level
+  by Ryan Schlesinger (@ryansch)
+* Fix duplicate filters attribute definition in TTY::Logger::Config
 
 ## [v0.4.0] - 2020-07-29
 
 ### Added
-
 * Allow editing logger configuration at runtime ([#10](https://github.com/piotrmurach/tty-logger/pull/10))
 * Support for the `<<` streaming operator ([#9](https://github.com/piotrmurach/tty-logger/pull/9)))
 
