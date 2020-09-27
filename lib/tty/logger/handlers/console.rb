@@ -55,7 +55,7 @@ module TTY
             color: :cyan,
             levelpad: 0
           }
-        }
+        }.freeze
 
         TEXT_REGEXP = /([{}()\[\]])?(["']?)(\S+?)(["']?=)/.freeze
         JSON_REGEXP = /\"([^,]+?)\"(?=:)/.freeze
@@ -65,7 +65,21 @@ module TTY
           json: [JSON_REGEXP, ->(c) { "\"" + c.("\\1") + "\"" }]
         }.freeze
 
-        attr_reader :output, :config, :level, :message_format
+        # The output stream
+        # @api private
+        attr_reader :output
+
+        # The configuration options
+        # @api private
+        attr_reader :config
+
+        # The logging level
+        # @api private
+        attr_reader :level
+
+        # The format for the message
+        # @api private
+        attr_reader :message_format
 
         def initialize(output: $stderr, formatter: nil, config: nil, level: nil,
                        styles: {}, message_format: "%-25s")
@@ -147,11 +161,11 @@ module TTY
         #
         # @api private
         def configure_styles(event)
-          return {}  if event.metadata[:name].nil?
+          return {} if event.metadata[:name].nil?
 
           STYLES.fetch(event.metadata[:name].to_sym, {})
-            .dup
-            .merge!(@styles[event.metadata[:name].to_sym] || {})
+                .dup
+                .merge!(@styles[event.metadata[:name].to_sym] || {})
         end
 
         def configure_color(style)
