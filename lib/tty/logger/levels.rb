@@ -15,7 +15,7 @@ module TTY
         warn: WARN_LEVEL,
         error: ERROR_LEVEL,
         fatal: FATAL_LEVEL
-      }
+      }.freeze
 
       # All the default level names
       #
@@ -60,6 +60,7 @@ module TTY
         right = right.is_a?(Integer) ? right : level_to_number(right)
 
         return :eq if left == right
+
         left < right ? :lt : :gt
       end
     end # Levels
