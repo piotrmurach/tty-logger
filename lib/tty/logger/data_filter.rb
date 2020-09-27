@@ -37,11 +37,9 @@ module TTY
       def filter(obj)
         return obj if filters.empty?
 
-        hash = obj.reduce({}) do |acc, (k, v)|
+        obj.each_with_object({}) do |(k, v), acc|
           acc[k] = filter_val(k, v)
-          acc
         end
-        hash
       end
 
       private
@@ -50,7 +48,7 @@ module TTY
         compiled = {
           regexps: [],
           nested_regexps: [],
-          blocks: [],
+          blocks: []
         }
         strings = []
         nested_strings = []
@@ -105,9 +103,8 @@ module TTY
       end
 
       def filter_obj(_key, obj, composite)
-        obj.reduce({}) do |acc, (k, v)|
+        obj.each_with_object({}) do |(k, v), acc|
           acc[k] = filter_val(k, v, composite)
-          acc
         end
       end
 

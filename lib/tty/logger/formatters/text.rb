@@ -32,12 +32,13 @@ module TTY
         def dump(obj, max_bytes: 2**12, max_depth: 3)
           bytesize = 0
 
-          line = obj.reduce([]) do |acc, (k, v)|
+          line = obj.each_with_object([]) do |(k, v), acc|
             str = "#{dump_key(k)}=#{dump_val(v, max_depth)}"
             items = acc.size - 1
 
             if bytesize + str.bytesize + items > max_bytes
-              if bytesize + items + (acc[-1].bytesize - ELLIPSIS.bytesize) > max_bytes
+              if bytesize + items +
+                 (acc[-1].bytesize - ELLIPSIS.bytesize) > max_bytes
                 acc.pop
               end
               acc << ELLIPSIS
@@ -46,7 +47,6 @@ module TTY
               bytesize += str.bytesize
               acc << str
             end
-            acc
           end
           line.join(SPACE)
         end
@@ -86,8 +86,8 @@ module TTY
           return LBRACE + ELLIPSIS + RBRACE if depth.zero?
 
           LBRACE +
-            obj.map { |k, v| "#{dump_key(k)}=#{dump_val(v, depth)}" }.join(SPACE) +
-            RBRACE
+            obj.map { |k, v| "#{dump_key(k)}=#{dump_val(v, depth)}" }
+               .join(SPACE) + RBRACE
         end
 
         def enc_arr(array, depth)
@@ -113,7 +113,8 @@ module TTY
           case str
           when SINGLE_QUOTE_REGEX
             str.inspect
-          when ESCAPE_STR_REGEX, LITERAL_TRUE, LITERAL_FALSE, LITERAL_NIL, NUM_REGEX
+          when ESCAPE_STR_REGEX, LITERAL_TRUE, LITERAL_FALSE,
+               LITERAL_NIL, NUM_REGEX
             ESCAPE_DOUBLE_QUOTE + str.inspect[1..-2] + ESCAPE_DOUBLE_QUOTE
           else
             str

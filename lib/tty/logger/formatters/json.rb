@@ -20,7 +20,7 @@ module TTY
         def dump(obj, max_bytes: 2**12, max_depth: 3)
           bytesize = 0
 
-          hash = obj.reduce({}) do |acc, (k, v)|
+          hash = obj.each_with_object({}) do |(k, v), acc|
             str = (k.to_json + v.to_json)
             items = acc.keys.size - 1
 
@@ -31,7 +31,6 @@ module TTY
               bytesize += str.bytesize
               acc[k] = dump_val(v, max_depth)
             end
-            acc
           end
           ::JSON.generate(hash)
         end
@@ -50,13 +49,13 @@ module TTY
         def enc_obj(obj, depth)
           return ELLIPSIS if depth.zero?
 
-          obj.reduce({}) { |acc, (k, v)| acc[k] = dump_val(v, depth); acc }
+          obj.each_with_object({}) { |(k, v), acc| acc[k] = dump_val(v, depth) }
         end
 
         def enc_arr(obj, depth)
           return ELLIPSIS if depth.zero?
 
-          obj.reduce([]) { |acc, v| acc << dump_val(v, depth); acc }
+          obj.each_with_object([]) { |v, acc| acc << dump_val(v, depth) }
         end
       end # JSON
     end # Formatters
