@@ -607,7 +607,7 @@ styled_logger.error("Custom error")
 # ! Dooh    Custom error
 ```
 
-To increase message padding to a percentage of terminal width (depends on https://github.com/piotrmurach/tty-screen/):
+To increase message padding to a percentage of terminal width (depends on [tty-screen](https://github.com/piotrmurach/tty-screen/)):
 
 ```ruby
 TTY::Logger.new do |config|
