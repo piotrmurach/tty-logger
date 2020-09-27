@@ -45,11 +45,6 @@ RSpec.describe TTY::Logger::Config do
     expect(config.date_format).to eq("%F")
   end
 
-  it "defaults message_format to left aligned with 25 padding" do
-    config = described_class.new
-    expect(config.message_format).to eq("%-25s")
-  end
-
   it "defaults output to stderr" do
     config = described_class.new
     expect(config.output).to eq($stderr)

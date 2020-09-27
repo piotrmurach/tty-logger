@@ -348,7 +348,6 @@ All the configuration options can be changed globally via `configure` or per log
 * `:types` - the new custom log types. Defaults to `{}`.
 * `:date_format` - uses `strftime` format to display dates. Defaults to `"%F"`.
 * `:time_format` - uses `strftime` format to display times. Defaults to `"%T.%3N"`.
-* `:message_format` - uses `sprintf` format display messages. Defaults to `"%-25s"`.
 
 For example, to configure `:max_bytes`, `:level` and `:metadata` for all logger instances do:
 
@@ -552,6 +551,7 @@ The console handler prints log messages to the console. It supports the followin
 * `:styles` - a hash of styling options.
 * `:formatter` - the formatter for log messages. Defaults to `:text`
 * `:output` - the device to log error messages to. Defaults to `$stderr`
+* `:message_format` - uses `sprintf` format to display messages. Defaults to `"%-25s"`.
 
 The supported options in the `:styles` are:
 
@@ -605,6 +605,15 @@ styled_logger.error("Custom error")
 # =>
 # + Ohh yes Custom success
 # ! Dooh    Custom error
+```
+
+To increase message padding to a percentage of terminal width (depends on https://github.com/piotrmurach/tty-screen/):
+
+```ruby
+TTY::Logger.new do |config|
+  padding = (TTY::Screen.columns * 0.4).to_i
+  config.handlers = [[:console, { message_format: "%-#{padding}s" }]]
+end
 ```
 
 #### 2.6.2 Stream handler

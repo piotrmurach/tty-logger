@@ -59,7 +59,7 @@ RSpec.describe TTY::Logger, 'handlers' do
 
   it "changes default message_format" do
     logger = TTY::Logger.new(output: output) do |config|
-      config.message_format = "%-10s"
+      config.handlers = [[:console, { message_format: "%-10s" }]]
     end
 
     logger.info("Logging")
@@ -73,7 +73,7 @@ RSpec.describe TTY::Logger, 'handlers' do
 
   it "overflows padding when necessary" do
     logger = TTY::Logger.new(output: output) do |config|
-      config.message_format = "%-0s"
+      config.handlers = [[:console, { message_format: "%-0s" }]]
     end
 
     logger.info("Logging")

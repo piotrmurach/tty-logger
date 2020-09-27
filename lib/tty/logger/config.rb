@@ -13,9 +13,6 @@ module TTY
       # The format used for time display. uses strftime format
       attr_accessor :time_format
 
-      # The format used for message display. uses sprintf format
-      attr_accessor :message_format
-
       # The filters to hide sensitive data from the messages and data.
       attr_accessor :filters
 
@@ -31,7 +28,7 @@ module TTY
       # The maximum message size to be logged in bytes. Defaults to 8192
       attr_accessor :max_bytes
 
-      # The maximum depth for formattin array and hash objects. Defaults to 3
+      # The maximum depth for formatting array and hash objects. Defaults to 3
       attr_accessor :max_depth
 
       # The meta info to display, can be :date, :time, :file, :pid. Defaults to []
@@ -55,7 +52,6 @@ module TTY
         @formatter = options.fetch(:formatter) { :text }
         @date_format = options.fetch(:date_format) { "%F" }
         @time_format = options.fetch(:time_format) { "%T.%3N" }
-        @message_format = options.fetch(:message_format) { "%-25s" }
         @output = options.fetch(:output) { $stderr }
         @types = options.fetch(:types) { {} }
       end
@@ -97,7 +93,6 @@ module TTY
         -> (config) {
           config.date_format = @date_format.dup
           config.time_format = @time_format.dup
-          config.message_format = @message_format.dup
           config.filters = @filters.dup
           config.formatter = @formatter
           config.handlers = @handlers.dup
