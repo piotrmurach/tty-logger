@@ -13,9 +13,6 @@ module TTY
       # The format used for time display. uses strftime format
       attr_accessor :time_format
 
-      # The filters to hide sensitive data from the messages and data.
-      attr_accessor :filters
-
       # The format used for displaying structured data
       attr_accessor :formatter
 
@@ -66,7 +63,7 @@ module TTY
         end
 
         def to_h
-          {message: @message, data: @data, mask: @mask}
+          { message: @message, data: @data, mask: @mask }
         end
 
         def to_s
