@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://piotrmurach.github.io/tty" target="_blank"><img width="130" src="https://github.com/piotrmurach/tty/raw/master/images/tty.png" alt="tty logo" /></a>
+  <a href="https://ttytoolkit.org" target="_blank"><img width="130" src="https://github.com/piotrmurach/tty/raw/master/images/tty.png" alt="tty logo" /></a>
 </div>
 
 # TTY::Logger [![Gitter](https://badges.gitter.im/Join%20Chat.svg)][gitter]
@@ -42,7 +42,7 @@
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'tty-logger'
+gem "tty-logger"
 ```
 
 And then execute:
@@ -62,7 +62,7 @@ Or install it yourself as:
     * [2.1.1 Exceptions](#211-exceptions)
     * [2.1.2 Types](#212-types)
   * [2.2 Levels](#22-levels)
-    * [2.2.1 Scoped Level](#22-scoped-levels)
+    * [2.2.1 Scoped Level](#22-scoped-level)
   * [2.3 Structured Data](#23-structured-data)
   * [2.4 Configuration](#24-configuration)
     * [2.4.1 Metadata](#241-metadata)
@@ -294,7 +294,7 @@ end
 # • debug   logged
 ```
 
-Or elevating level to error with a constant `ERROR_LEVEL`:
+Or elevate a level to an error with a constant `ERROR_LEVEL`:
 
 ```ruby
 logger.log_at TTY::Logger::ERROR_LEVEL do
