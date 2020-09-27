@@ -65,14 +65,10 @@ module TTY
           json: [JSON_REGEXP, ->(c) { "\"" + c.("\\1") + "\"" }]
         }.freeze
 
-        attr_reader :output
-
-        attr_reader :config
-
-        attr_reader :level
+        attr_reader :output, :config, :level, :message_format
 
         def initialize(output: $stderr, formatter: nil, config: nil, level: nil,
-                       styles: {})
+                       styles: {}, message_format: "%-25s")
           @output = Array[output].flatten
           @formatter = coerce_formatter(formatter || config.formatter).new
           @formatter_name = @formatter.class.name.split("::").last.downcase
@@ -82,6 +78,7 @@ module TTY
           @level = level || @config.level
           @mutex = Mutex.new
           @pastel = Pastel.new
+          @message_format = message_format
         end
 
         # Handle log event output in format
@@ -118,7 +115,7 @@ module TTY
             fmt << color.(style[:symbol])
             fmt << color.(style[:label]) + (" " * style[:levelpad])
           end
-          fmt << "%-25s" % event.message.join(" ")
+          fmt << message_format % event.message.join(" ")
           unless event.fields.empty?
             pattern, replacement = *@color_pattern
             fmt << @formatter.dump(event.fields, max_bytes: config.max_bytes,

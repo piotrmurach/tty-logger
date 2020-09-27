@@ -7,10 +7,10 @@ module TTY
     class Config
       FILTERED = "[FILTERED]"
 
-      # The format used for date display
+      # The format used for date display. uses strftime format
       attr_accessor :date_format
 
-      # The format used for time display
+      # The format used for time display. uses strftime format
       attr_accessor :time_format
 
       # The filters to hide sensitive data from the messages and data.
@@ -28,7 +28,7 @@ module TTY
       # The maximum message size to be logged in bytes. Defaults to 8192
       attr_accessor :max_bytes
 
-      # The maximum depth for formattin array and hash objects. Defaults to 3
+      # The maximum depth for formatting array and hash objects. Defaults to 3
       attr_accessor :max_depth
 
       # The meta info to display, can be :date, :time, :file, :pid. Defaults to []
@@ -92,6 +92,7 @@ module TTY
       def to_proc
         -> (config) {
           config.date_format = @date_format.dup
+          config.time_format = @time_format.dup
           config.filters = @filters.dup
           config.formatter = @formatter
           config.handlers = @handlers.dup
@@ -100,7 +101,6 @@ module TTY
           config.max_depth = @max_depth
           config.metadata = @metadata.dup
           config.output = @output.dup
-          config.time_format = @time_format.dup
           config.types = @types.dup
           config
         }
