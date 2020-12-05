@@ -549,9 +549,11 @@ logger.remove_handler(:console)
 The console handler prints log messages to the console. It supports the following options:
 
 * `:styles` - a hash of styling options.
-* `:formatter` - the formatter for log messages. Defaults to `:text`
-* `:output` - the device to log error messages to. Defaults to `$stderr`
+* `:formatter` - the formatter for log messages. Defaults to `:text`.
+* `:output` - the device to log error messages to. Defaults to `$stderr`.
 * `:message_format` - uses `sprintf` format to display messages. Defaults to `"%-25s"`.
+* `:enable_color` - when `true` forces colored output, when `false` disables colored output.
+                    Defaults to `nil` which performs automatic terminal color support detection.
 
 The supported options in the `:styles` are:
 
