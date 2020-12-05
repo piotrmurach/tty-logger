@@ -17,6 +17,8 @@ RSpec.describe TTY::Logger, "#add_handler" do
 
     logger.remove_handler :console
 
+    logger.info("Console handler removed")
+
     expect(output.string).to eq([
       "\e[32m#{styles[:info][:symbol]}\e[0m ",
       "\e[32minfo\e[0m    ",
@@ -37,11 +39,41 @@ RSpec.describe TTY::Logger, "#add_handler" do
 
     logger.info("Console handler")
 
-    logger.remove_handler :console
+    logger.remove_handler TTY::Logger::Handlers::Console
+
+    logger.info("Console handler removed")
 
     expect(output.string).to eq([
       "\e[33m#{styles[:info][:symbol]}\e[0m ",
       "\e[33minfo\e[0m    ",
       "Console handler\n"].join)
+  end
+
+  it "removes all handlers matching given type" do
+    logger = TTY::Logger.new(output: output) do |config|
+      config.handlers = [
+        :stream,
+        [:console, enable_color: true, message_format: "%s"]
+      ]
+    end
+
+    logger.info("Stream handler")
+
+    logger.add_handler(:stream)
+
+    logger.info("Stream twice")
+
+    logger.remove_handler(:stream)
+
+    logger.info("No stream")
+
+    expect(output.string).to eq([
+      "level=info message=\"Stream handler\"\n",
+      "\e[32m#{styles[:info][:symbol]}\e[0m \e[32minfo\e[0m    Stream handler\n",
+      "level=info message=\"Stream twice\"\n",
+      "\e[32m#{styles[:info][:symbol]}\e[0m \e[32minfo\e[0m    Stream twice\n",
+      "level=info message=\"Stream twice\"\n",
+      "\e[32m#{styles[:info][:symbol]}\e[0m \e[32minfo\e[0m    No stream\n",
+    ].join)
   end
 end

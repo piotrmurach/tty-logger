@@ -146,10 +146,10 @@ module TTY
     # @api public
     def add_handler(handler, **options)
       h, h_opts = *(handler.is_a?(Array) ? handler : [handler, options])
-      name = coerce_handler(h)
+      handler_type = coerce_handler(h)
       global_opts = { output: @output, config: @config }
       opts = global_opts.merge(h_opts)
-      ready_handler = name.new(**opts)
+      ready_handler = handler_type.new(**opts)
       @ready_handlers << ready_handler
     end
 
@@ -160,7 +160,8 @@ module TTY
     #
     # @api public
     def remove_handler(handler)
-      @ready_handlers.delete(handler)
+      handler_type = coerce_handler(handler)
+      @ready_handlers.delete_if { |_handler| _handler.is_a?(handler_type) }
     end
 
     # Coerce handler name into object
