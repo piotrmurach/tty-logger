@@ -82,7 +82,7 @@ module TTY
         attr_reader :message_format
 
         def initialize(output: $stderr, formatter: nil, config: nil, level: nil,
-                       styles: {}, message_format: "%-25s")
+                       styles: {}, enable_color: nil, message_format: "%-25s")
           @output = Array[output].flatten
           @formatter = coerce_formatter(formatter || config.formatter).new
           @formatter_name = @formatter.class.name.split("::").last.downcase
@@ -91,7 +91,7 @@ module TTY
           @styles = styles
           @level = level || @config.level
           @mutex = Mutex.new
-          @pastel = Pastel.new
+          @pastel = Pastel.new(enabled: enable_color)
           @message_format = message_format
         end
 

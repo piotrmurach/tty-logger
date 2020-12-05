@@ -11,7 +11,7 @@ RSpec.describe TTY::Logger, "#add_handler" do
 
     logger.info("No handler")
 
-    logger.add_handler :console
+    logger.add_handler :console, enable_color: true
 
     logger.info("Console handler")
 
@@ -32,7 +32,8 @@ RSpec.describe TTY::Logger, "#add_handler" do
 
     logger.add_handler :console,
       styles: {info: {color: :yellow}},
-      message_format: "%-5s"
+      message_format: "%-5s",
+      enable_color: true
 
     logger.info("Console handler")
 

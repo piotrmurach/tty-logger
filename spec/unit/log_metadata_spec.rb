@@ -10,6 +10,7 @@ RSpec.describe TTY::Logger, "log metadata" do
 
     logger = TTY::Logger.new(output: output) do |config|
       config.metadata = [:time, :date, :file]
+      config.handlers = [[:console, enable_color: true]]
     end
 
     logger.info("Deploying", app: "myapp", env: "prod")
@@ -34,6 +35,7 @@ RSpec.describe TTY::Logger, "log metadata" do
 
     logger = TTY::Logger.new(output: output) do |config|
       config.metadata = [:all]
+      config.handlers = [[:console, enable_color: true]]
     end
 
     logger.info("Deploying", app: "myapp", env: "prod")

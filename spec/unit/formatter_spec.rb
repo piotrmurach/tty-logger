@@ -7,6 +7,7 @@ RSpec.describe TTY::Logger, "formatter" do
   it "changes default formatter to JSON as class name" do
     logger = TTY::Logger.new(output: output) do |config|
       config.formatter = TTY::Logger::Formatters::JSON
+      config.handlers = [[:console, enable_color: true]]
     end
 
     logger.info("Logging", app: "myapp", env: "prod")
@@ -21,6 +22,7 @@ RSpec.describe TTY::Logger, "formatter" do
   it "changes default formatter to JSON as name" do
     logger = TTY::Logger.new(output: output) do |config|
       config.formatter = :json
+      config.handlers = [[:console, enable_color: true]]
     end
 
     logger.info("Logging", app: "myapp", env: "prod")
@@ -34,8 +36,9 @@ RSpec.describe TTY::Logger, "formatter" do
 
   it "changes default formatter for only one handler" do
     logger = TTY::Logger.new(output: output) do |config|
-      config.handlers = [:console,
-                         [:console, {formatter: :JSON}]]
+      config.handlers = [[:console, enable_color: true],
+                         [:console, { formatter: :JSON,
+                                      enable_color: true }]]
     end
 
     logger.info("Logging", app: "myapp", env: "prod")
@@ -53,7 +56,9 @@ RSpec.describe TTY::Logger, "formatter" do
 
   it "formats nested data colors correctly" do
     logger = TTY::Logger.new(output: output) do |config|
-      config.handlers = [:console, [:console, {formatter: :JSON}]]
+      config.handlers = [[:console, enable_color: true],
+                         [:console, { formatter: :JSON,
+                                      enable_color: true }]]
     end
 
     logger.info("Logging", "[params]" => {"{app}" => "myapp", env: "prod"})

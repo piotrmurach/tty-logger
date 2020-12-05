@@ -7,6 +7,7 @@ RSpec.describe TTY::Logger, "#log" do
   it "logs without a method name directly using level" do
     logger = TTY::Logger.new(output: output) do |config|
       config.level = :debug
+      config.handlers = [[:console, enable_color: true]]
     end
 
     logger.log(:debug, "Deploying...")
@@ -21,6 +22,7 @@ RSpec.describe TTY::Logger, "#log" do
   it "logs when called from another method" do
     logger = TTY::Logger.new(output: output) do |config|
       config.level = :debug
+      config.handlers = [[:console, enable_color: true]]
     end
 
     log_wrapper(logger).call(:debug, "Deploying...")
@@ -41,6 +43,7 @@ RSpec.describe TTY::Logger, "#log" do
   it "logs a message at debug level" do
     logger = TTY::Logger.new(output: output) do |config|
       config.level = :debug
+      config.handlers = [[:console, enable_color: true]]
     end
 
     logger.debug("Successfully", "deployed")
@@ -52,7 +55,9 @@ RSpec.describe TTY::Logger, "#log" do
   end
 
   it "logs a message at info level" do
-    logger = TTY::Logger.new(output: output)
+    logger = TTY::Logger.new(output: output) do |config|
+      config.handlers = [[:console, enable_color: true]]
+    end
 
     logger.info("Successfully", "deployed")
 
@@ -63,7 +68,9 @@ RSpec.describe TTY::Logger, "#log" do
   end
 
   it "logs a message at warn level" do
-    logger = TTY::Logger.new(output: output)
+    logger = TTY::Logger.new(output: output) do |config|
+      config.handlers = [[:console, enable_color: true]]
+    end
 
     logger.warn("Failed to", "deploy")
 
@@ -74,7 +81,9 @@ RSpec.describe TTY::Logger, "#log" do
   end
 
   it "logs a message at error level" do
-    logger = TTY::Logger.new(output: output)
+    logger = TTY::Logger.new(output: output) do |config|
+      config.handlers = [[:console, enable_color: true]]
+    end
 
     logger.error("Failed to", "deploy")
 
@@ -85,7 +94,9 @@ RSpec.describe TTY::Logger, "#log" do
   end
 
   it "logs a message at fatal level" do
-    logger = TTY::Logger.new(output: output)
+    logger = TTY::Logger.new(output: output) do |config|
+      config.handlers = [[:console, enable_color: true]]
+    end
 
     logger.fatal("Failed to", "deploy")
 
@@ -96,7 +107,9 @@ RSpec.describe TTY::Logger, "#log" do
   end
 
   it "logs a success message at info level" do
-    logger = TTY::Logger.new(output: output)
+    logger = TTY::Logger.new(output: output) do |config|
+      config.handlers = [[:console, enable_color: true]]
+    end
 
     logger.success("Deployed", "successfully")
 
@@ -107,7 +120,9 @@ RSpec.describe TTY::Logger, "#log" do
   end
 
   it "logs a wait message at info level" do
-    logger = TTY::Logger.new(output: output)
+    logger = TTY::Logger.new(output: output) do |config|
+      config.handlers = [[:console, enable_color: true]]
+    end
 
     logger.wait("Waiting for", "deploy")
 
@@ -118,7 +133,9 @@ RSpec.describe TTY::Logger, "#log" do
   end
 
   it "logs a message in a block" do
-    logger = TTY::Logger.new(output: output)
+    logger = TTY::Logger.new(output: output) do |config|
+      config.handlers = [[:console, enable_color: true]]
+    end
 
     logger.info { "Successfully deployed" }
 
@@ -129,7 +146,9 @@ RSpec.describe TTY::Logger, "#log" do
   end
 
   it "logs a message in a block as an array of elements" do
-    logger = TTY::Logger.new(output: output)
+    logger = TTY::Logger.new(output: output) do |config|
+      config.handlers = [[:console, enable_color: true]]
+    end
 
     logger.info { ["Successfully", "deployed"] }
 
@@ -140,7 +159,9 @@ RSpec.describe TTY::Logger, "#log" do
   end
 
   it "logs a message in a block with metadata" do
-    logger = TTY::Logger.new(output: output)
+    logger = TTY::Logger.new(output: output) do |config|
+      config.handlers = [[:console, enable_color: true]]
+    end
 
     logger.info { ["Successfully", "deployed", {app: "myapp", env: "prod"}] }
 
@@ -163,7 +184,11 @@ RSpec.describe TTY::Logger, "#log" do
   end
 
   it "logs message with global fields" do
-    logger = TTY::Logger.new(output: output, fields: {app: 'myapp', env: 'prod'})
+    logger = TTY::Logger.new(
+      output: output,
+      fields: {app: 'myapp', env: 'prod'}) do |config|
+        config.handlers = [[:console, enable_color: true]]
+      end
 
     logger.info("Successfully deployed")
 
@@ -175,7 +200,9 @@ RSpec.describe TTY::Logger, "#log" do
   end
 
   it "logs message with scoped fields" do
-    logger = TTY::Logger.new(output: output)
+    logger = TTY::Logger.new(output: output) do |config|
+      config.handlers = [[:console, enable_color: true]]
+    end
 
     logger.info("Successfully deployed", app: 'myapp', env: 'prod')
 
@@ -199,7 +226,8 @@ RSpec.describe TTY::Logger, "#log" do
               color: :red,
               levelpad: 1
             }
-          }
+          },
+          enable_color: true
         }]
       ]
     end

@@ -5,7 +5,9 @@ RSpec.describe TTY::Logger, "exception logging" do
   let(:styles) { TTY::Logger::Handlers::Console::STYLES }
 
   it "handles exception type message when console" do
-    logger = TTY::Logger.new(output: output)
+    logger = TTY::Logger.new(output: output) do |config|
+      config.handlers = [[:console, enable_color: true]]
+    end
     error = nil
 
     begin

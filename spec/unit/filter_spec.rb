@@ -7,6 +7,7 @@ RSpec.describe TTY::Logger, "filters" do
   it "filters a sensitive data from a message" do
     logger = TTY::Logger.new(output: output) do |config|
       config.filters.message = ["secret", "password"]
+      config.handlers = [[:console, enable_color: true]]
     end
 
     logger.info("Super secret info with password")
@@ -21,6 +22,7 @@ RSpec.describe TTY::Logger, "filters" do
     logger = TTY::Logger.new(output: output) do |config|
       config.filters.message = %w[secret]
       config.filters.mask = "<SECRET>"
+      config.handlers = [[:console, enable_color: true]]
     end
 
     logger.info("Super secret info")
@@ -34,6 +36,7 @@ RSpec.describe TTY::Logger, "filters" do
   it "filters sensitive information from structured data matching keys" do
     logger = TTY::Logger.new(output: output) do |config|
       config.filters.data = %w[password]
+      config.handlers = [[:console, enable_color: true]]
     end
 
     logger.info("Secret password",
@@ -52,6 +55,7 @@ RSpec.describe TTY::Logger, "filters" do
     logger = TTY::Logger.new(output: output) do |config|
       config.filters.data = %w[params.password]
       config.filters.mask = "<SECRET>"
+      config.handlers = [[:console, enable_color: true]]
     end
 
     logger.info("Secret password", params: {password: "Secret123",
@@ -69,6 +73,7 @@ RSpec.describe TTY::Logger, "filters" do
   it "filters sensitive data from an error message with backtrace" do
     logger = TTY::Logger.new(output: output) do |config|
       config.filters.message = ["secret"]
+      config.handlers = [[:console, enable_color: true]]
     end
 
     arg_error = ArgumentError.new("wrong argument secret")
@@ -88,6 +93,7 @@ RSpec.describe TTY::Logger, "filters" do
   it "filters sensitive data from an error message without backtrace" do
     logger = TTY::Logger.new(output: output) do |config|
       config.filters.message = ["secret"]
+      config.handlers = [[:console, enable_color: true]]
     end
 
     arg_error = ArgumentError.new("wrong argument secret")

@@ -94,6 +94,7 @@ RSpec.describe TTY::Logger::Config do
     logger = TTY::Logger.new(output: output) do |config|
       config.max_bytes = 2**4
       config.level = :debug
+      config.handlers = [[:console, enable_color: true]]
     end
 
     logger.debug("Deploying", app: "myapp", env: "prod")
@@ -110,6 +111,7 @@ RSpec.describe TTY::Logger::Config do
     logger = TTY::Logger.new(output: output) do |config|
       config.max_depth = 1
       config.level = :debug
+      config.handlers = [[:console, enable_color: true]]
     end
 
     logger.debug("Deploying", app: "myapp", env: { name: "prod" })

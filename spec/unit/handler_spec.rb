@@ -6,7 +6,7 @@ RSpec.describe TTY::Logger, 'handlers' do
 
   it "coerces name into handler object" do
     logger = TTY::Logger.new(output: output) do |config|
-      config.handlers = [:console]
+      config.handlers = [[:console, enable_color: true]]
     end
 
     logger.info("Logging")
@@ -19,7 +19,8 @@ RSpec.describe TTY::Logger, 'handlers' do
 
   it "coerces class name into handler object" do
     logger = TTY::Logger.new(output: output) do |config|
-      config.handlers = [TTY::Logger::Handlers::Console]
+      config.handlers = [[TTY::Logger::Handlers::Console,
+                         enable_color: true]]
     end
 
     logger.info("Logging")
@@ -33,7 +34,10 @@ RSpec.describe TTY::Logger, 'handlers' do
   it "changes default handler styling" do
     logger = TTY::Logger.new(output: output) do |config|
       config.handlers = [
-        [:console, {styles: {info: {symbol: "+", label: "INFO"}}}]
+        [:console, {
+          styles: { info: { symbol: "+", label: "INFO" } },
+          enable_color: true
+        }]
       ]
     end
 
@@ -46,7 +50,9 @@ RSpec.describe TTY::Logger, 'handlers' do
   end
 
   it "defaults format to 25 space padded message" do
-    logger = TTY::Logger.new(output: output)
+    logger = TTY::Logger.new(output: output) do |config|
+      config.handlers = [[:console, enable_color: true]]
+    end
 
     logger.info("Logging")
 
@@ -59,7 +65,8 @@ RSpec.describe TTY::Logger, 'handlers' do
 
   it "changes default message_format" do
     logger = TTY::Logger.new(output: output) do |config|
-      config.handlers = [[:console, { message_format: "%-10s" }]]
+      config.handlers = [[:console, { message_format: "%-10s",
+                                      enable_color: true }]]
     end
 
     logger.info("Logging")
@@ -73,7 +80,8 @@ RSpec.describe TTY::Logger, 'handlers' do
 
   it "overflows padding when necessary" do
     logger = TTY::Logger.new(output: output) do |config|
-      config.handlers = [[:console, { message_format: "%-0s" }]]
+      config.handlers = [[:console, { message_format: "%-0s",
+                                      enable_color: true }]]
     end
 
     logger.info("Logging")
@@ -88,8 +96,8 @@ RSpec.describe TTY::Logger, 'handlers' do
   it "logs different levels for each handler" do
     logger = TTY::Logger.new(output: output) do |config|
       config.handlers = [
-        [:console, level: :error],
-        [:console, level: :debug]
+        [:console, level: :error, enable_color: true],
+        [:console, level: :debug, enable_color: true]
       ]
     end
 

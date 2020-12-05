@@ -5,7 +5,11 @@ RSpec.describe TTY::Logger, "#copy" do
   let(:styles) { TTY::Logger::Handlers::Console::STYLES }
 
   it "copies ouptut, fields and configuration over to child logger" do
-    logger = TTY::Logger.new(output: output, fields: {app: "parent", env: "prod"})
+    logger = TTY::Logger.new(
+      output: output,
+      fields: {app: "parent", env: "prod"}) do |config|
+        config.handlers = [[:console, enable_color: true]]
+      end
     child_logger = logger.copy(app: "child") do |config|
       config.filters.message = ["logging"]
     end

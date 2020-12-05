@@ -24,7 +24,7 @@ RSpec.describe TTY::Logger, "outputs" do
 
     logger = TTY::Logger.new do |config|
       config.handlers = [
-        [:console, output: stream],
+        [:console, output: stream, enable_color: true],
         [:stream, output: stream]
       ]
     end
