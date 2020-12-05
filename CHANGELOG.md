@@ -1,5 +1,16 @@
 # Change log
 
+## [v0.6.0] - 2020-12-05
+
+### Added
+* Add :enable_color option to control coloring in the console handler
+
+### Changed
+* Change #add_handler to accept handler configuration options as an extra parameter
+
+### Fixed
+* Fix removing handlers by name or type
+
 ## [v0.5.0] - 2020-09-27
 
 ### Added
@@ -50,6 +61,7 @@
 
 * Initial implementation and release
 
+[v0.6.0]: https://github.com/piotrmurach/tty-logger/compare/v0.5.0..v0.6.0
 [v0.5.0]: https://github.com/piotrmurach/tty-logger/compare/v0.4.0..v0.5.0
 [v0.4.0]: https://github.com/piotrmurach/tty-logger/compare/v0.3.0..v0.4.0
 [v0.3.0]: https://github.com/piotrmurach/tty-logger/compare/v0.2.0..v0.3.0
