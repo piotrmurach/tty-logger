@@ -134,12 +134,21 @@ module TTY
     # @example
     #   add_handler(:console)
     #
+    # @example
+    #   add_handler(:console, styles: { info: { color: :yellow } })
+    #
+    # @example
+    #   add_handler([:console, message_format: "%-10s"])
+    #
+    # @param [Symbol, Handlers] handler
+    #   the handler name or class
+    #
     # @api public
-    def add_handler(handler)
-      h, options = *(handler.is_a?(Array) ? handler : [handler, {}])
+    def add_handler(handler, **options)
+      h, h_opts = *(handler.is_a?(Array) ? handler : [handler, options])
       name = coerce_handler(h)
       global_opts = { output: @output, config: @config }
-      opts = global_opts.merge(options)
+      opts = global_opts.merge(h_opts)
       ready_handler = name.new(**opts)
       @ready_handlers << ready_handler
     end
