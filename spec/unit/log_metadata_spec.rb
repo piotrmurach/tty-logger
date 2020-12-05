@@ -6,6 +6,7 @@ RSpec.describe TTY::Logger, "log metadata" do
 
   it "outputs metadata" do
     time_now = Time.new(2019, 7, 10, 19, 42, 35, "+02:00")
+    scope = RSpec::Support::Ruby.jruby? ? "`<main>`" : "`<top (required)>`"
     allow(Time).to receive(:now).and_return(time_now)
 
     logger = TTY::Logger.new(output: output) do |config|
@@ -18,7 +19,7 @@ RSpec.describe TTY::Logger, "log metadata" do
     expected_output = [
       "\e[37m[19:42:35.000]\e[0m ",
       "\e[37m[2019-07-10]\e[0m ",
-      "\e[37m[#{__FILE__}:#{__LINE__ - 5}:in`<top (required)>`]\e[0m",
+      "\e[37m[#{__FILE__}:#{__LINE__ - 5}:in#{scope}]\e[0m",
       " #{TTY::Logger::Handlers::Console::ARROW} ",
       "\e[32m#{styles[:info][:symbol]}\e[0m ",
       "\e[32minfo\e[0m    ",
@@ -31,6 +32,7 @@ RSpec.describe TTY::Logger, "log metadata" do
 
   it "outputs all metadata when :all key used" do
     time_now = Time.new(2019, 7, 10, 19, 42, 35, "+02:00")
+    scope = RSpec::Support::Ruby.jruby? ? "`<main>`" : "`<top (required)>`"
     allow(Time).to receive(:now).and_return(time_now)
 
     logger = TTY::Logger.new(output: output) do |config|
@@ -44,7 +46,7 @@ RSpec.describe TTY::Logger, "log metadata" do
       "\e[37m[#{Process.pid}]\e[0m ",
       "\e[37m[2019-07-10]\e[0m ",
       "\e[37m[19:42:35.000]\e[0m ",
-      "\e[37m[#{__FILE__}:#{__LINE__ - 6}:in`<top (required)>`]\e[0m",
+      "\e[37m[#{__FILE__}:#{__LINE__ - 6}:in#{scope}]\e[0m",
       " #{TTY::Logger::Handlers::Console::ARROW} ",
       "\e[32m#{styles[:info][:symbol]}\e[0m ",
       "\e[32minfo\e[0m    ",

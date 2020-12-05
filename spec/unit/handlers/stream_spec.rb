@@ -18,6 +18,7 @@ RSpec.describe TTY::Logger, "#log" do
 
   it "logs message with all metadata in text format" do
     time_now = Time.new(2019, 7, 21, 14, 04, 35, "+02:00")
+    scope = RSpec::Support::Ruby.jruby? ? "`<main>`" : "`<top (required)>`"
     allow(Time).to receive(:now).and_return(time_now)
 
     logger = TTY::Logger.new(output: output) do |config|
@@ -31,7 +32,7 @@ RSpec.describe TTY::Logger, "#log" do
       "pid=#{Process.pid} ",
       "date=\"2019-07-21\" ",
       "time=\"14:04:35.000\" ",
-      "path=\"#{__FILE__}:#{__LINE__ - 6}:in`<top (required)>`\" ",
+      "path=\"#{__FILE__}:#{__LINE__ - 6}:in#{scope}\" ",
       "level=info message=\"Successfully deployed\" ",
       "app=myapp env=prod\n"
     ].join)
@@ -52,6 +53,7 @@ RSpec.describe TTY::Logger, "#log" do
 
   it "logs message with all metadata in json format" do
     time_now = Time.new(2019, 7, 21, 14, 04, 35, "+02:00")
+    scope = RSpec::Support::Ruby.jruby? ? "`<main>`" : "`<top (required)>`"
     allow(Time).to receive(:now).and_return(time_now)
 
     logger = TTY::Logger.new(output: output) do |config|
@@ -65,7 +67,7 @@ RSpec.describe TTY::Logger, "#log" do
       "{\"pid\":#{Process.pid},",
       "\"date\":\"2019-07-21\",",
       "\"time\":\"14:04:35.000\",",
-      "\"path\":\"#{__FILE__}:#{__LINE__ - 6}:in`<top (required)>`\",",
+      "\"path\":\"#{__FILE__}:#{__LINE__ - 6}:in#{scope}\",",
       "\"level\":\"info\",\"message\":\"Successfully deployed\"}\n"
     ].join)
   end
