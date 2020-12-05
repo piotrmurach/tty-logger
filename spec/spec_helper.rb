@@ -27,5 +27,6 @@ RSpec.configure do |config|
 
   config.expect_with :rspec do |c|
     c.syntax = :expect
+    c.max_formatted_output_length = nil
   end
 end
