@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "../lib/tty/logger"
 
 class MyHandler
@@ -11,7 +13,7 @@ class MyHandler
 end
 
 TTY::Logger.configure do |config|
-  config.handlers = [[MyHandler, {name: :hello}]]
+  config.handlers = [[MyHandler, { name: :hello }]]
 end
 
 logger = TTY::Logger.new

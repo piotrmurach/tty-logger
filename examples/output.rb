@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "../lib/tty/logger"
 
 file = File.open("errors.log", "a")
@@ -8,7 +10,7 @@ TTY::Logger.configure do |config|
   config.output = file
 end
 
-logger = TTY::Logger.new(fields: {app: "myapp", env: "prod"})
+logger = TTY::Logger.new(fields: { app: "myapp", env: "prod" })
 
 logger.error("Failed to deploy")
 

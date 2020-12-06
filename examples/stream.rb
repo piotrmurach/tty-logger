@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 require_relative "../lib/tty/logger"
 
 TTY::Logger.configure do |config|
   config.max_bytes = 2**7
   config.metadata = [:all]
-  config.handlers = [[:stream, formatter: :text]]
+  config.handlers = [[:stream, { formatter: :text }]]
   config.level = :debug
 end
 
-logger = TTY::Logger.new(fields: {app: "myapp", env: "prod"})
+logger = TTY::Logger.new(fields: { app: "myapp", env: "prod" })
 
 logger.copy(path: "/var/www/example.com").info("Deploying", "code")
 

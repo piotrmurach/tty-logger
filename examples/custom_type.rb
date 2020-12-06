@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require_relative "../lib/tty/logger"
 
 logger = TTY::Logger.new do |config|
-  config.types = {thanks: {level: :info}, done: {level: :info}}
+  config.types = { thanks: { level: :info }, done: { level: :info } }
   config.handlers = [
     [:console, {
       styles: {

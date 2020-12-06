@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "../lib/tty/logger"
 
 logger = TTY::Logger.new do |config|
