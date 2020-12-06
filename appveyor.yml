@@ -1,5 +1,11 @@
 ---
+skip_commits:
+  files:
+    - "bin/**"
+    - "examples/**"
+    - "*.md"
 install:
+  - set SSL_CERT_FILE=C:\Ruby%ruby_version%\ssl\cert.pem
   - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
   - gem install bundler -v '< 2.0'
   - bundle install
