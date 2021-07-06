@@ -97,7 +97,7 @@ logger.info { "Dynamically generated info" }
 Include structured data:
 
 ```ruby
-logger.success "Deployed successfully", myapp: "myapp", env: "prod"
+logger.success "Deployed successfully", app: "myapp", env: "prod"
 # =>
 # ✔ success Deployed successfully     app=myapp env=prod
 ```
@@ -108,7 +108,7 @@ Add [metadata](#241-metadata) information:
 logger = TTY::Logger.new do |config|
   config.metadata = [:date, :time]
 end
-logger.info "Deployed successfully", myapp: "myapp", env: "prod"
+logger.info "Deployed successfully", app: "myapp", env: "prod"
 # =>
 # [2019-07-17] [23:21:55.287] › ℹ info    Info about the deploy     app=myapp env=prod
 ```
@@ -632,7 +632,7 @@ end
 By default, the output will be a plain text streamed to console. The text contains key and value pairs of all the metadata and the message of the log event.
 
 ```ruby
-logger.info("Info about the deploy", app:"myap", env:"prod")
+logger.info("Info about the deploy", app: "myapp", env: "prod")
 # =>
 # pid=18315 date="2019-07-21" time="15:42:12.463" path="examples/stream.rb:17:in`<main>`"
 # level=info message="Info about the deploy" app=myapp env=prod
@@ -650,7 +650,7 @@ end
 This will output JSON formatted text streamed to console.
 
 ```ruby
-logger.info("Info about the deploy", app="myap", env="prod")
+logger.info("Info about the deploy", app: "myapp", env: "prod")
 # =>
 # {"pid":18513,"date":"2019-07-21","time":"15:54:09.924","path":"examples/stream.rb:17:in`<main>`",
 # "level":"info","message":"Info about the deploy","app":"myapp","env":"prod"}
