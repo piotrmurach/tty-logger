@@ -9,15 +9,15 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/vtrkdk0naknnxoog?svg=true)][appveyor]
 [![Code Climate](https://codeclimate.com/github/piotrmurach/tty-logger/badges/gpa.svg)][codeclimate]
 [![Coverage Status](https://coveralls.io/repos/github/piotrmurach/tty-logger/badge.svg)][coverage]
-[![Inline docs](http://inch-ci.org/github/piotrmurach/tty-logger.svg?branch=master)][inchpages]
+[![Inline docs](https://inch-ci.org/github/piotrmurach/tty-logger.svg?branch=master)][inchpages]
 
 [gitter]: https://gitter.im/piotrmurach/tty
-[gem]: http://badge.fury.io/rb/tty-logger
+[gem]: https://badge.fury.io/rb/tty-logger
 [gh_actions_ci]: https://github.com/piotrmurach/tty-logger/actions?query=workflow%3ACI
 [appveyor]: https://ci.appveyor.com/project/piotrmurach/tty-logger
 [codeclimate]: https://codeclimate.com/github/piotrmurach/tty-logger
 [coverage]: https://coveralls.io/github/piotrmurach/tty-logger
-[inchpages]: http://inch-ci.org/github/piotrmurach/tty-logger
+[inchpages]: https://inch-ci.org/github/piotrmurach/tty-logger
 
 > A readable, structured and beautiful logging for the terminal
 
