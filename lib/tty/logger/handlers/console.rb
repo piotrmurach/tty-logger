@@ -73,10 +73,6 @@ module TTY
         # @api private
         attr_reader :config
 
-        # The logging level
-        # @api private
-        attr_reader :level
-
         # The format for the message
         # @api private
         attr_reader :message_format
@@ -89,7 +85,7 @@ module TTY
           @color_pattern = COLOR_PATTERNS[@formatter_name.to_sym]
           @config = config
           @styles = styles
-          @level = level || @config.level
+          @level = level
           @mutex = Mutex.new
           @pastel = Pastel.new(enabled: enable_color)
           @message_format = message_format
@@ -143,6 +139,11 @@ module TTY
           output.each { |out| out.puts fmt.join(" ") }
         ensure
           @mutex.unlock
+        end
+
+        # @api private
+        def level
+          @level || @config.level
         end
 
         private
