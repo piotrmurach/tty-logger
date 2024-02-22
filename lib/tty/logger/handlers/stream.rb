@@ -12,13 +12,11 @@ module TTY
 
         attr_reader :config
 
-        attr_reader :level
-
         def initialize(output: $stderr, formatter: nil, config: nil, level: nil)
           @output = Array[output].flatten
           @formatter = coerce_formatter(formatter || config.formatter).new
           @config = config
-          @level = level || @config.level
+          @level = level
           @mutex = Mutex.new
         end
 
@@ -56,6 +54,10 @@ module TTY
           end
         ensure
           @mutex.unlock
+        end
+
+        def level
+          @level || @config.level
         end
       end # Stream
     end # Handlers

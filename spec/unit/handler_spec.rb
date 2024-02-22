@@ -111,6 +111,27 @@ RSpec.describe TTY::Logger, 'handlers' do
     ].join)
   end
 
+  it "respects logger instance-level log level configuration changes" do
+    logger = TTY::Logger.new(output: output) do |config|
+      config.handlers = [
+        [:console, enable_color: false]
+      ]
+      config.level = :warn
+    end
+
+    logger.configure do |config|
+      config.level = :info
+    end
+
+    logger.info("Info")
+    logger.error("Error")
+
+    expect(output.string).to eq([
+      "#{styles[:info][:symbol]} info    Info                     \n",
+      "#{styles[:error][:symbol]} error   Error                    \n",
+    ].join)
+  end
+
   it "fails to coerce unknown object type into handler object" do
     expect {
       TTY::Logger.new do |config|

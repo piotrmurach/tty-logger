@@ -1,5 +1,11 @@
 # Change log
 
+## Unreleased
+
+### Fixed
+
+* Fix console and stream handlers to respect logger runtime log-level changes
+
 ## [v0.6.0] - 2020-12-05
 
 ### Added

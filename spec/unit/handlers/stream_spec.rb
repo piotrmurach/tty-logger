@@ -71,4 +71,22 @@ RSpec.describe TTY::Logger, "#log" do
       "\"level\":\"info\",\"message\":\"Successfully deployed\"}\n"
     ].join)
   end
+
+  it "respects logger instance-level log level configuration changes" do
+    logger = TTY::Logger.new(output: output) do |config|
+      config.handlers = [:stream]
+    end
+
+    logger.configure do |config|
+      config.level = :debug
+    end
+
+    logger.info("Successfully deployed")
+    logger.debug("A debug message")
+
+    expect(output.string).to eq([
+      "level=info message=\"Successfully deployed\"\n",
+      "level=debug message=\"A debug message\"\n",
+    ].join)
+  end
 end
